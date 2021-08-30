@@ -11,7 +11,9 @@ const config = {
         mailAddress: process.env.MAIL_ADDRESS,
         mailPassword: process.env.MAIL_PASSWORD,
         thingworxHost: process.env.THINGWORX_HOST,
-        thingworxAppKey: process.env.THINGWORX_APP_KEY
+        thingworxAppKey: process.env.THINGWORX_APP_KEY,
+        firebaseURL: process.env.FIREBASE_URL,
+        firebaseToken: process.env.FIREBASE_TOKEN
     },
     production: {
         jwtKey: process.env.JWT_KEY,
@@ -20,7 +22,9 @@ const config = {
         mailAddress: process.env.MAIL_ADDRESS,
         mailPassword: process.env.MAIL_PASSWORD,
         thingworxHost: process.env.THINGWORX_HOST,
-        thingworxAppKey: process.env.THINGWORX_APP_KEY
+        thingworxAppKey: process.env.THINGWORX_APP_KEY,
+        firebaseURL: process.env.FIREBASE_URL,
+        firebaseToken: process.env.FIREBASE_TOKEN
     }
 }
 

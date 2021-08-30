@@ -27,15 +27,22 @@ export class MeetingController {
 
     @Post('')
     create(@Req() req: Request, @Body() meetingData: MeetingDto){
-        return this.meetingService.create({
-            ...meetingData,
-            user_booked: req.user._id
-        })
+        console.log(meetingData)
+        // return this.meetingService.create({
+        //     ...meetingData,
+        //     user_booked: req.user._id
+        // })
+        return "success"
     }
 
     @Get('/my-meetings')
     getByMe(@Req() req: Request, @Query() query: {start_time?: number, end_time?: number}){
-        return this.meetingService.getByUser(req.user._id, query)
+        return this.meetingService.getMyMeeting(req.user._id, query)
+    }
+
+    @Get('/booked')
+    getMeetingIBooked(@Req() req: Request, @Query() query: {start_time?: number, end_time?: number}){
+        return this.meetingService.getMeetingIBooked(req.user._id, query)
     }
 
     @Get('/room/:id')

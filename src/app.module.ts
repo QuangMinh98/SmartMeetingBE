@@ -10,6 +10,7 @@ import { LocationModule } from './modules/locations';
 import { DeviceModule } from './modules/devices';
 import { MeetingModule } from './modules/meetings';
 import { MeetingTypeModule } from './modules/meeting_type';
+import { NotificationModule } from './modules/notifications';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { MeetingTypeModule } from './modules/meeting_type';
     LocationModule,
     DeviceModule,
     MeetingModule,
-    MeetingTypeModule
+    MeetingTypeModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService]

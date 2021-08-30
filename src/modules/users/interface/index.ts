@@ -15,6 +15,7 @@ export interface IFUser extends Document {
     gender: string,
     status: string,
     created_time: number,
+    fcm_token: string[],
     generateToken(): string,
     comparePassword(password: string): boolean,
     hashPassword(): void

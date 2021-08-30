@@ -1,12 +1,12 @@
-import { Document } from 'mongoose'
+import { Document, Model } from 'mongoose'
 
-export interface IFMeeting extends Document{
+export interface IFMeeting extends Document, IFMeetingDoc{
     _id: string,
     name: string,
     document?: string[],
     members: string[],
     description: string,
-    notes: string,
+    note: string,
     start_time: number,
     end_time: number,
     time: {
@@ -17,7 +17,7 @@ export interface IFMeeting extends Document{
     remind?: boolean,
     repeat?: number,
     until_date?: number,
-    clone?: boolean,
+    is_clone?: boolean,
     clone_from?: string,
     day_of_week: number,
     number_of_members: number,
@@ -27,4 +27,13 @@ export interface IFMeeting extends Document{
     type: string,
     created_time: number,
     updated_time: number
+}
+
+export interface IFMeetingDoc {
+    clone(properties?: any): IFMeeting,
+    setTime(): void
+}
+
+export interface MeetingModel extends Model<IFMeeting> {
+    findAndGroupByDate(filter?: any): Array<IFMeeting[]>
 }

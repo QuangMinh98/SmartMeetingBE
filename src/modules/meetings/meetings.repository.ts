@@ -4,6 +4,7 @@ import { RoomRepository } from "../rooms";
 import { MeetingDto } from "./dto/dto";
 import { Meeting } from "./model"
 import { IFMeeting } from "./interface"
+import { MeetingObserver, Observer, Subject } from "./meetings-observer"
 
 @Injectable()
 export class MeetingRepository {
@@ -14,20 +15,11 @@ export class MeetingRepository {
         return data
     }
 
-    setTime(meeting: IFMeeting): void{
-        meeting.day_of_week = (new Date(meeting.start_time)).getDay()
-        meeting.time = {
-            start: (meeting.start_time + 25200000)%86400000,
-            end: (meeting.end_time + 25200000)%86400000,
-            date: (new Date(meeting.start_time)).getDate()
-        }
-    }
-
     async create(meetingData: MeetingDto): Promise<IFMeeting> {
         const meeting: IFMeeting = new Meeting(meetingData);
         await meeting.save();
 
-        this.setTime(meeting)
+        meeting.setTime()
 
         return meeting;
     }
@@ -36,8 +28,15 @@ export class MeetingRepository {
         const meeting: IFMeeting[] = await Meeting.find(filter)
             .populate('room')
             .populate('type')
+            .sort({ start_time: 'desc' })
 
         return meeting
+    }
+
+    async getAllAndGroupByDate(filter?: any): Promise<Array<IFMeeting[]>> {
+        const result = await Meeting.findAndGroupByDate(filter)
+
+        return result
     }
 
     async getByRoom(id: string) {
@@ -72,7 +71,7 @@ export class MeetingRepository {
 
         Object.assign(meeting, meetingData)
 
-        this.setTime(meeting)
+        meeting.setTime()
         await meeting.save()
 
         return meeting

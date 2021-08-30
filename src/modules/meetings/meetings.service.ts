@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, Injectable } from "@nestjs/common";
 import { MeetingDto } from "./dto/dto";
 import { MeetingRepository } from './meetings.repository'
-import { CestronRepository } from '../cestron';
+import { CestronRepository, CestronService } from '../cestron';
 import { RoomRepository, IFRoom } from '../rooms'
 import { MeetingTypeRepository, IFMeetingType } from '../meeting_type'
 import { NotificationService } from "../notifications";
@@ -12,16 +12,78 @@ export class MeetingService {
 
     constructor(
         private readonly meetingRepo: MeetingRepository,
-        private readonly cestronRepo: CestronRepository,
         private readonly roomRepo: RoomRepository,
         private readonly meetingTypeRepo: MeetingTypeRepository,
+        private readonly cestronService: CestronService,
         private readonly notificationService: NotificationService
     ) {}
 
-    async createAppointmentsOnCestron(meeting: IFMeeting, room: IFRoom, meetingType: IFMeetingType){
+    filterMeeting(meeting: IFMeeting){
+        // Filter data object
+        let filter: any = {
+            "room": meeting.room,
+            "start_time": { $lte: meeting.until_date, $gte: meeting.start_time },
+            "_id": { "$ne": meeting._id },
+            "$or": [
+                { 'time.start': {$gte: meeting.time.start , $lte: meeting.time.end} },
+                { 'time.end': {$gte: meeting.time.start, $lte: meeting.time.end} }
+            ]
+        }
+
+        // If meeting is not repeat
+        if(!meeting.repeat || meeting.repeat === 0){
+            filter = {
+                "room": meeting.room,
+                "$or": [
+                    { 'start_time': { $gte: meeting.start_time, $lte: meeting.end_time } },
+                    { 'end_time': { $gte: meeting.start_time, $lte: meeting.end_time} }
+                ]
+            }
+        }
+
+        // If repeat is weekly
+        if(meeting.repeat === 2){
+            filter.day_of_week = meeting.day_of_week
+        }
+
+        // If repeat is monthly
+        if(meeting.repeat === 3){
+            filter["time.date"] = meeting.time.date
+        }
+        return filter
+    }
+
+
+    async checkIfRoomAble(meeting: IFMeeting){
+        let filter = this.filterMeeting(meeting)
+
+        // Get data from database
+        const meetings = await this.meetingRepo.countDocuments(filter);
+        return meetings
+    }
+
+    async checkingRoomWhenUpdate(meeting: IFMeeting) {
+        let filter = {
+            "room": meeting.room,
+            "_id": { $ne: meeting._id },
+            "$or": [
+                { 'start_time': { $gte: meeting.start_time, $lte: meeting.end_time } },
+                { 'end_time': { $gte: meeting.start_time, $lte: meeting.end_time } }
+            ]
+        }
+
+        // Get data from database
+        const meetings = await this.meetingRepo.countDocuments(filter)
+
+        return meetings
+    }
+
+    async createAppointmentsOnCestron(meeting: IFMeeting){
         try{
-            console.log('fail')
-            meeting.cestron_meeting_id = await this.cestronRepo.createAppointments({
+            const room: IFRoom = await this.roomRepo.findById(meeting.room)
+
+            const meetingType: IFMeetingType = await this.meetingTypeRepo.findById(meeting.type)
+            meeting.cestron_meeting_id = await this.cestronService.createAppointments({
                 cestron_room_id: room.cestron_room_id,
                 name: meeting.name,
                 note: meeting.note,
@@ -39,16 +101,17 @@ export class MeetingService {
     }
 
     async create(meetingData: MeetingDto){
-        // const room: IFRoom = await this.roomRepo.findById(meetingData.room)
-
-        // const meetingType: IFMeetingType = await this.meetingTypeRepo.findById(meetingData.type)
-        console.log(meetingData)
-
+        
         const newMeeting = await this.meetingRepo.create(meetingData)
         
-        // Create appointment on cestron thingworx
-        //this.createAppointmentsOnCestron(newMeeting, room, meetingType)
+        // Check if there is a meeting created at this time
+        if(await this.checkIfRoomAble(newMeeting) > 0) 
+        throw new HttpException({error_code: "400", error_message: "Can not booking meeting."}, 400)
 
+        // Create appointment on cestron thingworx
+        this.createAppointmentsOnCestron(newMeeting)
+
+        // Send notifications
         this.notificationService.createMany(newMeeting)
 
         return newMeeting;
@@ -72,7 +135,7 @@ export class MeetingService {
             filter.end_time = { $lt: end_time }
         }
 
-        return this.meetingRepo.getAll(filter)
+        return this.meetingRepo.getAllAndGroupByDate(filter)
     }
 
     getMeetingIBooked(id: string, { start_time, end_time }: { start_time?: number, end_time?: number}){
@@ -84,7 +147,7 @@ export class MeetingService {
             filter.end_time = { $lt: end_time }
         }
 
-        return this.meetingRepo.getAll(filter)
+        return this.meetingRepo.getAllAndGroupByDate(filter)
     }
 
     getById(id: string, { isAdmin, userId }: { isAdmin: boolean, userId: string }){
@@ -101,7 +164,7 @@ export class MeetingService {
         return this.meetingRepo.getOne(filter)
     }
 
-    update(id: string, meetingData: MeetingDto, { isAdmin, userId }: { isAdmin?: boolean, userId: string }){
+    async update(id: string, meetingData: MeetingDto, { isAdmin, userId }: { isAdmin?: boolean, userId: string }){
         let filter: any = { _id: id }
 
         // If user is not admin
@@ -109,7 +172,13 @@ export class MeetingService {
             filter.user_booked = userId
         }
 
-        return this.meetingRepo.updateOne(meetingData, filter)
+        const updated_meeting = await this.meetingRepo.updateOne(meetingData, filter)
+
+        // Check if there is a meeting created at this time
+        if(await this.checkingRoomWhenUpdate(updated_meeting) > 0) 
+        throw new HttpException({error_code: "400", error_message: "Can not update meeting."}, 400)
+
+        return updated_meeting
     }
 
     delete(id: string, { isAdmin, userId }: { isAdmin: boolean, userId: string}){

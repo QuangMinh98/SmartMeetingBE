@@ -15,6 +15,7 @@ import {
     ConflictException,
     Query,
     UseGuards,
+    HttpCode,
 } from '@nestjs/common';
 import { LocationDto } from './dto/dto';
 import { LocationService } from './locations.service';
@@ -25,6 +26,7 @@ export class LocationController {
     constructor(private readonly locationService: LocationService) {}
 
     @Post('')
+    @HttpCode(200)
     create(@Body() locationData: LocationDto){
         return this.locationService.create(locationData)
     }

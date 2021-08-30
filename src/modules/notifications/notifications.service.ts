@@ -45,9 +45,7 @@ export class NotificationService {
 
     async createMany(meeting: IFMeeting){
         let noti = []
-
-        console.log(meeting)
-
+        
         const user_booked = await this.userRepo.findById(meeting.user_booked)
 
         const room = await this.roomRepo.findById(meeting.room)

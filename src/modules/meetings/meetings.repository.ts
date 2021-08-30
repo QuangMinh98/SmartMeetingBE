@@ -1,10 +1,8 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { ResponseRepository, IFResponse } from '../response';
 import { RoomRepository } from "../rooms";
 import { MeetingDto } from "./dto/dto";
 import { Meeting } from "./model"
 import { IFMeeting } from "./interface"
-import { MeetingObserver, Observer, Subject } from "./meetings-observer"
 
 @Injectable()
 export class MeetingRepository {
@@ -15,11 +13,15 @@ export class MeetingRepository {
         return data
     }
 
+    async countDocuments(filter?: any): Promise<Number> {
+        return await Meeting.countDocuments(filter)
+    }
+
     async create(meetingData: MeetingDto): Promise<IFMeeting> {
         const meeting: IFMeeting = new Meeting(meetingData);
-        await meeting.save();
-
         meeting.setTime()
+
+        await meeting.save();
 
         return meeting;
     }

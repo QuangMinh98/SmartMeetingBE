@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose'
-import { Schema } from 'mongoose'
+import { Schema, Document } from 'mongoose'
 import { IFMeeting, MeetingModel } from '../interface'
 
 const MeetingSchema = new Schema<IFMeeting>({
@@ -44,7 +44,7 @@ const MeetingSchema = new Schema<IFMeeting>({
     until_date: {
         type: Number
     },
-    clone: {
+    isClone: {
         type: Boolean
     },
     clone_from: {
@@ -81,8 +81,15 @@ const MeetingSchema = new Schema<IFMeeting>({
     }
 })
 
-MeetingSchema.statics.findAndGroupByDate = function (filter?: any): Array<IFMeeting[]>{
-    const meetings = this.find(filter)
+MeetingSchema.index({ room: 1, start_time: -1, end_time: -1 })
+MeetingSchema.index({ user_booked: 1, start_time: -1, end_time: -1 })
+MeetingSchema.index({ user_booked: 1, start_time: -1, end_time: -1, members: 1 })
+MeetingSchema.index({ members: 1 })
+MeetingSchema.index({ user_booked: 1 })
+MeetingSchema.index({ start_time: -1 })
+
+MeetingSchema.statics.findAndGroupByDate = async function (filter?: any): Promise<Array<IFMeeting[]>>{
+    const meetings = await this.find(filter)
         .populate('room')
         .populate('type')
         .sort({ start_time: 'desc' })
@@ -92,11 +99,11 @@ MeetingSchema.statics.findAndGroupByDate = function (filter?: any): Array<IFMeet
     let group_meetings: IFMeeting[] = [];
 
     meetings.forEach(meeting => {
-        let surplus = Math.floor(meeting.start_time / 86400000)
-        if (intermediary === surplus) group_meetings.push(meeting)
-        else {
-            if (group_meetings.length > 0) result.push(group_meetings)
-            group_meetings = [meeting]
+        let surplus = Math.floor((meeting.start_time + 25200000) /86400000)
+        if(intermediary === surplus) group_meetings.push(meeting)
+        else{
+            if(group_meetings.length > 0) result.push(group_meetings)
+            group_meetings = [ meeting ]
         }
         intermediary = surplus
     })

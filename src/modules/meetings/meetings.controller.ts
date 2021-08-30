@@ -27,12 +27,10 @@ export class MeetingController {
 
     @Post('')
     create(@Req() req: Request, @Body() meetingData: MeetingDto){
-        console.log(meetingData)
-        // return this.meetingService.create({
-        //     ...meetingData,
-        //     user_booked: req.user._id
-        // })
-        return "success"
+        return this.meetingService.create({
+            ...meetingData,
+            user_booked: req.user._id
+        })
     }
 
     @Get('/my-meetings')

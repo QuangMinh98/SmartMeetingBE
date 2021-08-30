@@ -23,7 +23,6 @@ export class FirebaseService {
 
     async sendNotifications(tokens: string[], data: any){
         try{
-            console.log(tokens)
             let result = await this.sendRequest(this.firebaseURL, {
                 "registration_ids": tokens,
                 "content_available": true,

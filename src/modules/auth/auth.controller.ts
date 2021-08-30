@@ -12,6 +12,7 @@ import {
     NotFoundException,
     ConflictException,
     Query,
+    HttpCode
 } from '@nestjs/common';
 import { Response } from 'express';
 import { IFAuthentication } from './interface';
@@ -24,6 +25,7 @@ export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     @Post('')
+    @HttpCode(200)
     async login(@Body() loginData: LoginDto, @Res() res: Response){
         console.log(loginData)
         return this.authService.login(loginData, res)

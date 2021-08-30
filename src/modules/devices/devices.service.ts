@@ -5,7 +5,7 @@ import { IFDevice } from './interface'
 import { DeviceRepository } from './devices.repository'
 import { DeviceDto } from './dto/dto'
 import { RoomRepository, IFRoom } from '../rooms'
-import { CestronRepository } from '../cestron'
+import { CestronRepository, CestronService } from '../cestron'
 
 @Injectable()
 export class DeviceService {
@@ -13,7 +13,7 @@ export class DeviceService {
     constructor(
         private readonly deviceRepo: DeviceRepository,
         private readonly roomRepo: RoomRepository,
-        private readonly cestronRepo: CestronRepository
+        private readonly cestronService: CestronService
     ) {}
 
     async create(deviceData: DeviceDto){
@@ -69,7 +69,7 @@ export class DeviceService {
         const device: IFDevice = await this.deviceRepo.updateValue(id,{ current_value, is_on})
 
         // Update device value on cestron thingworx
-        this.cestronRepo.updateDeviceValue({
+        this.cestronService.updateDeviceValue({
             AttributeID: (device.device_type === 1 || device.is_on === true) ? device.cestron_device_id : device.cestron_device_id_off,
             value: (device.device_type === 1) ? device.current_value : device.is_on
         })

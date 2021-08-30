@@ -15,6 +15,7 @@ import {
     ConflictException,
     Query,
     UseGuards,
+    HttpCode
 } from '@nestjs/common';
 import { Request } from 'express'
 import { RoomDto } from './dto/dto';
@@ -27,6 +28,7 @@ export class RoomController{
     constructor(private readonly roomService: RoomService) {}
 
     @Post('')
+    @HttpCode(200)
     async create(@Body() roomData: RoomDto){
         return this.roomService.create(roomData)
     }

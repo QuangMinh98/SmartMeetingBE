@@ -15,6 +15,7 @@ import {
     ConflictException,
     Query,
     UseGuards,
+    HttpCode
 } from '@nestjs/common';
 import { DeviceDto } from './dto/dto'
 import { DeviceService } from './devices.service';
@@ -25,6 +26,7 @@ export class DeviceController{
     constructor(private deviceService: DeviceService) {}
 
     @Post('')
+    @HttpCode(200)
     create(deviceData: DeviceDto) {
         return this.deviceService.create(deviceData)
     }

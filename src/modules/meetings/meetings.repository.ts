@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { HttpException, Injectable, NotFoundException } from "@nestjs/common";
 import { RoomRepository } from "../rooms";
 import { MeetingDto } from "./dto/dto";
 import { Meeting } from "./model"
@@ -64,7 +64,7 @@ export class MeetingRepository extends AbstractMeetingSubject {
 
     async getOne(filter?: any): Promise<IFMeeting> {
         const meeting: IFMeeting = await Meeting.findOne(filter)
-        if(!meeting) throw new NotFoundException("Meeting not found")
+        if(!meeting) throw new HttpException({error_code: "404", error_message: "Meeting not found"}, 404)
 
         return meeting
     }
@@ -75,7 +75,7 @@ export class MeetingRepository extends AbstractMeetingSubject {
         checkIfRoomAble?: Function
     ): Promise<IFMeeting>{
         let meeting: IFMeeting = await Meeting.findOne(filter)
-        if(!meeting) throw new NotFoundException("Meeting not found")
+        if(!meeting) throw new HttpException({error_code: "404", error_message: "Meeting not found"}, 404)
 
         let clone_meeting = meeting.clone()
 
@@ -89,7 +89,7 @@ export class MeetingRepository extends AbstractMeetingSubject {
 
     async deleteOne(filter?: any): Promise<IFMeeting> {
         const meeting: IFMeeting = await Meeting.findOneAndDelete(filter)
-        if(!meeting) throw new NotFoundException("Meeting not found")
+        if(!meeting) throw new HttpException({error_code: "404", error_message: "Meeting not found"}, 404)
 
         return meeting
     }

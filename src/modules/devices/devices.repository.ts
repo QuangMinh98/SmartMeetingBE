@@ -1,4 +1,5 @@
 import {
+    HttpException,
     Injectable,
     NotFoundException
 } from '@nestjs/common'
@@ -47,12 +48,12 @@ export class DeviceRepository extends AbstractDeviceSubject {
     async findById(id: string): Promise<IFDevice>{
         try{
             const device: IFDevice = await Device.findById(id)
-            if(!device) throw new NotFoundException("Device not found")
+            if(!device) throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
 
             return device
         }
         catch(err) {
-            throw new NotFoundException("Device not found")
+            throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
         }
     }
 
@@ -63,12 +64,12 @@ export class DeviceRepository extends AbstractDeviceSubject {
     ): Promise<IFDevice>{
         try{
             const device = await Device.findByIdAndUpdate(id, deviceData, options)
-            if(!device) throw new NotFoundException("Device not found")
+            if(!device) throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
 
             return this.fromEntity(device)
         }
         catch(err) {
-            throw new NotFoundException("Device not found")
+            throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
         }
     }
 
@@ -78,7 +79,7 @@ export class DeviceRepository extends AbstractDeviceSubject {
     ): Promise<IFDevice>{
         try{
             const device: IFDevice = await Device.findById(id)
-            if(!device) throw new NotFoundException("Device not found")
+            if(!device) throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
 
             // If device is off
             if(device.device_type === 1){
@@ -101,19 +102,19 @@ export class DeviceRepository extends AbstractDeviceSubject {
             return device
         }
         catch(err) {
-            throw new NotFoundException("Device not found")
+            throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
         }
     }
 
     async deleteById(id: string): Promise<IFDevice>{
         try{
             const device: IFDevice = await Device.findByIdAndDelete(id)
-            if(!device) throw new NotFoundException("Device not found")
+            if(!device) throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
 
             return device
         }
         catch(err) {
-            throw new NotFoundException("Device not found")
+            throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
         }
     }
 }

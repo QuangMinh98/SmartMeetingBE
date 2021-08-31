@@ -1,4 +1,4 @@
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, HttpException } from '@nestjs/common';
 import { Observable } from 'rxjs'
 
 @Injectable()
@@ -10,7 +10,7 @@ export class RoleGuard implements CanActivate{
     ): boolean | Promise<boolean> | Observable<boolean> {
         const req = context.switchToHttp().getRequest();
         if(req.user.admin) return true;
-        if(this.model == "admin") throw new UnauthorizedException()
+        if(this.model == "admin") throw new HttpException({error_code: "401", error_message: "unauthorized"}, 401)
 
         let permissions = [];
 
@@ -18,7 +18,7 @@ export class RoleGuard implements CanActivate{
 
 
         if (!user.roles || user.roles.length === 0) {
-            throw new UnauthorizedException()
+            throw new HttpException({error_code: "401", error_message: "unauthorized"}, 401)
         }
 
         user.roles.forEach(role => {
@@ -29,7 +29,7 @@ export class RoleGuard implements CanActivate{
 
         const allow = permissions.find(permission => permission.model == this.model && permission.permissions[this.action])
         if (!allow) {
-            throw new UnauthorizedException()
+            throw new HttpException({error_code: "401", error_message: "unauthorized"}, 401)
         }
 
         return true

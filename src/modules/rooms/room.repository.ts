@@ -1,4 +1,5 @@
 import {
+    HttpException,
     Injectable,
     NotFoundException
 } from '@nestjs/common'
@@ -46,12 +47,12 @@ export class RoomRepository {
     async findById(id: string): Promise<IFRoom>{
         try {
             const room: IFRoom = await Room.findById(id)
-            if(!room)  throw new NotFoundException("Room not found")
+            if(!room)  throw new HttpException({error_code: "404", error_message: "Room not found"}, 404)
 
             return room
         }
         catch(err){
-            throw new NotFoundException("Room not found")
+            throw new HttpException({error_code: "404", error_message: "Room not found"}, 404)
         }
     }
     
@@ -62,24 +63,24 @@ export class RoomRepository {
     ): Promise<IFRoom>{
         try{
             const room = await Room.findByIdAndUpdate(id, roomData, options)
-            if(!room) throw new NotFoundException("Room not found")
+            if(!room) throw new HttpException({error_code: "404", error_message: "Room not found"}, 404)
 
             return this.fromEntity(room)
         }
         catch(err){
-            throw new NotFoundException("Room not found")
+            throw new HttpException({error_code: "404", error_message: "Room not found"}, 404)
         }
     }
 
     async deleteById(id: string):  Promise<IFRoom>{
         try{
             const room = await Room.findByIdAndDelete(id)
-            if(!room) throw new NotFoundException("Room not found")
+            if(!room) throw new HttpException({error_code: "404", error_message: "Room not found"}, 404)
 
             return room
         }
         catch(err){
-            throw new NotFoundException("Room not found")
+            throw new HttpException({error_code: "404", error_message: "Room not found"}, 404)
         }
     }
 

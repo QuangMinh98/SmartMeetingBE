@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { HttpException, Injectable, NotFoundException } from "@nestjs/common";
 import { ResponseRepository, IFResponse } from "../response";
 import { IFMeetingType } from "./interface";
 import { MeetingType } from "./model";
@@ -31,12 +31,12 @@ export class MeetingTypeRepository {
     async findById(id: string): Promise<IFMeetingType> {
         try{
             const meetingType = await MeetingType.findById(id);
-            if(!meetingType) throw new NotFoundException("Meeting type not found")
+            if(!meetingType) throw new HttpException({error_code: "404", error_message: "Meeting type not found"}, 404)
 
             return meetingType
         }
         catch(err){
-            throw new NotFoundException("Meeting type not found")
+            throw new HttpException({error_code: "404", error_message: "Meeting type not found"}, 404)
         }
     }
 

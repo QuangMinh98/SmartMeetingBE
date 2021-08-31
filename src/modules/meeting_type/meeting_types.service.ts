@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { MeetingTypeRepository } from "./meeting_types.repository";
 
+@Injectable()
 export class MeetingTypeService {
 
     constructor(private readonly meetingTypeRepo: MeetingTypeRepository) {}

@@ -17,7 +17,7 @@ export class MeetingTypeRepository {
 
         const meetingTypes = await MeetingType.find(filter)
             .limit(+limit)
-            .skip(+skip)
+            .skip(skip)
             .sort(sort);
         const totalRecords: number = await MeetingType.countDocuments(filter)
 

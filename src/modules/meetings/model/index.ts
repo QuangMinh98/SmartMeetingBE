@@ -113,7 +113,7 @@ MeetingSchema.statics.findAndGroupByDate = async function (filter?: Object): Pro
 }
 
 MeetingSchema.methods.setTime = function(){
-    this.day_of_week = (new Date(this.start_time)).getDay()
+    this.day_of_week = (new Date(this.start_time + 25200000)).getDay()
     this.time = {
         start: (this.start_time + 25200000) % 86400000,
         end: (this.end_time + 25200000) % 86400000,

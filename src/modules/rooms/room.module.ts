@@ -2,7 +2,8 @@ import {
     Module,
     MiddlewareConsumer,
     NestModule,
-    RequestMethod
+    RequestMethod,
+    forwardRef
 } from '@nestjs/common'
 import { RoomController } from './room.controller'
 import { RoomService } from './room.service'
@@ -12,7 +13,9 @@ import { ResponseModule } from '../response'
 import { CestronModule } from '../cestron'
 
 @Module({
-    imports: [ResponseModule, CestronModule],
+    imports: [
+        ResponseModule, 
+        forwardRef(() => CestronModule)],
     controllers: [RoomController],
     providers: [RoomService, RoomRepository],
     exports: [RoomService, RoomRepository]

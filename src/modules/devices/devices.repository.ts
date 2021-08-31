@@ -6,11 +6,12 @@ import { IFDevice } from './interface'
 import { Device } from './model'
 import { ResponseRepository, IFResponse} from '../response'
 import { DeviceDto } from './dto/dto'
+import { AbstractDeviceSubject } from './devices-observer'
 
 @Injectable()
-export class DeviceRepository {
+export class DeviceRepository extends AbstractDeviceSubject {
     
-    constructor(private readonly responseRepo: ResponseRepository){}
+    constructor(private readonly responseRepo: ResponseRepository){ super() }
 
     fromEntity(data: any): IFDevice {
         return data
@@ -93,6 +94,9 @@ export class DeviceRepository {
             }
 
             device.save()
+
+            // Send notify to cestron service
+            this.notify(device)
 
             return device
         }

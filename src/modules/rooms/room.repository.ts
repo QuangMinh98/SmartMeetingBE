@@ -32,7 +32,7 @@ export class RoomRepository {
 
         const rooms: IFRoom[] = await Room.find(filter)
             .limit(+limit)
-            .skip(+skip)
+            .skip(skip)
             .sort(sort);
         const totalRecords: number = await Room.countDocuments(filter)
 

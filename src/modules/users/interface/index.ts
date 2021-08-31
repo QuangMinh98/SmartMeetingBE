@@ -1,7 +1,6 @@
 import { Document, Schema, QueryOptions } from 'mongoose'
-import { UserDto } from '../dto/dto'
 
-export interface IFUser extends Document {
+export interface IFUser extends Document, IFUserDoc {
     _id: string,
     avatar: string,
     fullname: string,
@@ -16,6 +15,9 @@ export interface IFUser extends Document {
     status: string,
     created_time: number,
     fcm_token: string[],
+}
+
+export interface IFUserDoc {
     generateToken(): string,
     comparePassword(password: string): boolean,
     hashPassword(): void

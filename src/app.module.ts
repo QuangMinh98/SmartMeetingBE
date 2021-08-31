@@ -12,6 +12,7 @@ import { MeetingModule } from './modules/meetings';
 import { MeetingTypeModule } from './modules/meeting_type';
 import { NotificationModule } from './modules/notifications';
 import { FcmTokenModule } from './modules/fcm_tokens';
+import { ForgotPasswordModule } from './modules/forgot_password';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { FcmTokenModule } from './modules/fcm_tokens';
     MeetingTypeModule,
     NotificationModule,
     FcmTokenModule,
+    ForgotPasswordModule
   ],
   controllers: [AppController],
   providers: [AppService]

@@ -80,4 +80,48 @@ export class NotificationService implements MeetingObserver {
         }
     }
 
+    // async createManyUpdateNotification(meeting: IFMeeting, clone_meeting?: IFMeeting){
+    //     let noti = []
+    //     let changed_data: any = {
+    //         name: (clone_meeting.name !== meeting.name) ? meeting.name : undefined,
+    //         start_time: (clone_meeting.start_time !== meeting.start_time) ? meeting.start_time : undefined,
+    //         end_time: (clone_meeting.end_time !== meeting.end_time) ? meeting.end_time : undefined,
+    //         members: meeting.members.filter(member =>  clone_meeting.members.includes(member)),
+    //         new_members: meeting.members.filter(member =>  !clone_meeting.members.includes(member))
+    //     }
+
+    //     let body = `The meeting ${meeting.name} has been updated to `
+    //     if(changed_data.name || changed_data.start_time || changed_data.end_time){
+    //         if(changed_data.name) body += `name ${changed_data.name} `
+    //         if(changed_data.start_time) body += `start at ${changed_data.start_time} `
+    //         if(changed_data.end_time) body += `end at ${changed_data.end_time} `
+    //     }
+
+    //     const data = {
+    //         title: "Meeting has been updated",
+    //         body,
+    //         data: {
+    //             meeting_id: meeting._id
+    //         }
+    //     }
+
+    //     this.sendNotificationsToUser(meeting.members, data)
+
+    //     changed_data.members.forEach(user => {
+    //         noti.push({
+    //             ...data,
+    //             user,
+    //             created_time: Date.now()
+    //         })
+    //     })
+
+    //     if(noti.length > 0){
+    //         await this.notificationRepo.insertMany(noti)
+    //     }
+
+    //     if(changed_data.members.length > 0) this.createMany(meeting.clone({ members: changed_data.new_members }))
+
+
+    // }
+
 }

@@ -14,7 +14,9 @@ export class DeviceService {
         private readonly deviceRepo: DeviceRepository,
         private readonly roomRepo: RoomRepository,
         private readonly cestronService: CestronService
-    ) {}
+    ) {
+        this.deviceRepo.attach(this.cestronService)
+    }
 
     async create(deviceData: DeviceDto){
         return this.deviceRepo.create(deviceData)
@@ -67,12 +69,6 @@ export class DeviceService {
         { current_value, is_on }: { current_value: number; is_on: boolean}
     ){
         const device: IFDevice = await this.deviceRepo.updateValue(id,{ current_value, is_on})
-
-        // Update device value on cestron thingworx
-        this.cestronService.updateDeviceValue({
-            AttributeID: (device.device_type === 1 || device.is_on === true) ? device.cestron_device_id : device.cestron_device_id_off,
-            value: (device.device_type === 1) ? device.current_value : device.is_on
-        })
 
         return device
     }

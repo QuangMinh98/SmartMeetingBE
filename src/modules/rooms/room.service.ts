@@ -1,4 +1,6 @@
 import {
+    forwardRef,
+    Inject,
     Injectable
 } from '@nestjs/common'
 import { RoomRepository } from './room.repository'
@@ -10,6 +12,7 @@ export class RoomService {
 
     constructor(
         private readonly roomRepo: RoomRepository,
+        @Inject(forwardRef(() => CestronRepository)) 
         private readonly cestronRepo: CestronRepository
     ) {}
 

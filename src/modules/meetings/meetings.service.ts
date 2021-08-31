@@ -12,12 +12,11 @@ export class MeetingService {
 
     constructor(
         private readonly meetingRepo: MeetingRepository,
-        private readonly roomRepo: RoomRepository,
-        private readonly meetingTypeRepo: MeetingTypeRepository,
         private readonly cestronService: CestronService,
         private readonly notificationService: NotificationService
     ) {
         this.meetingRepo.attach(this.notificationService)
+        this.meetingRepo.attach(this.cestronService)
     }
 
     filterMeeting(meeting: IFMeeting){
@@ -55,7 +54,6 @@ export class MeetingService {
         return filter
     }
 
-
     async checkIfRoomAble(meeting: IFMeeting){
         let filter = this.filterMeeting(meeting)
 
@@ -80,28 +78,6 @@ export class MeetingService {
         return meetings
     }
 
-    async createAppointmentsOnCestron(meeting: IFMeeting){
-        try{
-            const room: IFRoom = await this.roomRepo.findById(meeting.room)
-
-            const meetingType: IFMeetingType = await this.meetingTypeRepo.findById(meeting.type)
-            meeting.cestron_meeting_id = await this.cestronService.createAppointments({
-                cestron_room_id: room.cestron_room_id,
-                name: meeting.name,
-                note: meeting.note,
-                start_time: meeting.start_time,
-                end_time: meeting.end_time,
-                type_id: meetingType.cestron_action_id,
-                type_name: meetingType.name
-            })
-
-            meeting.save()
-        }
-        catch(err){
-            console.log(err.message);
-        }
-    }
-
     async create(meetingData: MeetingDto){
 
         const newMeeting = await this.meetingRepo.create(meetingData, async (meeting) => {
@@ -109,9 +85,6 @@ export class MeetingService {
             if(await this.checkIfRoomAble(meeting) > 0) 
             throw new HttpException({error_code: "400", error_message: "Can not booking meeting."}, 400)
         })
-
-        // Create appointment on cestron thingworx
-        this.createAppointmentsOnCestron(newMeeting)
 
         return newMeeting;
     }

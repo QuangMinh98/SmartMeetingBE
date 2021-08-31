@@ -5,3 +5,5 @@ export { DeviceRepository } from './devices.repository'
 export { IFDevice } from './interface'
 
 export { Device } from './model'
+
+export { DeviceObserver } from './devices-observer'

@@ -15,6 +15,7 @@ import {
     ConflictException,
     Query,
     UseGuards,
+    HttpCode,
 } from '@nestjs/common';
 import { Request, Response } from 'express'
 import { MeetingDto } from './dto/dto'
@@ -26,6 +27,7 @@ export class MeetingController {
     constructor(private readonly meetingService: MeetingService) {}
 
     @Post('')
+    @HttpCode(200)
     create(@Req() req: Request, @Body() meetingData: MeetingDto){
         return this.meetingService.create({
             ...meetingData,

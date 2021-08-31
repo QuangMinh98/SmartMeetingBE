@@ -88,7 +88,7 @@ MeetingSchema.index({ members: 1 })
 MeetingSchema.index({ user_booked: 1 })
 MeetingSchema.index({ start_time: -1 })
 
-MeetingSchema.statics.findAndGroupByDate = async function (filter?: any): Promise<Array<IFMeeting[]>>{
+MeetingSchema.statics.findAndGroupByDate = async function (filter?: Object): Promise<Array<IFMeeting[]>>{
     const meetings = await this.find(filter)
         .populate('room')
         .populate('type')

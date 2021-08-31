@@ -19,6 +19,7 @@ import {
 } from '@nestjs/common';
 import { DeviceDto } from './dto/dto'
 import { DeviceService } from './devices.service';
+import { RoleGuard } from '../roles';
 
 @Controller('devices')
 export class DeviceController{
@@ -27,11 +28,13 @@ export class DeviceController{
 
     @Post('')
     @HttpCode(200)
+    @UseGuards(new RoleGuard('Device', 'admin'))
     create(deviceData: DeviceDto) {
         return this.deviceService.create(deviceData)
     }
 
     @Get('')
+    @UseGuards(new RoleGuard('Device', 'admin'))
     getAll(@Query() query: { page?: number, limit?: number}){
         return this.deviceService.getAll(query)
     }
@@ -42,11 +45,13 @@ export class DeviceController{
     }
 
     @Get('/:id')
+    @UseGuards(new RoleGuard('Device', 'admin'))
     getById(@Param('id') id: string){
         return this.deviceService.getById(id)
     }
 
     @Put('/:id')
+    @UseGuards(new RoleGuard('Device', 'admin'))
     update(@Param('id') id: string,@Body()deviceData: DeviceDto){
         return this.deviceService.update(id, deviceData)
     }
@@ -57,6 +62,7 @@ export class DeviceController{
     }
 
     @Delete('/:id')
+    @UseGuards(new RoleGuard('Device', 'admin'))
     delete(@Param('id') id: string){
         return this.deviceService.delete(id)
     }

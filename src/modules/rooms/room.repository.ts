@@ -2,7 +2,6 @@ import {
     Injectable,
     NotFoundException
 } from '@nestjs/common'
-import { UpdateQuery ,Schema } from 'mongoose' 
 import { Room } from './model'
 import { IFRoom } from './interface'
 import { RoomDto } from './dto/dto'
@@ -77,7 +76,7 @@ export class RoomRepository {
             const room = await Room.findByIdAndDelete(id)
             if(!room) throw new NotFoundException("Room not found")
 
-            return this.fromEntity(room)
+            return room
         }
         catch(err){
             throw new NotFoundException("Room not found")

@@ -29,6 +29,7 @@ export class RoomController{
 
     @Post('')
     @HttpCode(200)
+    @UseGuards(new RoleGuard('Room', 'admin'))
     async create(@Body() roomData: RoomDto){
         return this.roomService.create(roomData)
     }
@@ -44,11 +45,13 @@ export class RoomController{
     }
 
     @Put('/:id')
+    @UseGuards(new RoleGuard('Room', 'admin'))
     async update(@Param('id') id: string, @Body() roomData: RoomDto){
         return this.roomService.update(id, roomData)
     }
 
     @Delete('/:id')
+    @UseGuards(new RoleGuard('Room', 'admin'))
     async delete(@Param('id') id: string){
         return this.roomService.delete(id)
     }

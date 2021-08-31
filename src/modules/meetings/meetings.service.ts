@@ -172,11 +172,13 @@ export class MeetingService {
             filter.user_booked = userId
         }
 
-        const updated_meeting = await this.meetingRepo.updateOne(meetingData, filter)
+        const updated_meeting = await this.meetingRepo.updateOne(meetingData, filter, { save: false })
 
         // Check if there is a meeting created at this time
         if(await this.checkingRoomWhenUpdate(updated_meeting) > 0) 
         throw new HttpException({error_code: "400", error_message: "Can not update meeting."}, 400)
+
+        await updated_meeting.save()
 
         return updated_meeting
     }

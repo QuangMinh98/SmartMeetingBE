@@ -11,6 +11,7 @@ import { DeviceModule } from './modules/devices';
 import { MeetingModule } from './modules/meetings';
 import { MeetingTypeModule } from './modules/meeting_type';
 import { NotificationModule } from './modules/notifications';
+import { FcmTokenModule } from './modules/fcm_tokens';
 
 @Module({
   imports: [
@@ -19,11 +20,11 @@ import { NotificationModule } from './modules/notifications';
     UserModule,
     RegisterModule,
     RoomModule,
-    LocationModule,
     DeviceModule,
     MeetingModule,
     MeetingTypeModule,
     NotificationModule,
+    FcmTokenModule,
   ],
   controllers: [AppController],
   providers: [AppService]

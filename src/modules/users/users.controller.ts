@@ -19,6 +19,7 @@ import {
 import { Request } from 'express'
 import { UserService } from './users.service';
 import { UserDto } from './dto/dto';
+import { RoleGuard } from '../roles';
 
 @Controller('users')
 export class UserController {
@@ -41,11 +42,13 @@ export class UserController {
     }
 
     @Put('/:id')
+    @UseGuards(new RoleGuard('User', 'admin'))
     async UpdateUser(@Param('id') id: string, @Body() userData: UserDto) {
         return this.userService.update(id, userData);
     }
 
     @Delete('/:id')
+    @UseGuards(new RoleGuard('User', 'admin'))
     async DeleteUser(@Param('id') id: string){
         return this.userService.delete(id);
     }

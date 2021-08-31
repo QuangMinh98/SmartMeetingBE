@@ -66,7 +66,8 @@ export class MeetingRepository {
 
     async updateOne(
         meetingData: MeetingDto,
-        filter?: any
+        filter?: any,
+        options?: {save: boolean}
     ): Promise<IFMeeting>{
         const meeting: IFMeeting = await Meeting.findOne(filter)
         if(!meeting) throw new NotFoundException("Meeting not found")
@@ -74,7 +75,7 @@ export class MeetingRepository {
         Object.assign(meeting, meetingData)
 
         meeting.setTime()
-        await meeting.save()
+        if(!options || options.save === true) await meeting.save()
 
         return meeting
     }

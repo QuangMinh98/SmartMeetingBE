@@ -19,4 +19,4 @@ const LocationSchema = new Schema({
     }
 })
 
-export const Location = mongoose.model<IFLocation>('Location', LocationSchema)
+// export const Location = mongoose.model<IFLocation>('Location', LocationSchema)

@@ -31,7 +31,7 @@ export class DeviceRepository {
         skip = (page -1) * limit;
 
         const devices: IFDevice[] = await Device.find(filter)
-            .limit(limit)
+            .limit(+limit)
             .skip(skip)
             .sort(sort);
         const totalRecords: number = await Device.countDocuments(filter)

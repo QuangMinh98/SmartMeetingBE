@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose'
-import { Schema, Document } from 'mongoose'
+import { Schema } from 'mongoose'
 import { IFMeeting, MeetingModel } from '../interface'
 
 const MeetingSchema = new Schema<IFMeeting>({
@@ -89,6 +89,9 @@ MeetingSchema.index({ user_booked: 1 })
 MeetingSchema.index({ start_time: -1 })
 
 MeetingSchema.statics.findAndGroupByDate = async function (filter?: Object): Promise<Array<IFMeeting[]>>{
+    const VIET_NAM_UTC: number = 25200000
+    const MILLIS_PER_DAY: number = 86400000
+
     const meetings = await this.find(filter)
         .populate('room')
         .populate('type')
@@ -99,7 +102,7 @@ MeetingSchema.statics.findAndGroupByDate = async function (filter?: Object): Pro
     let group_meetings: IFMeeting[] = [];
 
     meetings.forEach(meeting => {
-        let surplus = Math.floor((meeting.start_time + 25200000) /86400000)
+        let surplus = Math.floor((meeting.start_time + VIET_NAM_UTC) /MILLIS_PER_DAY)
         if(intermediary === surplus) group_meetings.push(meeting)
         else{
             if(group_meetings.length > 0) result.push(group_meetings)
@@ -113,10 +116,12 @@ MeetingSchema.statics.findAndGroupByDate = async function (filter?: Object): Pro
 }
 
 MeetingSchema.methods.setTime = function(){
-    this.day_of_week = (new Date(this.start_time + 25200000)).getDay()
+    const VIET_NAM_UTC: number = 25200000 // Vietnam is 7 hours different from the original time zone
+    const MILLIS_PER_DAY: number = 86400000
+    this.day_of_week = (new Date(this.start_time +  VIET_NAM_UTC)).getDay()
     this.time = {
-        start: (this.start_time + 25200000) % 86400000,
-        end: (this.end_time + 25200000) % 86400000,
+        start: (this.start_time +  VIET_NAM_UTC) % MILLIS_PER_DAY,
+        end: (this.end_time +  VIET_NAM_UTC) % MILLIS_PER_DAY,
         date: (new Date(this.start_time)).getDate()
     }
 }

@@ -77,12 +77,12 @@ export class MeetingRepository extends AbstractMeetingSubject {
         let meeting: IFMeeting = await Meeting.findOne(filter)
         if(!meeting) throw new HttpException({error_code: "404", error_message: "Meeting not found"}, 404)
 
-        let clone_meeting = meeting.clone()
-
         Object.assign(meeting, meetingData)
         meeting.setTime()
 
         if(checkIfRoomAble) await checkIfRoomAble(meeting)
+
+        await meeting.save()
 
         return meeting
     }

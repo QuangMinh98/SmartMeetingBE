@@ -5,7 +5,7 @@ import { IFDevice } from './interface'
 import { DeviceRepository } from './devices.repository'
 import { DeviceDto } from './dto/dto'
 import { RoomRepository, IFRoom } from '../rooms'
-import { CestronRepository, CestronService } from '../cestron'
+import { CestronService } from '../cestron'
 
 @Injectable()
 export class DeviceService {

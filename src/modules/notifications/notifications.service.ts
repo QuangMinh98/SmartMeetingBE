@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { FirebaseService } from "../firebase";
-import { IFMeeting } from "../meetings";
+import { IFMeeting, MeetingObserver } from "../meetings";
 import { RoomRepository } from "../rooms";
 import { UserRepository } from "../users/users.repository";
 import { NotificationRepository } from "./notifications.repository";
 
 @Injectable()
-export class NotificationService {
+export class NotificationService implements MeetingObserver {
 
     constructor(
         private readonly notificationRepo: NotificationRepository,
@@ -41,6 +41,10 @@ export class NotificationService {
             })
             if(tokens.length > 0) this.firebaseService.sendNotifications(tokens, data)
         }
+    }
+
+    async observerNotify(meeting: IFMeeting){
+        await this.createMany(meeting)
     }
 
     async createMany(meeting: IFMeeting){

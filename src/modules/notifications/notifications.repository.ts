@@ -16,7 +16,6 @@ export class NotificationRepository {
     }
 
     async insertMany(notificationData: any[]){
-        console.log(notificationData)
         await Notification.create(notificationData)
     }
 

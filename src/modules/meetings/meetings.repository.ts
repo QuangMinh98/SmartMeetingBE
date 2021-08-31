@@ -3,11 +3,46 @@ import { RoomRepository } from "../rooms";
 import { MeetingDto } from "./dto/dto";
 import { Meeting } from "./model"
 import { IFMeeting } from "./interface"
+import { MeetingObserver, MeetingSubject } from "./meeting-observer";
 
 @Injectable()
-export class MeetingRepository {
+export class MeetingRepository implements MeetingSubject {
 
     constructor(private readonly roomRepo: RoomRepository) {}
+
+    private observers: MeetingObserver[] = [];
+
+    /**
+     * The subscription management methods.
+     */
+    public attach(observer: MeetingObserver): void {
+        const isExist = this.observers.includes(observer);
+        if (isExist) {
+            return console.log('Subject: Observer has been attached already.');
+        }
+
+        console.log('Subject: Attached an observer.');
+        this.observers.push(observer);
+    }
+
+    public detach(observer: MeetingObserver): void {
+        const observerIndex = this.observers.indexOf(observer);
+        if (observerIndex === -1) {
+            return console.log('Subject: Nonexistent observer.');
+        }
+
+        this.observers.splice(observerIndex, 1);
+        console.log('Subject: Detached an observer.');
+    }
+
+    /**
+     * Trigger an update in each subscriber.
+     */
+    public notify(meeting: IFMeeting): void {
+        for (const observer of this.observers) {
+            observer.observerNotify(meeting);
+        }
+    }
 
     fromEntity(data: any): IFMeeting {
         return data
@@ -17,11 +52,15 @@ export class MeetingRepository {
         return await Meeting.countDocuments(filter)
     }
 
-    async create(meetingData: MeetingDto): Promise<IFMeeting> {
+    async create(meetingData: MeetingDto, checkIfRoomAble?: Function): Promise<IFMeeting> {
         const meeting: IFMeeting = new Meeting(meetingData);
         meeting.setTime()
 
+        if(checkIfRoomAble) await checkIfRoomAble(meeting)
+
         await meeting.save();
+
+        this.notify(meeting)
 
         return meeting;
     }
@@ -67,15 +106,15 @@ export class MeetingRepository {
     async updateOne(
         meetingData: MeetingDto,
         filter?: any,
-        options?: {save: boolean}
+        checkIfRoomAble?: Function
     ): Promise<IFMeeting>{
         const meeting: IFMeeting = await Meeting.findOne(filter)
         if(!meeting) throw new NotFoundException("Meeting not found")
 
         Object.assign(meeting, meetingData)
-
         meeting.setTime()
-        if(!options || options.save === true) await meeting.save()
+
+        if(checkIfRoomAble) await checkIfRoomAble(meeting)
 
         return meeting
     }

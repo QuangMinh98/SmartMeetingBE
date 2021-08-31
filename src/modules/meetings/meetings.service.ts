@@ -16,7 +16,9 @@ export class MeetingService {
         private readonly meetingTypeRepo: MeetingTypeRepository,
         private readonly cestronService: CestronService,
         private readonly notificationService: NotificationService
-    ) {}
+    ) {
+        this.meetingRepo.attach(this.notificationService)
+    }
 
     filterMeeting(meeting: IFMeeting){
         // Filter data object
@@ -101,18 +103,15 @@ export class MeetingService {
     }
 
     async create(meetingData: MeetingDto){
-        
-        const newMeeting = await this.meetingRepo.create(meetingData)
-        
-        // Check if there is a meeting created at this time
-        if(await this.checkIfRoomAble(newMeeting) > 0) 
-        throw new HttpException({error_code: "400", error_message: "Can not booking meeting."}, 400)
+
+        const newMeeting = await this.meetingRepo.create(meetingData, async (meeting) => {
+            // Check if there is a meeting created at this time
+            if(await this.checkIfRoomAble(meeting) > 0) 
+            throw new HttpException({error_code: "400", error_message: "Can not booking meeting."}, 400)
+        })
 
         // Create appointment on cestron thingworx
         this.createAppointmentsOnCestron(newMeeting)
-
-        // Send notifications
-        this.notificationService.createMany(newMeeting)
 
         return newMeeting;
     }
@@ -172,11 +171,11 @@ export class MeetingService {
             filter.user_booked = userId
         }
 
-        const updated_meeting = await this.meetingRepo.updateOne(meetingData, filter, { save: false })
-
-        // Check if there is a meeting created at this time
-        if(await this.checkingRoomWhenUpdate(updated_meeting) > 0) 
-        throw new HttpException({error_code: "400", error_message: "Can not update meeting."}, 400)
+        const updated_meeting = await this.meetingRepo.updateOne(meetingData, filter, async (meeting) => {
+            // Check if there is a meeting created at this time
+            if(await this.checkingRoomWhenUpdate(meeting) > 0) 
+            throw new HttpException({error_code: "400", error_message: "Can not update meeting."}, 400)
+        })
 
         await updated_meeting.save()
 

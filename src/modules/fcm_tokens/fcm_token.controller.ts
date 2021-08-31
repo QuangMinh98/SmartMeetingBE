@@ -17,7 +17,7 @@ import {
     UseGuards,
     HttpCode
 } from '@nestjs/common';
-import { Request } from 'Express'
+import { Request } from 'express'
 import { FcmTokenDto } from './dto/dto';
 import { FcmTokenService } from './fcm_token.service';
 

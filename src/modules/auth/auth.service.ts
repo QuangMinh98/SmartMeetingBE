@@ -1,3 +1,4 @@
+import { pick } from 'lodash'
 import { Injectable } from '@nestjs/common';
 import { LoginDto } from './dto/dto'
 import { User } from '../users'
@@ -21,7 +22,8 @@ export class AuthService {
 
         // Generate token
         const token = user.generateToken();
-        const response = user
+        const response = pick(user, ['_id', 'email', 'admin', 'fullname', 'phone_number', 'address', 'gender'])
+        
         return res.header('x-auth-token', token).send(response);
     }
 

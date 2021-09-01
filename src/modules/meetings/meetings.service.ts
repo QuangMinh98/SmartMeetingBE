@@ -82,7 +82,7 @@ export class MeetingService {
     async create(meetingData: MeetingDto){
 
         const newMeeting = await this.meetingRepo.create(meetingData, async (meeting) => {
-            // Check if there is a meeting created at this time before save meeting to database
+            // Check if there is a meeting created at this time before save new meeting to database
             if(await this.checkIfRoomAble(meeting) > 0) 
             throw new HttpException({error_code: "400", error_message: "Can not booking meeting."}, 400)
         })

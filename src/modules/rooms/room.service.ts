@@ -15,11 +15,11 @@ export class RoomService {
         @Inject(forwardRef(() => CestronService)) 
         private readonly cestronService: CestronService
     ) {
+        // Attach observers to the room subject.
         this.roomRepo.attach(this.cestronService)
     }
 
     async create(roomData: RoomDto){
-        // Attach observers to the room subject.
         return this.roomRepo.create(roomData)
     }
 

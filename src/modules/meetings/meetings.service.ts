@@ -24,10 +24,10 @@ export class MeetingService {
     filterMeeting(meeting: IFMeeting){
         // Filter data object
         let filter: any = {
-            "room": meeting.room,
-            "start_time": { $lte: meeting.until_date, $gte: meeting.start_time },
-            "_id": { "$ne": meeting._id },
-            "$or": [
+            room: meeting.room,
+            start_time: { $lte: meeting.end_time, $gte: meeting.start_time }, // Find a meeting that start_time of this meeting  
+            _id: { $ne: meeting._id },
+            $or: [
                 { 'time.start': {$gte: meeting.time.start , $lte: meeting.time.end} },
                 { 'time.end': {$gte: meeting.time.start, $lte: meeting.time.end} }
             ]
@@ -36,10 +36,10 @@ export class MeetingService {
         // If meeting is not repeat
         if(!meeting.repeat || meeting.repeat === 0){
             filter = {
-                "room": meeting.room,
-                "$or": [
-                    { 'start_time': { $gte: meeting.start_time, $lte: meeting.end_time } },
-                    { 'end_time': { $gte: meeting.start_time, $lte: meeting.end_time} }
+                room: meeting.room,
+                $or: [
+                    { start_time: { $gte: meeting.start_time, $lte: meeting.end_time } },
+                    { end_time: { $gte: meeting.start_time, $lte: meeting.end_time} }
                 ]
             }
         }
@@ -101,7 +101,7 @@ export class MeetingService {
     getMyMeeting(id: string, { start_time, end_time }: { start_time?: number, end_time?: number}){
         let filter: any = {
             $or: [
-                { members: { $in:  [id] } }, // if this user is a member of meetings
+                { members: { $in:  [id] } }, // if this user is a member of this meetings
                 { user_booked: id } // or if this user is the user who created this meeting
             ]
         }
@@ -117,6 +117,7 @@ export class MeetingService {
 
     getMeetingIBooked(id: string, { start_time, end_time }: { start_time?: number, end_time?: number}){
         let filter: any = { user_booked: id }
+
         if(start_time){
             filter.start_time = { $gte: start_time }
         }
@@ -130,7 +131,8 @@ export class MeetingService {
     getById(id: string, { isAdmin, userId }: { isAdmin: boolean, userId: string }){
         let filter: any = { _id: id }
 
-        // If user is not admin
+        // If the user does not have administrative rights,
+        // he or she is only allowed to view information about meetings booked by himself or as a member who can join that meeting.
         if(!isAdmin){
             filter.$or = [
                 {user_booked: userId},
@@ -144,7 +146,8 @@ export class MeetingService {
     async update(id: string, meetingData: MeetingDto, { isAdmin, userId }: { isAdmin?: boolean, userId: string }){
         let filter: any = { _id: id }
 
-        // If user is not admin
+        // If the user does not have administrative rights,
+        // he is only allowed to view the meeting information book by himself
         if(!isAdmin){
             filter.user_booked = userId
         }
@@ -163,7 +166,8 @@ export class MeetingService {
     delete(id: string, { isAdmin, userId }: { isAdmin: boolean, userId: string}){
         let filter: any = { _id: id }
 
-        // If user is not admin
+        // If the user does not have administrative rights,
+        // he is only allowed to view the meeting information book by himself
         if(!isAdmin){
             filter.user_booked = userId
         }

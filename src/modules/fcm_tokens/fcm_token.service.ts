@@ -9,6 +9,8 @@ export class FcmTokenService {
     async create(id: string, fcm_token: string){
         let user = await this.userRepo.findById(id);
 
+        // If the user already has this token, it will not be added
+        // This will save storage space on the database
         if(!user.fcm_token.includes(fcm_token)){
             user.fcm_token.push(fcm_token);
             user.save();

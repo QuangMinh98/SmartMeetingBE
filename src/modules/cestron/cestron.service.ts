@@ -33,8 +33,8 @@ export class CestronService extends AbstractCestron implements Observer {
     /**
      * This function to create a new meeting on cestron thingworx and save id of that meeting to @param meeting
      * Get room data and meeting type data from @param meeting
-     * Create a meeting on cestron thingworx with @param meeting
-     * Get meeting id on cestron thingworx and save it in meeting data
+     * Then create a meeting on cestron thingworx with @param meeting, room data and meeting type data
+     * Get meeting id on cestron thingworx and save it in @param meeting as field cestron_meeting_id
      */
     async createAppointmentsWhenCreateMeeting(meeting: IFMeeting){
         try{

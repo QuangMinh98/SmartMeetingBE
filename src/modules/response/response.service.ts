@@ -7,8 +7,8 @@ export class ResponseService {
             data: data,
             meta_data: {
                 total_records: totalRecords,
-                page,
-                limit,
+                page: page.toString(),
+                limit: limit.toString(),
                 total_page: Math.ceil(totalRecords / Number(limit))
             }
         }

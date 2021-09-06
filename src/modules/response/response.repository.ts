@@ -8,8 +8,8 @@ export class ResponseRepository {
             data: data,
             meta_data: {
                 total_records: totalRecords,
-                page: +page,
-                limit: +limit,
+                page: page.toString(),
+                limit: limit.toString(),
                 total_page: Math.ceil(totalRecords / Number(limit))
             }
         }

@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common'
 import { User } from './model'
 import { IFUser } from './interface'
-import { UpdateQuery, Schema } from 'mongoose'
 import { UserDto } from './dto/dto'
 import { IFResponse, ResponseRepository } from '../response'
 

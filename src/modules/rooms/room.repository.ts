@@ -7,11 +7,12 @@ import { Room } from './model'
 import { IFRoom } from './interface'
 import { RoomDto } from './dto/dto'
 import { ResponseRepository, IFResponse } from '../response'
+import { AbstractSubject } from '../observer'
 
 @Injectable()
-export class RoomRepository {
+export class RoomRepository extends AbstractSubject {
 
-    constructor(private readonly responseRepo: ResponseRepository){}
+    constructor(private readonly responseRepo: ResponseRepository){ super() }
 
     fromEntity(data: any): IFRoom{
         return data

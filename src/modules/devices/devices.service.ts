@@ -15,6 +15,7 @@ export class DeviceService {
         private readonly roomRepo: RoomRepository,
         private readonly cestronService: CestronService
     ) {
+        // Attach observers to the device subject.
         this.deviceRepo.attach(this.cestronService)
     }
 
@@ -51,6 +52,8 @@ export class DeviceService {
         if (!limit) {
             limit = 20;
         }
+
+        // Get room data from id, then use id of this room to filter results
         const room: IFRoom = await this.roomRepo.findById(id);
 
         return this.deviceRepo.findAllAndPaging({

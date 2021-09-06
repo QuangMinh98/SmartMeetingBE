@@ -3,14 +3,15 @@ import {
     Inject,
     Injectable
 } from '@nestjs/common'
-import { DeviceObserver, IFDevice } from '../devices'
-import { IFMeeting, MeetingObserver } from '../meetings'
+import { IFDevice } from '../devices'
+import { IFMeeting } from '../meetings'
 import { MeetingTypeRepository } from '../meeting_type'
-import { RoomRepository } from '../rooms'
+import { ISubscription, Observer } from '../observer'
+import { IFRoom, RoomRepository } from '../rooms'
 import { AbstractCestron } from './cestron-abstract'
 
 @Injectable()
-export class CestronService extends AbstractCestron implements MeetingObserver, DeviceObserver {
+export class CestronService extends AbstractCestron implements Observer {
 
     constructor(
         @Inject(forwardRef(() => RoomRepository))
@@ -20,19 +21,28 @@ export class CestronService extends AbstractCestron implements MeetingObserver, 
         super()
     }
 
-    async observerNotify(meeting: IFMeeting, type?: string){
-        await this.createAppointmentsWhenCreateMeeting(meeting)
+    /**
+     * This method will be called when state change
+     */
+    async observerNotify({ meeting, device, room }: ISubscription, type?: string){
+        if(!type || type === 'Create Meeting' || type === 'Repeat Meeting') await this.createAppointmentsWhenCreateMeeting(meeting)
+        if(type === 'Update device value') await this.updateDeviceValueOnCestron(device)
+        if(type === 'Create room') await this.createRoomOnCestron(room)
     }
 
-    async deviceObserverNotify(device: IFDevice){
-        await this.updateDeviceValueOnCestron(device)
-    }
-
+    /**
+     * This function to create a new meeting on cestron thingworx and save id of that meeting to @param meeting
+     * Get room data and meeting type data from @param meeting
+     * Create a meeting on cestron thingworx with @param meeting
+     * Get meeting id on cestron thingworx and save it in meeting data
+     */
     async createAppointmentsWhenCreateMeeting(meeting: IFMeeting){
         try{
+            // Get room and meeting data from meeting data
             const room = await this.roomRepo.findById(meeting.room)
             const meetingType = await this.meetingTypeRepo.findById(meeting.type)
             
+            // Create a meeting on cestron thingworx and get id of that meeting
             meeting.cestron_meeting_id = await this.createAppointments({
                 cestron_room_id: room.cestron_room_id,
                 name: meeting.name,
@@ -51,10 +61,27 @@ export class CestronService extends AbstractCestron implements MeetingObserver, 
         }
     }
 
+    /**
+     * This function to update device value from @param meeting
+     */
     async updateDeviceValueOnCestron(device: IFDevice){
         await this.updateDeviceValue({
             AttributeID: (device.device_type === 1 || device.is_on === true) ? device.cestron_device_id : device.cestron_device_id_off,
             value: (device.device_type === 1) ? device.current_value : device.is_on
         })
+    }
+
+    /**
+     * This function to create a new room on cestron thingworx and save id of that room to @param room
+     */
+    async createRoomOnCestron(room: IFRoom){
+        try{
+            const cestron_room = await this.createRoom({ roomName: room.name, description: ` Description for ${room.name}`})
+            room.cestron_room_id = cestron_room.API_Rooms[0].RoomID
+            await room.save()
+        }
+        catch(err){
+            console.log(err.message)
+        }
     }
 }

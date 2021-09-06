@@ -5,27 +5,21 @@ import {
 } from '@nestjs/common'
 import { RoomRepository } from './room.repository'
 import { RoomDto } from './dto/dto'
-import { CestronRepository } from '../cestron';
+import { CestronService } from '../cestron';
 
 @Injectable()
 export class RoomService {
 
     constructor(
         private readonly roomRepo: RoomRepository,
-        @Inject(forwardRef(() => CestronRepository)) 
-        private readonly cestronRepo: CestronRepository
-    ) {}
+        @Inject(forwardRef(() => CestronService)) 
+        private readonly cestronService: CestronService
+    ) {
+        this.roomRepo.attach(this.cestronService)
+    }
 
     async create(roomData: RoomDto){
-        try{
-            roomData.cestron_room_id = await this.cestronRepo.createRoom({
-                roomName: roomData.name,
-                description: ` Description for ${roomData.name}`
-            })
-        }
-        catch(err){
-            console.log(err.message)
-        }
+        // Attach observers to the room subject.
         return this.roomRepo.create(roomData)
     }
 

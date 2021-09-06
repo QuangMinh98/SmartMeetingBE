@@ -1,9 +1,7 @@
 import { HttpException, Injectable } from "@nestjs/common";
 import { MeetingDto } from "./dto/dto";
 import { MeetingRepository } from './meetings.repository'
-import { CestronRepository, CestronService } from '../cestron';
-import { RoomRepository, IFRoom } from '../rooms'
-import { MeetingTypeRepository, IFMeetingType } from '../meeting_type'
+import { CestronService } from '../cestron';
 import { NotificationService } from "../notifications";
 import { IFMeeting } from "./interface";
 
@@ -20,6 +18,9 @@ export class MeetingService {
         this.meetingRepo.attach(this.cestronService)
     }
 
+    /**
+     * This function used to create data filter for check if the time of this meeting is overlapped with another meeting
+     */
     filterMeeting(meeting: IFMeeting){
         // Filter data object
         let filter: any = {
@@ -55,6 +56,9 @@ export class MeetingService {
         return filter
     }
 
+    /**
+     * Check the number of duplicate meetings with @param meeting
+     */
     async checkIfRoomAble(meeting: IFMeeting){
         let filter = this.filterMeeting(meeting)
 
@@ -97,8 +101,8 @@ export class MeetingService {
     getMyMeeting(id: string, { start_time, end_time }: { start_time?: number, end_time?: number}){
         let filter: any = {
             $or: [
-                { members: { $in:  [id] } },
-                { user_booked: id }
+                { members: { $in:  [id] } }, // if this user is a member of meetings
+                { user_booked: id } // or if this user is the user who created this meeting
             ]
         }
         if(start_time){

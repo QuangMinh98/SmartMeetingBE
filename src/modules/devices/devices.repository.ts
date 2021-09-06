@@ -7,10 +7,10 @@ import { IFDevice } from './interface'
 import { Device } from './model'
 import { ResponseRepository, IFResponse} from '../response'
 import { DeviceDto } from './dto/dto'
-import { AbstractDeviceSubject } from './devices-observer'
+import { AbstractSubject } from '../observer'
 
 @Injectable()
-export class DeviceRepository extends AbstractDeviceSubject {
+export class DeviceRepository extends AbstractSubject {
     
     constructor(private readonly responseRepo: ResponseRepository){ super() }
 
@@ -81,7 +81,8 @@ export class DeviceRepository extends AbstractDeviceSubject {
             const device: IFDevice = await Device.findById(id)
             if(!device) throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
 
-            // If device is off
+            // If the device state is inactive (is_on == false) 
+            // The current_value of this device will be adjusted to 0 and vice versa
             if(device.device_type === 1){
                 if(is_on == false || current_value == 0){
                     is_on = false
@@ -97,7 +98,7 @@ export class DeviceRepository extends AbstractDeviceSubject {
             device.save()
 
             // Send notify to cestron service
-            this.notify(device)
+            this.notify({ device }, "Update device value")
 
             return device
         }

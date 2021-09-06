@@ -1,19 +1,20 @@
 import { Injectable } from "@nestjs/common";
 import { FirebaseService } from "../firebase";
-import { IFMeeting, MeetingObserver } from "../meetings";
+import { IFMeeting } from "../meetings";
+import { ISubscription, Observer } from "../observer";
 import { RoomRepository } from "../rooms";
 import { UserRepository } from "../users/users.repository";
 import { NotificationRepository } from "./notifications.repository";
 
 @Injectable()
-export class NotificationService implements MeetingObserver {
+export class NotificationService implements Observer {
 
     constructor(
         private readonly notificationRepo: NotificationRepository,
         private readonly userRepo: UserRepository,
         private readonly roomRepo: RoomRepository,
         private readonly firebaseService: FirebaseService,
-    ) { }
+    ) {}
 
     getAll({ page, limit }: { page?: number, limit?: number}, userId: string){
         if (!page || page <= 0) {
@@ -30,10 +31,13 @@ export class NotificationService implements MeetingObserver {
         }, { user: userId })
     }
 
-
+    /**
+     * This function used to send firebase notifications to members's devices
+     */
     async sendNotificationsToUser(userIds: string[], data){
         const users = await this.userRepo.findAll({ _id: { $in: userIds } })
 
+        // Get list tokens from users and send firevase notifications by that tokens
         if(users.length > 0 ){
             let tokens = [];
             users.forEach(user => {
@@ -43,19 +47,24 @@ export class NotificationService implements MeetingObserver {
         }
     }
 
-    async observerNotify(meeting: IFMeeting){
-        await this.createMany(meeting)
+    async observerNotify({ meeting }: ISubscription, type?: string){
+        if(!type || type === 'Create Meeting')  await this.createMany(meeting)
     }
 
+    /**
+     * This function used to create notifications and save it to database
+     * then send firebase notifications to users'device
+     * Find user_booked's data and room's data, then use those data to create notification body
+     * Loop members'ids and create new notifications data
+     */
     async createMany(meeting: IFMeeting){
-        let noti = []
+        let list_notis = []
         
         const user_booked = await this.userRepo.findById(meeting.user_booked)
-
         const room = await this.roomRepo.findById(meeting.room)
-
         const body = `${ user_booked.fullname } invite you to join ${ meeting.name} at ${room.name} dated ${(new Date(meeting.start_time)).toLocaleDateString('vi-VN',{timeZone: "Asia/Ho_Chi_Minh"})} ${(new Date(meeting.start_time)).toLocaleTimeString('vi-VN',{timeZone: "Asia/Ho_Chi_Minh"})} - ${(new Date(meeting.end_time)).toLocaleTimeString('vi-VN',{timeZone: "Asia/Ho_Chi_Minh"})}` 
         
+        // Data to create notifications
         const data = {
             title: "Meeting",
             body,
@@ -64,19 +73,20 @@ export class NotificationService implements MeetingObserver {
             }
         }
 
-        // Send firebase message to user's device
+        // Send firebase message to users's devices
         this.sendNotificationsToUser(meeting.members, data)
         
+        // Create a new notifications data and push it to list_notis
         meeting.members.forEach(user => {
-            noti.push({
+            list_notis.push({
                 ...data,
                 user,
                 created_time: Date.now()
             })
         })
 
-        if(noti.length > 0){
-            await this.notificationRepo.insertMany(noti)
+        if(list_notis.length > 0){
+            await this.notificationRepo.insertMany(list_notis)
         }
     }
 

@@ -12,12 +12,6 @@ async function bootstrap() {
     next();
   });
 
-  // app.enableCors({
-  //   origin: '*',
-  //   methods: 'GET, PUT, POST, DELETE',
-  //   allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, x-auth-token",
-  // });
-
   app.setGlobalPrefix('api');
 
   const port = Number(process.env.PORT) || 3000;

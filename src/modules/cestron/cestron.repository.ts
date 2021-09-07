@@ -18,20 +18,20 @@ export class CestronRepository {
     }
 
     async createRoom({ roomName,  description}: { roomName: string, description: string}){
-        const url = config.thingworxHost + "/Thingworx/Things/CestronApi/Services/CreateRoom"
+        const url = config.thingworxHost + '/Thingworx/Things/CestronApi/Services/CreateRoom'
         const room = await this.post({
             url,
             headers: {
-                Accept: "application/json",
+                Accept: 'application/json',
                 appKey: config.thingworxAppKey
             },
             body: {
                 createRoom:{
-                    GroupwareProviderType: "Internal",
+                    GroupwareProviderType: 'Internal',
                     Description: description,
-                    ParentNodeID: "ROOMS",
+                    ParentNodeID: 'ROOMS',
                     RoomName: roomName,
-                    TimeZoneID: "Dateline Standard Time"
+                    TimeZoneID: 'Dateline Standard Time'
                 }
             }
         })
@@ -42,25 +42,25 @@ export class CestronRepository {
         { cestron_room_id, name, note,start_time, end_time, type_id, type_name}:
         { cestron_room_id: string, name: string, note: string, start_time:number, end_time:number, type_id: string, type_name: string}
     ){
-        const url = config.thingworxHost + "/Thingworx/Things/CestronApi/Services/CreateAppointment"
-        if(!note) note = "note"
+        const url = config.thingworxHost + '/Thingworx/Things/CestronApi/Services/CreateAppointment'
+        if(!note) note = 'note'
         const appointments = await this.post({
             url,
             headers: {
-                Accept: "application/json",
+                Accept: 'application/json',
                 appKey: config.thingworxAppKey
             },
             body: {
                 param: {
-                    AltID: "Test11211",
+                    AltID: 'Test11211',
                     MeetingSubject: name,
                     MeetingComment: note,
                     RoomID: cestron_room_id,
                     Start: `\/Date(${(start_time - 25200000).toString()}-0700)\/`,
                     End: `\/Date(${(end_time - 25200000).toString()}-0700)\/`,
-                    TimeZoneId: "SE Asia Standard Time",
-                    Organizer: "mmcreavy@crestron.com",
-                    EventOrMeeting: "EventWithActions",
+                    TimeZoneId: 'SE Asia Standard Time',
+                    Organizer: 'mmcreavy@crestron.com',
+                    EventOrMeeting: 'EventWithActions',
                     IsPrivate: true,
                     MeetingType: true,
                     NotifyAction: true,
@@ -76,11 +76,11 @@ export class CestronRepository {
     }
 
     async getDeviceByRoomId({ RoomID }: { RoomID: string}){
-        const url = config.thingworxHost + "/Thingworx/Things/CestronApi/Services/Get_Room_byID"
+        const url = config.thingworxHost + '/Thingworx/Things/CestronApi/Services/Get_Room_byID'
         const { API_Rooms } = await this.post({
             url,
             headers: {
-                Accept: "application/json",
+                Accept: 'application/json',
                 appKey: config.thingworxAppKey
             },
             body: {
@@ -91,16 +91,16 @@ export class CestronRepository {
     }
 
     async updateDeviceValue({ AttributeID, value }: { AttributeID: string, value: boolean | number}){
-        const url = config.thingworxHost + "/Thingworx/Things/CestronApi/Services/UpdateDevice"
+        const url = config.thingworxHost + '/Thingworx/Things/CestronApi/Services/UpdateDevice'
         const data = await this.post({
             url,
             headers: {
-                Accept: "application/json",
+                Accept: 'application/json',
                 appKey: config.thingworxAppKey
             },
             body: {
                 contentUpdate: {
-                    SymbolID: "fa4d7963-f7fb-4713-8ab7-9907121e31b0",
+                    SymbolID: 'fa4d7963-f7fb-4713-8ab7-9907121e31b0',
                     AttributeID,
                     value
                 }

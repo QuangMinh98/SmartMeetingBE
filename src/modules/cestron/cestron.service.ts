@@ -54,7 +54,7 @@ export class CestronService extends AbstractCestron implements Observer {
             })
 
             meeting.save()
-            console.log("create appointment success")
+            console.log('create appointment success')
         }
         catch(err){
             console.log(err.message);

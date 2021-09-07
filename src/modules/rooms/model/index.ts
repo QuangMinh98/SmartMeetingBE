@@ -1,4 +1,4 @@
-import * as mongoose from "mongoose";
+import * as mongoose from 'mongoose';
 import { Schema } from 'mongoose';
 import { IFRoom } from '../interface'
 
@@ -17,7 +17,7 @@ const RoomSchema = new Schema({
     },
     location: {
         type: Schema.Types.ObjectId,
-        ref: "Location"
+        ref: 'Location'
     },
     area: {
         type: String

@@ -1,9 +1,9 @@
-import { HttpException, Injectable, NotFoundException } from "@nestjs/common";
-import { RoomRepository } from "../rooms";
-import { MeetingDto } from "./dto/dto";
-import { Meeting } from "./model"
-import { IFMeeting } from "./interface"
-import { AbstractSubject } from "../observer";
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { RoomRepository } from '../rooms';
+import { MeetingDto } from './dto/dto';
+import { Meeting } from './model'
+import { IFMeeting } from './interface'
+import { AbstractSubject } from '../observer';
 
 @Injectable()
 export class MeetingRepository extends AbstractSubject {
@@ -154,13 +154,13 @@ export class MeetingRepository extends AbstractSubject {
             }
         }
         catch(err){
-            throw new NotFoundException("Room not found")
+            throw new NotFoundException('Room not found')
         }
     }
 
     async getOne(filter?: any): Promise<IFMeeting> {
         const meeting: IFMeeting = await Meeting.findOne(filter)
-        if(!meeting) throw new HttpException({error_code: "404", error_message: "Meeting not found"}, 404)
+        if(!meeting) throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404)
 
         return meeting
     }
@@ -171,7 +171,7 @@ export class MeetingRepository extends AbstractSubject {
         checkIfRoomAble?: Function
     ): Promise<IFMeeting>{
         let meeting: IFMeeting = await Meeting.findOne(filter)
-        if(!meeting) throw new HttpException({error_code: "404", error_message: "Meeting not found"}, 404)
+        if(!meeting) throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404)
 
         Object.assign(meeting, meetingData)
         meeting.setTime()
@@ -185,7 +185,7 @@ export class MeetingRepository extends AbstractSubject {
 
     async deleteOne(filter?: any): Promise<IFMeeting> {
         const meeting: IFMeeting = await Meeting.findOneAndDelete(filter)
-        if(!meeting) throw new HttpException({error_code: "404", error_message: "Meeting not found"}, 404)
+        if(!meeting) throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404)
 
         return meeting
     }

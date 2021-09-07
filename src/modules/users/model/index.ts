@@ -1,6 +1,6 @@
-import * as mongoose from "mongoose";
-import { Schema } from "mongoose";
-import { IFUser } from "../interface";
+import * as mongoose from 'mongoose';
+import { Schema } from 'mongoose';
+import { IFUser } from '../interface';
 import * as jwt from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt'
 
@@ -26,7 +26,7 @@ export const UserSchema = new Schema<IFUser>({
     roles: [
         {
             type: Schema.Types.ObjectId,
-            ref: "Role"
+            ref: 'Role'
         }
     ],
     admin: {

@@ -1,10 +1,10 @@
-import { Injectable } from "@nestjs/common";
-import { FirebaseService } from "../firebase";
-import { IFMeeting } from "../meetings";
-import { ISubscription, Observer } from "../observer";
-import { RoomRepository } from "../rooms";
-import { UserRepository } from "../users/users.repository";
-import { NotificationRepository } from "./notifications.repository";
+import { Injectable } from '@nestjs/common';
+import { FirebaseService } from '../firebase';
+import { IFMeeting } from '../meetings';
+import { ISubscription, Observer } from '../observer';
+import { RoomRepository } from '../rooms';
+import { UserRepository } from '../users/users.repository';
+import { NotificationRepository } from './notifications.repository';
 
 @Injectable()
 export class NotificationService implements Observer {
@@ -37,7 +37,7 @@ export class NotificationService implements Observer {
     async sendNotificationsToUser(userIds: string[], data){
         const users = await this.userRepo.findAll({ _id: { $in: userIds } })
 
-        // Get list tokens from users and send firevase notifications by that tokens
+        // Get list tokens from users and send firebase notifications by that tokens
         if(users.length > 0 ){
             let tokens = [];
             users.forEach(user => {
@@ -62,11 +62,11 @@ export class NotificationService implements Observer {
         
         const user_booked = await this.userRepo.findById(meeting.user_booked)
         const room = await this.roomRepo.findById(meeting.room)
-        const body = `${ user_booked.fullname } invite you to join ${ meeting.name} at ${room.name} dated ${(new Date(meeting.start_time)).toLocaleDateString('vi-VN',{timeZone: "Asia/Ho_Chi_Minh"})} ${(new Date(meeting.start_time)).toLocaleTimeString('vi-VN',{timeZone: "Asia/Ho_Chi_Minh"})} - ${(new Date(meeting.end_time)).toLocaleTimeString('vi-VN',{timeZone: "Asia/Ho_Chi_Minh"})}` 
+        const body = `${ user_booked.fullname } invite you to join ${ meeting.name} at ${room.name} dated ${(new Date(meeting.start_time)).toLocaleDateString('vi-VN',{timeZone: 'Asia/Ho_Chi_Minh'})} ${(new Date(meeting.start_time)).toLocaleTimeString('vi-VN',{timeZone: 'Asia/Ho_Chi_Minh'})} - ${(new Date(meeting.end_time)).toLocaleTimeString('vi-VN',{timeZone: 'Asia/Ho_Chi_Minh'})}` 
         
         // Data to create notifications
         const data = {
-            title: "Meeting",
+            title: 'Meeting',
             body,
             data: {
                 meeting_id: meeting._id
@@ -108,7 +108,7 @@ export class NotificationService implements Observer {
     //     }
 
     //     const data = {
-    //         title: "Meeting has been updated",
+    //         title: 'Meeting has been updated',
     //         body,
     //         data: {
     //             meeting_id: meeting._id

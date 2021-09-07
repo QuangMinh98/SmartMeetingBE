@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
-import { MeetingTypeRepository } from "./meeting_types.repository";
+import { Injectable } from '@nestjs/common';
+import { MeetingTypeRepository } from './meeting_types.repository';
 
 @Injectable()
 export class MeetingTypeService {

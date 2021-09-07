@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
-import { UserRepository } from "../users/users.repository";
+import { Injectable } from '@nestjs/common';
+import { UserRepository } from '../users/users.repository';
 
 @Injectable()
 export class FcmTokenService {

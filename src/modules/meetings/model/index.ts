@@ -14,7 +14,7 @@ const MeetingSchema = new Schema<IFMeeting>({
     members: [
         {
             type: Schema.Types.ObjectId,
-            ref: "User"
+            ref: 'User'
         }
     ],
     description: {
@@ -68,7 +68,7 @@ const MeetingSchema = new Schema<IFMeeting>({
     },
     type: {
         type: Schema.Types.ObjectId,
-        ref: "MeetingType"
+        ref: 'MeetingType'
     },
     created_time: {
         type: Number,

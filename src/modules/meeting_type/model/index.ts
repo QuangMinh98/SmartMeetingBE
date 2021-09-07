@@ -1,6 +1,6 @@
-import * as mongoose from "mongoose"
-import { Schema } from "mongoose"
-import { IFMeetingType } from "../interface"
+import * as mongoose from 'mongoose';
+import { Schema } from 'mongoose';
+import { IFMeetingType } from '../interface';
 
 const MeetingTypeSchema = new Schema({
     name: {

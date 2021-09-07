@@ -49,12 +49,12 @@ export class UserRepository {
     async findById(id: string): Promise<IFUser> {
         try{
             const user: IFUser = await User.findById(id);
-            if(!user) throw new HttpException({error_code: "404", error_message: "User not found"}, 404)
+            if(!user) throw new HttpException({error_code: '404', error_message: 'User not found'}, 404)
 
             return user
         }
         catch(err){
-            throw new HttpException({error_code: "404", error_message: "User not found"}, 404)
+            throw new HttpException({error_code: '404', error_message: 'User not found'}, 404)
         }
     }
 
@@ -65,12 +65,12 @@ export class UserRepository {
     ): Promise<IFUser>{
         try{
             const user = await User.findByIdAndUpdate(id, userData, options);
-            if(!user) throw new HttpException({error_code: "404", error_message: "User not found"}, 404)
+            if(!user) throw new HttpException({error_code: '404', error_message: 'User not found'}, 404)
 
             return this.fromEntity(user);
         }
         catch(err){
-            throw new HttpException({error_code: "404", error_message: "User not found"}, 404)
+            throw new HttpException({error_code: '404', error_message: 'User not found'}, 404)
         }
 
     }
@@ -78,12 +78,12 @@ export class UserRepository {
     async deleteById(id: string): Promise<IFUser>{
         try{
             const user: IFUser = await User.findByIdAndDelete(id);
-            if(!user) throw new HttpException({error_code: "404", error_message: "User not found"}, 404)
+            if(!user) throw new HttpException({error_code: '404', error_message: 'User not found'}, 404)
 
             return user
         }
         catch(err){
-            throw new HttpException({error_code: "404", error_message: "User not found"}, 404)
+            throw new HttpException({error_code: '404', error_message: 'User not found'}, 404)
         }
     }
 

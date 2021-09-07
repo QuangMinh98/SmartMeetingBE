@@ -1,3 +1,3 @@
-export { FirebaseModule } from './firebase.module'
+export { FirebaseModule } from './firebase.module';
 
-export { FirebaseService } from './firebase.service'
+export { FirebaseService } from './firebase.service';

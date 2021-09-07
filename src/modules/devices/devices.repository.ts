@@ -48,12 +48,12 @@ export class DeviceRepository extends AbstractSubject {
     async findById(id: string): Promise<IFDevice>{
         try{
             const device: IFDevice = await Device.findById(id)
-            if(!device) throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
+            if(!device) throw new HttpException({error_code: '404', error_message: 'Device not found'}, 404)
 
             return device
         }
         catch(err) {
-            throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
+            throw new HttpException({error_code: '404', error_message: 'Device not found'}, 404)
         }
     }
 
@@ -64,12 +64,12 @@ export class DeviceRepository extends AbstractSubject {
     ): Promise<IFDevice>{
         try{
             const device = await Device.findByIdAndUpdate(id, deviceData, options)
-            if(!device) throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
+            if(!device) throw new HttpException({error_code: '404', error_message: 'Device not found'}, 404)
 
             return this.fromEntity(device)
         }
         catch(err) {
-            throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
+            throw new HttpException({error_code: '404', error_message: 'Device not found'}, 404)
         }
     }
 
@@ -79,7 +79,7 @@ export class DeviceRepository extends AbstractSubject {
     ): Promise<IFDevice>{
         try{
             const device: IFDevice = await Device.findById(id)
-            if(!device) throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
+            if(!device) throw new HttpException({error_code: '404', error_message: 'Device not found'}, 404)
 
             // If the device state is inactive (is_on == false) 
             // The current_value of this device will be adjusted to 0 and vice versa
@@ -98,24 +98,24 @@ export class DeviceRepository extends AbstractSubject {
             device.save()
 
             // Send notify to cestron service
-            this.notify({ device }, "Update device value")
+            this.notify({ device }, 'Update device value')
 
             return device
         }
         catch(err) {
-            throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
+            throw new HttpException({error_code: '404', error_message: 'Device not found'}, 404)
         }
     }
 
     async deleteById(id: string): Promise<IFDevice>{
         try{
             const device: IFDevice = await Device.findByIdAndDelete(id)
-            if(!device) throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
+            if(!device) throw new HttpException({error_code: '404', error_message: 'Device not found'}, 404)
 
             return device
         }
         catch(err) {
-            throw new HttpException({error_code: "404", error_message: "Device not found"}, 404)
+            throw new HttpException({error_code: '404', error_message: 'Device not found'}, 404)
         }
     }
 }

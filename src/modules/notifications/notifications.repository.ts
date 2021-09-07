@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { IFResponse, ResponseRepository } from "../response";
-import { IFNotification } from "./interface";
-import { Notification } from "./model"
+import { Injectable } from '@nestjs/common';
+import { IFResponse, ResponseRepository } from '../response';
+import { IFNotification } from './interface';
+import { Notification } from './model'
 
 @Injectable()
 export class NotificationRepository {

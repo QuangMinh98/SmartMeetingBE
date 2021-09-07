@@ -1,6 +1,6 @@
-import * as mongoose from "mongoose";
-import { Schema } from "mongoose"
-import { IFDevice } from "../interface";
+import * as mongoose from 'mongoose';
+import { Schema } from 'mongoose'
+import { IFDevice } from '../interface';
 
 const DeviceSchema = new Schema({
     device_name: {
@@ -11,7 +11,7 @@ const DeviceSchema = new Schema({
     },
     room: {
         type: Schema.Types.ObjectId,
-        ref: "Room"
+        ref: 'Room'
     },
     device_type: {
         type: Number

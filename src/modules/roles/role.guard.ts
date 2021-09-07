@@ -14,12 +14,12 @@ export class RoleGuard implements CanActivate{
 
         // Admin user can access any request
         if(user.admin) return true;
-        if(this.model == "admin") throw new HttpException({error_code: "401", error_message: "unauthorized"}, 401)
+        if(this.model == 'admin') throw new HttpException({error_code: '401', error_message: 'unauthorized'}, 401)
 
         // If the user is not an administrator and does not have any permissions, 
         // an error will be returned to the user
         if (!user.roles || user.roles.length === 0) {
-            throw new HttpException({error_code: "401", error_message: "unauthorized"}, 401)
+            throw new HttpException({error_code: '401', error_message: 'unauthorized'}, 401)
         }
 
         // Get all permissions of this user
@@ -34,7 +34,7 @@ export class RoleGuard implements CanActivate{
         // if it has the right permissions, user can access this request
         const allow = permissions.find(permission => permission.model == this.model && permission.permissions[this.action])
         if (!allow) {
-            throw new HttpException({error_code: "401", error_message: "unauthorized"}, 401)
+            throw new HttpException({error_code: '401', error_message: 'unauthorized'}, 401)
         }
 
         return true

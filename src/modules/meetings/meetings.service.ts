@@ -1,9 +1,9 @@
-import { HttpException, Injectable } from "@nestjs/common";
-import { MeetingDto } from "./dto/dto";
+import { HttpException, Injectable } from '@nestjs/common';
+import { MeetingDto } from './dto/dto';
 import { MeetingRepository } from './meetings.repository'
 import { CestronService } from '../cestron';
-import { NotificationService } from "../notifications";
-import { IFMeeting } from "./interface";
+import { NotificationService } from '../notifications';
+import { IFMeeting } from './interface';
 
 @Injectable()
 export class MeetingService {
@@ -51,7 +51,7 @@ export class MeetingService {
 
         // If repeat is monthly
         if(meeting.repeat === 3){
-            filter["time.date"] = meeting.time.date
+            filter['time.date'] = meeting.time.date
         }
         return filter
     }
@@ -69,9 +69,9 @@ export class MeetingService {
 
     async checkingRoomWhenUpdate(meeting: IFMeeting) {
         let filter = {
-            "room": meeting.room,
-            "_id": { $ne: meeting._id },
-            "$or": [
+            'room': meeting.room,
+            '_id': { $ne: meeting._id },
+            '$or': [
                 { 'start_time': { $gte: meeting.start_time, $lte: meeting.end_time } },
                 { 'end_time': { $gte: meeting.start_time, $lte: meeting.end_time } }
             ]
@@ -88,7 +88,7 @@ export class MeetingService {
         const newMeeting = await this.meetingRepo.create(meetingData, async (meeting) => {
             // Check if there is a meeting created at this time before save new meeting to database
             if(await this.checkIfRoomAble(meeting) > 0) 
-            throw new HttpException({error_code: "400", error_message: "Can not booking meeting."}, 400)
+            throw new HttpException({error_code: '400', error_message: 'Can not booking meeting.'}, 400)
         })
 
         return newMeeting;
@@ -155,7 +155,7 @@ export class MeetingService {
         const updated_meeting = await this.meetingRepo.updateOne(meetingData, filter, async (meeting) => {
             // Check if there is a meeting created at this time
             if(await this.checkingRoomWhenUpdate(meeting) > 0) 
-            throw new HttpException({error_code: "400", error_message: "Can not update meeting."}, 400)
+            throw new HttpException({error_code: '400', error_message: 'Can not update meeting.'}, 400)
         })
 
         await updated_meeting.save()

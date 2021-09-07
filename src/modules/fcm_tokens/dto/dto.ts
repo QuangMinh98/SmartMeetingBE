@@ -4,6 +4,6 @@ export class FcmTokenDto {
 
     @IsString()
     @IsNotEmpty()
-    fcm_token: string
+    fcm_token: string;
 
 }

@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import { Schema } from 'mongoose';
-import { IFRoom } from '../interface'
+import { IFRoom } from '../interface';
 
 const RoomSchema = new Schema({
     name: {
@@ -45,6 +45,6 @@ const RoomSchema = new Schema({
         type: Number,
         default: Date.now()
     }
-})
+});
 
-export const Room = mongoose.model<IFRoom>('Room', RoomSchema)
+export const Room = mongoose.model<IFRoom>('Room', RoomSchema);

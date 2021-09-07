@@ -1,5 +1,5 @@
-export { CestronRepository } from './cestron.repository'
+export { CestronRepository } from './cestron.repository';
 
-export { CestronModule } from './cestron.module'
+export { CestronModule } from './cestron.module';
 
-export { CestronService } from './cestron.service'
+export { CestronService } from './cestron.service';

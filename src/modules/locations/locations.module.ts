@@ -3,14 +3,14 @@ import {
     MiddlewareConsumer,
     NestModule,
     RequestMethod
-} from '@nestjs/common'
-import { AuthMiddleware } from '../auth'
-import { LocationController } from './locations.controller'
-import { LocationService } from './locations.service'
-import { LocationRepository } from './locations.repository'
-import { ResponseModule } from '../response'
+} from '@nestjs/common';
+import { AuthMiddleware } from '../auth';
+import { LocationController } from './locations.controller';
+import { LocationService } from './locations.service';
+import { LocationRepository } from './locations.repository';
+import { ResponseModule } from '../response';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Location, LocationSchema } from './schema'
+import { Location, LocationSchema } from './schema';
 
 @Module({
     imports: [ResponseModule, MongooseModule.forFeature([{ name: "Location", schema: LocationSchema }])],

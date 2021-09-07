@@ -26,6 +26,6 @@ const MeetingTypeSchema = new Schema({
     user_updated: {
         type: Schema.Types.ObjectId
     }
-})
+});
 
-export const MeetingType = mongoose.model<IFMeetingType>('MeetingType', MeetingTypeSchema)
+export const MeetingType = mongoose.model<IFMeetingType>('MeetingType', MeetingTypeSchema);

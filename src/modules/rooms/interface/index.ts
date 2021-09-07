@@ -1,4 +1,4 @@
-import { Schema, Document } from 'mongoose'
+import { Schema, Document } from 'mongoose';
 
 export interface IFRoom extends Document{
     readonly _id: string,

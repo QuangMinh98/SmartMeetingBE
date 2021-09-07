@@ -1,7 +1,7 @@
-export { DeviceModule } from './devices.module'
+export { DeviceModule } from './devices.module';
 
-export { DeviceRepository } from './devices.repository'
+export { DeviceRepository } from './devices.repository';
 
-export { IFDevice } from './interface'
+export { IFDevice } from './interface';
 
-export { Device } from './model'
+export { Device } from './model';

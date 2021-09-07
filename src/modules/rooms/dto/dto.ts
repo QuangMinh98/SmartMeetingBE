@@ -3,16 +3,16 @@ import { IsNotEmpty } from 'class-validator';
 export class RoomDto {
     
     @IsNotEmpty()
-    readonly name: string
+    readonly name: string;
 
-    readonly status: string
+    readonly status: string;
 
     @IsNotEmpty()
-    readonly location: string
+    readonly location: string;
 
-    readonly area: string
+    readonly area: string;
 
-    readonly capacity: number
+    readonly capacity: number;
 
-    cestron_room_id: string
+    cestron_room_id: string;
 }

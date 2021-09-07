@@ -15,8 +15,8 @@ import {
     UseGuards,
     HttpCode
 } from '@nestjs/common';
-import { RegisterDto } from './dto/dto'
-import { RegisterService } from './register.service'
+import { RegisterDto } from './dto/dto';
+import { RegisterService } from './register.service';
 
 @Controller('register')
 export class RegisterController {
@@ -26,7 +26,7 @@ export class RegisterController {
     @Post('')
     @HttpCode(200)
     async register(@Body() userData: RegisterDto){
-        return this.registerService.register(userData)
+        return this.registerService.register(userData);
     }
 
 }

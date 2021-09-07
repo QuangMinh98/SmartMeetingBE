@@ -1,21 +1,21 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { RoomRepository } from '../rooms';
 import { MeetingDto } from './dto/dto';
-import { Meeting } from './model'
-import { IFMeeting } from './interface'
+import { Meeting } from './model';
+import { IFMeeting } from './interface';
 import { AbstractSubject } from '../observer';
 
 @Injectable()
 export class MeetingRepository extends AbstractSubject {
 
-    constructor(private readonly roomRepo: RoomRepository) { super() }
+    constructor(private readonly roomRepo: RoomRepository) { super(); }
 
     fromEntity(data: any): IFMeeting {
-        return data
+        return data;
     }
 
-    async countDocuments(filter?: any): Promise<Number> {
-        return await Meeting.countDocuments(filter)
+    async countDocuments(filter?: any): Promise<number> {
+        return await Meeting.countDocuments(filter);
     }
 
     /**
@@ -29,16 +29,16 @@ export class MeetingRepository extends AbstractSubject {
         // Loop while start time is less than until date
         while (1 == 1) {
             // clone a meeting from the meeting created with new start_time and end_time 
-            let repeat_meeting = meeting.clone({
+            const repeat_meeting = meeting.clone({
                 start_time: meeting.start_time + MILLIS_PER_DAY,
                 end_time: meeting.end_time + MILLIS_PER_DAY
-            })
-            repeat_meeting.setTime()
+            });
+            repeat_meeting.setTime();
 
             if (repeat_meeting.start_time > meeting.until_date) break;
-            repeat_meeting.save()
+            repeat_meeting.save();
 
-            this.notify({ meeting }, 'Repeat Meeting')
+            this.notify({ meeting }, 'Repeat Meeting');
 
             // Add 1 day to MILLIS_PER_DAY (Loop to next day)
             MILLIS_PER_DAY += 86400000;
@@ -56,16 +56,16 @@ export class MeetingRepository extends AbstractSubject {
         // Loop while start time is less than until date
         while (1 == 1) {
             // clone a meeting from the meeting created with new start_time and end_time 
-            let repeat_meeting = meeting.clone({
+            const repeat_meeting = meeting.clone({
                 start_time: meeting.start_time + MILLIS_PER_WEEK,
                 end_time: meeting.end_time + MILLIS_PER_WEEK
-            })
-            repeat_meeting.setTime()
+            });
+            repeat_meeting.setTime();
 
             if (repeat_meeting.start_time > meeting.until_date) break;
-            repeat_meeting.save()
+            repeat_meeting.save();
 
-            this.notify({ meeting }, 'Repeat Meeting')
+            this.notify({ meeting }, 'Repeat Meeting');
 
             // Add 1 week to MILLIS_PER_WEEK (loop to next week)
             MILLIS_PER_WEEK += 604800000;
@@ -78,30 +78,30 @@ export class MeetingRepository extends AbstractSubject {
      * Each iteration will create a clone of @param meeting with new start_time and end_time
      */
     async createRepeatMonthly(meeting: IFMeeting): Promise<void>{
-        let start_time = new Date(meeting.start_time)
-        let end_time = new Date(meeting.end_time)
+        const start_time = new Date(meeting.start_time);
+        const end_time = new Date(meeting.end_time);
 
         // Add 1 month to start time and end time
-        start_time.setMonth(start_time.getMonth() + 1)
-        end_time.setMonth(end_time.getMonth() + 1)
+        start_time.setMonth(start_time.getMonth() + 1);
+        end_time.setMonth(end_time.getMonth() + 1);
 
         // Loop while start time is less than until date
         while (1 == 1) {
             // clone a meeting from the meeting created with new start_time and end_time 
-            let repeat_meeting = meeting.clone({
+            const repeat_meeting = meeting.clone({
                 start_time: start_time.getTime(),
                 end_time: end_time.getTime()
-            })
-            repeat_meeting.setTime()
+            });
+            repeat_meeting.setTime();
 
             if (repeat_meeting.start_time > meeting.until_date) break;
-            meeting.save()
+            meeting.save();
 
-            this.notify({ meeting }, 'Repeat Meeting')
+            this.notify({ meeting }, 'Repeat Meeting');
 
             // Add 1 month to start time and end time (loop to next month)
-            start_time.setMonth(start_time.getMonth() + 1)
-            end_time.setMonth(end_time.getMonth() + 1)
+            start_time.setMonth(start_time.getMonth() + 1);
+            end_time.setMonth(end_time.getMonth() + 1);
         }
     }
 
@@ -113,13 +113,13 @@ export class MeetingRepository extends AbstractSubject {
      */
     async create(meetingData: MeetingDto, checkIfRoomAble?: Function): Promise<IFMeeting> {
         const meeting: IFMeeting = new Meeting(meetingData);
-        meeting.setTime()
+        meeting.setTime();
 
-        if(checkIfRoomAble) await checkIfRoomAble(meeting)
+        if(checkIfRoomAble) await checkIfRoomAble(meeting);
 
         await meeting.save();
 
-        this.notify({meeting})
+        this.notify({meeting});
 
         return meeting;
     }
@@ -128,41 +128,41 @@ export class MeetingRepository extends AbstractSubject {
         const meeting: IFMeeting[] = await Meeting.find(filter)
             .populate('room')
             .populate('type')
-            .sort({ start_time: 'desc' })
+            .sort({ start_time: 'desc' });
 
-        return meeting
+        return meeting;
     }
 
     /**
      * This function is used to get all meetings and group them by date
      */
     async getAllAndGroupByDate(filter?: any): Promise<Array<IFMeeting[]>> {
-        const result = await Meeting.findAndGroupByDate(filter)
+        const result = await Meeting.findAndGroupByDate(filter);
 
-        return result
+        return result;
     }
 
     async getByRoom(id: string) {
         try{
-            const room = await this.roomRepo.findById(id)
+            const room = await this.roomRepo.findById(id);
 
-            const meetings: IFMeeting[] = await Meeting.find({ room: room._id }).populate('type')
+            const meetings: IFMeeting[] = await Meeting.find({ room: room._id }).populate('type');
 
             return {
                 room,
                 meetings
-            }
+            };
         }
         catch(err){
-            throw new NotFoundException('Room not found')
+            throw new NotFoundException('Room not found');
         }
     }
 
     async getOne(filter?: any): Promise<IFMeeting> {
-        const meeting: IFMeeting = await Meeting.findOne(filter)
-        if(!meeting) throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404)
+        const meeting: IFMeeting = await Meeting.findOne(filter);
+        if(!meeting) throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404);
 
-        return meeting
+        return meeting;
     }
 
     async updateOne(
@@ -170,23 +170,23 @@ export class MeetingRepository extends AbstractSubject {
         filter?: any,
         checkIfRoomAble?: Function
     ): Promise<IFMeeting>{
-        let meeting: IFMeeting = await Meeting.findOne(filter)
-        if(!meeting) throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404)
+        const meeting: IFMeeting = await Meeting.findOne(filter);
+        if(!meeting) throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404);
 
-        Object.assign(meeting, meetingData)
-        meeting.setTime()
+        Object.assign(meeting, meetingData);
+        meeting.setTime();
 
-        if(checkIfRoomAble) await checkIfRoomAble(meeting)
+        if(checkIfRoomAble) await checkIfRoomAble(meeting);
 
-        await meeting.save()
+        await meeting.save();
 
-        return meeting
+        return meeting;
     }
 
     async deleteOne(filter?: any): Promise<IFMeeting> {
-        const meeting: IFMeeting = await Meeting.findOneAndDelete(filter)
-        if(!meeting) throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404)
+        const meeting: IFMeeting = await Meeting.findOneAndDelete(filter);
+        if(!meeting) throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404);
 
-        return meeting
+        return meeting;
     }
 }

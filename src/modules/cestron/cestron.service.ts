@@ -2,13 +2,13 @@ import {
     forwardRef,
     Inject,
     Injectable
-} from '@nestjs/common'
-import { IFDevice } from '../devices'
-import { IFMeeting } from '../meetings'
-import { MeetingTypeRepository } from '../meeting_type'
-import { ISubscription, Observer } from '../observer'
-import { IFRoom, RoomRepository } from '../rooms'
-import { AbstractCestron } from './cestron-abstract'
+} from '@nestjs/common';
+import { IFDevice } from '../devices';
+import { IFMeeting } from '../meetings';
+import { MeetingTypeRepository } from '../meeting_type';
+import { ISubscription, Observer } from '../observer';
+import { IFRoom, RoomRepository } from '../rooms';
+import { AbstractCestron } from './cestron-abstract';
 
 @Injectable()
 export class CestronService extends AbstractCestron implements Observer {
@@ -18,16 +18,16 @@ export class CestronService extends AbstractCestron implements Observer {
         private readonly roomRepo: RoomRepository,
         private readonly meetingTypeRepo: MeetingTypeRepository,
     ){
-        super()
+        super();
     }
 
     /**
      * This method will be called when state change
      */
     async observerNotify({ meeting, device, room }: ISubscription, type?: string){
-        if(!type || type === 'Create Meeting' || type === 'Repeat Meeting') await this.createAppointmentsWhenCreateMeeting(meeting)
-        if(type === 'Update device value') await this.updateDeviceValueOnCestron(device)
-        if(type === 'Create room') await this.createRoomOnCestron(room)
+        if(!type || type === 'Create Meeting' || type === 'Repeat Meeting') await this.createAppointmentsWhenCreateMeeting(meeting);
+        if(type === 'Update device value') await this.updateDeviceValueOnCestron(device);
+        if(type === 'Create room') await this.createRoomOnCestron(room);
     }
 
     /**
@@ -39,8 +39,8 @@ export class CestronService extends AbstractCestron implements Observer {
     async createAppointmentsWhenCreateMeeting(meeting: IFMeeting){
         try{
             // Get room and meeting data from meeting data
-            const room = await this.roomRepo.findById(meeting.room)
-            const meetingType = await this.meetingTypeRepo.findById(meeting.type)
+            const room = await this.roomRepo.findById(meeting.room);
+            const meetingType = await this.meetingTypeRepo.findById(meeting.type);
             
             // Create a meeting on cestron thingworx and get id of that meeting
             meeting.cestron_meeting_id = await this.createAppointments({
@@ -51,10 +51,10 @@ export class CestronService extends AbstractCestron implements Observer {
                 end_time: meeting.end_time,
                 type_id: meetingType.cestron_action_id,
                 type_name: meetingType.name
-            })
+            });
 
-            meeting.save()
-            console.log('create appointment success')
+            meeting.save();
+            console.log('create appointment success');
         }
         catch(err){
             console.log(err.message);
@@ -68,7 +68,7 @@ export class CestronService extends AbstractCestron implements Observer {
         await this.updateDeviceValue({
             AttributeID: (device.device_type === 1 || device.is_on === true) ? device.cestron_device_id : device.cestron_device_id_off,
             value: (device.device_type === 1) ? device.current_value : device.is_on
-        })
+        });
     }
 
     /**
@@ -76,12 +76,12 @@ export class CestronService extends AbstractCestron implements Observer {
      */
     async createRoomOnCestron(room: IFRoom){
         try{
-            const cestron_room = await this.createRoom({ roomName: room.name, description: ` Description for ${room.name}`})
-            room.cestron_room_id = cestron_room.API_Rooms[0].RoomID
-            await room.save()
+            const cestron_room = await this.createRoom({ roomName: room.name, description: ` Description for ${room.name}`});
+            room.cestron_room_id = cestron_room.API_Rooms[0].RoomID;
+            await room.save();
         }
         catch(err){
-            console.log(err.message)
+            console.log(err.message);
         }
     }
 }

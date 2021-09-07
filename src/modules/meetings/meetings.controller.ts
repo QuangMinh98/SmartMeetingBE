@@ -17,8 +17,8 @@ import {
     UseGuards,
     HttpCode,
 } from '@nestjs/common';
-import { Request, Response } from 'express'
-import { MeetingDto } from './dto/dto'
+import { Request, Response } from 'express';
+import { MeetingDto } from './dto/dto';
 import { MeetingService } from './meetings.service';
 
 @Controller('meetings')
@@ -32,22 +32,22 @@ export class MeetingController {
         return this.meetingService.create({
             ...meetingData,
             user_booked: req.user._id
-        })
+        });
     }
 
     @Get('/my-meetings')
     getByMe(@Req() req: Request, @Query() query: {start_time?: number, end_time?: number}){
-        return this.meetingService.getMyMeeting(req.user._id, query)
+        return this.meetingService.getMyMeeting(req.user._id, query);
     }
 
     @Get('/booked')
     getMeetingIBooked(@Req() req: Request, @Query() query: {start_time?: number, end_time?: number}){
-        return this.meetingService.getMeetingIBooked(req.user._id, query)
+        return this.meetingService.getMeetingIBooked(req.user._id, query);
     }
 
     @Get('/room/:id')
     getByRoom(@Param('id') id: string){
-        return this.meetingService.getByRoom(id)
+        return this.meetingService.getByRoom(id);
     }
 
     @Get('/:id')
@@ -55,7 +55,7 @@ export class MeetingController {
         return this.meetingService.getById(id, { 
             userId: req.user._id,  
             isAdmin: req.user.admin
-        })
+        });
     }
 
     @Put('/:id')
@@ -63,7 +63,7 @@ export class MeetingController {
         return this.meetingService.update(id, meetingData, { 
             userId: req.user._id,
             isAdmin: req.user.admin
-        })
+        });
     }
 
     @Delete('/:id')
@@ -71,7 +71,7 @@ export class MeetingController {
         return this.meetingService.delete(id, {
             userId: req.user._id,
             isAdmin: req.user.admin
-        })
+        });
     }
 
 }

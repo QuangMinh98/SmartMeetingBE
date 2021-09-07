@@ -28,27 +28,27 @@ export class NotificationService implements Observer {
             page, 
             limit,
             sort: { created_time: -1 }
-        }, { user: userId })
+        }, { user: userId });
     }
 
     /**
      * This function used to send firebase notifications to members's devices
      */
     async sendNotificationsToUser(userIds: string[], data){
-        const users = await this.userRepo.findAll({ _id: { $in: userIds } })
+        const users = await this.userRepo.findAll({ _id: { $in: userIds } });
 
         // Get list tokens from users and send firebase notifications by that tokens
         if(users.length > 0 ){
             let tokens = [];
             users.forEach(user => {
-                tokens = tokens.concat(user.fcm_token)
-            })
-            if(tokens.length > 0) this.firebaseService.sendNotifications(tokens, data)
+                tokens = tokens.concat(user.fcm_token);
+            });
+            if(tokens.length > 0) this.firebaseService.sendNotifications(tokens, data);
         }
     }
 
     async observerNotify({ meeting }: ISubscription, type?: string){
-        if(!type || type === 'Create Meeting')  await this.createMany(meeting)
+        if(!type || type === 'Create Meeting')  await this.createMany(meeting);
     }
 
     /**
@@ -58,11 +58,11 @@ export class NotificationService implements Observer {
      * Loop members'ids and create new notifications data
      */
     async createMany(meeting: IFMeeting){
-        let list_notis = []
+        const list_notis = [];
         
-        const user_booked = await this.userRepo.findById(meeting.user_booked)
-        const room = await this.roomRepo.findById(meeting.room)
-        const body = `${ user_booked.fullname } invite you to join ${ meeting.name} at ${room.name} dated ${(new Date(meeting.start_time)).toLocaleDateString('vi-VN',{timeZone: 'Asia/Ho_Chi_Minh'})} ${(new Date(meeting.start_time)).toLocaleTimeString('vi-VN',{timeZone: 'Asia/Ho_Chi_Minh'})} - ${(new Date(meeting.end_time)).toLocaleTimeString('vi-VN',{timeZone: 'Asia/Ho_Chi_Minh'})}` 
+        const user_booked = await this.userRepo.findById(meeting.user_booked);
+        const room = await this.roomRepo.findById(meeting.room);
+        const body = `${ user_booked.fullname } invite you to join ${ meeting.name} at ${room.name} dated ${(new Date(meeting.start_time)).toLocaleDateString('vi-VN',{timeZone: 'Asia/Ho_Chi_Minh'})} ${(new Date(meeting.start_time)).toLocaleTimeString('vi-VN',{timeZone: 'Asia/Ho_Chi_Minh'})} - ${(new Date(meeting.end_time)).toLocaleTimeString('vi-VN',{timeZone: 'Asia/Ho_Chi_Minh'})}`; 
         
         // Data to create notifications
         const data = {
@@ -71,10 +71,10 @@ export class NotificationService implements Observer {
             data: {
                 meeting_id: meeting._id
             }
-        }
+        };
 
         // Send firebase message to users's devices
-        this.sendNotificationsToUser(meeting.members, data)
+        this.sendNotificationsToUser(meeting.members, data);
         
         // Create a new notifications data and push it to list_notis
         meeting.members.forEach(user => {
@@ -82,11 +82,11 @@ export class NotificationService implements Observer {
                 ...data,
                 user,
                 created_time: Date.now()
-            })
-        })
+            });
+        });
 
         if(list_notis.length > 0){
-            await this.notificationRepo.insertMany(list_notis)
+            await this.notificationRepo.insertMany(list_notis);
         }
     }
 

@@ -17,7 +17,7 @@ import {
     UseGuards,
     HttpCode
 } from '@nestjs/common';
-import { DeviceDto } from './dto/dto'
+import { DeviceDto } from './dto/dto';
 import { DeviceService } from './devices.service';
 import { RoleGuard } from '../roles';
 
@@ -30,40 +30,40 @@ export class DeviceController{
     @HttpCode(200)
     @UseGuards(new RoleGuard('Device', 'admin'))
     create(deviceData: DeviceDto) {
-        return this.deviceService.create(deviceData)
+        return this.deviceService.create(deviceData);
     }
 
     @Get('')
     @UseGuards(new RoleGuard('Device', 'admin'))
     getAll(@Query() query: { page?: number, limit?: number}){
-        return this.deviceService.getAll(query)
+        return this.deviceService.getAll(query);
     }
 
     @Get('/room/:id')
     getByRoomId(@Param('id') id: string, @Query() query: { page?: number, limit?: number}){
-        return this.deviceService.getByRoomId(id, query)
+        return this.deviceService.getByRoomId(id, query);
     }
 
     @Get('/:id')
     @UseGuards(new RoleGuard('Device', 'admin'))
     getById(@Param('id') id: string){
-        return this.deviceService.getById(id)
+        return this.deviceService.getById(id);
     }
 
     @Put('/:id')
     @UseGuards(new RoleGuard('Device', 'admin'))
     update(@Param('id') id: string,@Body()deviceData: DeviceDto){
-        return this.deviceService.update(id, deviceData)
+        return this.deviceService.update(id, deviceData);
     }
 
     @Put('data/:id')
     updateValue(@Param('id')id: string,@Body() deviceData){
-        return this.deviceService.updateValue(id, deviceData)
+        return this.deviceService.updateValue(id, deviceData);
     }
 
     @Delete('/:id')
     @UseGuards(new RoleGuard('Device', 'admin'))
     delete(@Param('id') id: string){
-        return this.deviceService.delete(id)
+        return this.deviceService.delete(id);
     }
 }

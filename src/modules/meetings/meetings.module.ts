@@ -1,12 +1,12 @@
-import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common'
-import { AuthMiddleware } from '../auth'
-import { RoomModule } from '../rooms'
-import { MeetingController } from './meetings.controller'
-import { MeetingService } from './meetings.service'
-import { MeetingRepository } from './meetings.repository'
-import { MeetingTypeModule } from '../meeting_type'
-import { CestronModule } from '../cestron'
-import { NotificationModule } from '../notifications'
+import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { AuthMiddleware } from '../auth';
+import { RoomModule } from '../rooms';
+import { MeetingController } from './meetings.controller';
+import { MeetingService } from './meetings.service';
+import { MeetingRepository } from './meetings.repository';
+import { MeetingTypeModule } from '../meeting_type';
+import { CestronModule } from '../cestron';
+import { NotificationModule } from '../notifications';
 
 @Module({
     imports: [RoomModule, CestronModule, MeetingTypeModule, NotificationModule],

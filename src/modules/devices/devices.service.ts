@@ -1,11 +1,11 @@
 import {
     Injectable
-} from '@nestjs/common'
-import { IFDevice } from './interface'
-import { DeviceRepository } from './devices.repository'
-import { DeviceDto } from './dto/dto'
-import { RoomRepository, IFRoom } from '../rooms'
-import { CestronService } from '../cestron'
+} from '@nestjs/common';
+import { IFDevice } from './interface';
+import { DeviceRepository } from './devices.repository';
+import { DeviceDto } from './dto/dto';
+import { RoomRepository, IFRoom } from '../rooms';
+import { CestronService } from '../cestron';
 
 @Injectable()
 export class DeviceService {
@@ -16,11 +16,11 @@ export class DeviceService {
         private readonly cestronService: CestronService
     ) {
         // Attach observers to the device subject.
-        this.deviceRepo.attach(this.cestronService)
+        this.deviceRepo.attach(this.cestronService);
     }
 
     async create(deviceData: DeviceDto){
-        return this.deviceRepo.create(deviceData)
+        return this.deviceRepo.create(deviceData);
     }
 
     async getAll({ page, limit }: { page?: number, limit?: number}){
@@ -35,11 +35,11 @@ export class DeviceService {
             page,
             limit,
             sort: {created_time: -1}
-        })
+        });
     }
 
     async getById(id: string){
-        return this.deviceRepo.findById(id)
+        return this.deviceRepo.findById(id);
     }
 
     async getByRoomId(
@@ -60,23 +60,23 @@ export class DeviceService {
             page,
             limit,
             sort: {created_time: -1}
-        }, { room: room.id })
+        }, { room: room.id });
     }
 
     async update(id: string, deviceData: DeviceDto){
-        return this.deviceRepo.updateById(id, deviceData, { new: true })
+        return this.deviceRepo.updateById(id, deviceData, { new: true });
     }
 
     async updateValue(
         id: string,
         { current_value, is_on }: { current_value: number; is_on: boolean}
     ){
-        const device: IFDevice = await this.deviceRepo.updateValue(id,{ current_value, is_on})
+        const device: IFDevice = await this.deviceRepo.updateValue(id,{ current_value, is_on});
 
-        return device
+        return device;
     }
 
     async delete(id: string){
-        return this.deviceRepo.deleteById(id)
+        return this.deviceRepo.deleteById(id);
     }
 }

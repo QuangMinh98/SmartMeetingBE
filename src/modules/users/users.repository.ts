@@ -2,11 +2,11 @@ import {
     HttpException,
     Injectable,
     NotFoundException 
-} from '@nestjs/common'
-import { User } from './model'
-import { IFUser } from './interface'
-import { UserDto } from './dto/dto'
-import { IFResponse, ResponseRepository } from '../response'
+} from '@nestjs/common';
+import { User } from './model';
+import { IFUser } from './interface';
+import { UserDto } from './dto/dto';
+import { IFResponse, ResponseRepository } from '../response';
 
 @Injectable()
 export class UserRepository {
@@ -14,11 +14,11 @@ export class UserRepository {
     constructor(private readonly responseRepo: ResponseRepository){}
 
     fromEntity(data: any): IFUser {
-        return data
+        return data;
     }
 
     async create(userData: UserDto): Promise<IFUser>{
-        const user = new User(userData)
+        const user = new User(userData);
         await user.save();
 
         return user;
@@ -28,7 +28,7 @@ export class UserRepository {
         { page, limit, sort }: { page: number, limit: number, sort?: any },
         filter?: any
     ): Promise<IFResponse<IFUser>>{
-        let skip: number = 0;
+        let skip = 0;
         skip = (page -1) * limit;
 
         const users:IFUser[] = await User.find(filter)
@@ -36,25 +36,25 @@ export class UserRepository {
         .limit(+limit)
         .sort(sort)
         .select('-password');
-        const totalRecords: number = await User.countDocuments(filter)
+        const totalRecords: number = await User.countDocuments(filter);
         
-        return this.responseRepo.getResponse<IFUser>(users, totalRecords, page, limit)
+        return this.responseRepo.getResponse<IFUser>(users, totalRecords, page, limit);
     }
 
     async findAll(filter?: any): Promise<IFUser[]>{
-        const users = await User.find(filter)
-        return users
+        const users = await User.find(filter);
+        return users;
     }
 
     async findById(id: string): Promise<IFUser> {
         try{
             const user: IFUser = await User.findById(id);
-            if(!user) throw new HttpException({error_code: '404', error_message: 'User not found'}, 404)
+            if(!user) throw new HttpException({error_code: '404', error_message: 'User not found'}, 404);
 
-            return user
+            return user;
         }
         catch(err){
-            throw new HttpException({error_code: '404', error_message: 'User not found'}, 404)
+            throw new HttpException({error_code: '404', error_message: 'User not found'}, 404);
         }
     }
 
@@ -65,12 +65,12 @@ export class UserRepository {
     ): Promise<IFUser>{
         try{
             const user = await User.findByIdAndUpdate(id, userData, options);
-            if(!user) throw new HttpException({error_code: '404', error_message: 'User not found'}, 404)
+            if(!user) throw new HttpException({error_code: '404', error_message: 'User not found'}, 404);
 
             return this.fromEntity(user);
         }
         catch(err){
-            throw new HttpException({error_code: '404', error_message: 'User not found'}, 404)
+            throw new HttpException({error_code: '404', error_message: 'User not found'}, 404);
         }
 
     }
@@ -78,12 +78,12 @@ export class UserRepository {
     async deleteById(id: string): Promise<IFUser>{
         try{
             const user: IFUser = await User.findByIdAndDelete(id);
-            if(!user) throw new HttpException({error_code: '404', error_message: 'User not found'}, 404)
+            if(!user) throw new HttpException({error_code: '404', error_message: 'User not found'}, 404);
 
-            return user
+            return user;
         }
         catch(err){
-            throw new HttpException({error_code: '404', error_message: 'User not found'}, 404)
+            throw new HttpException({error_code: '404', error_message: 'User not found'}, 404);
         }
     }
 

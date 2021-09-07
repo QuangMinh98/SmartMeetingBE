@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { Schema } from 'mongoose'
+import { Schema } from 'mongoose';
 import { IFDevice } from '../interface';
 
 const DeviceSchema = new Schema({
@@ -51,6 +51,6 @@ const DeviceSchema = new Schema({
     user_updated: {
         type: Schema.Types.ObjectId
     }
-})
+});
 
-export const Device = mongoose.model<IFDevice>('Device', DeviceSchema)
+export const Device = mongoose.model<IFDevice>('Device', DeviceSchema);

@@ -1,6 +1,6 @@
 import * as mongoose from "mongoose";
 import { Schema } from "mongoose";
-import { NotificationClass } from "../interface"
+import { NotificationClass } from "../interface";
 
 const NotificationSchema = new Schema({
     title: {
@@ -21,8 +21,8 @@ const NotificationSchema = new Schema({
         type: Number,
         default: Date.now()
     }
-})
+});
 
-NotificationSchema.index({ user: 1, created_time: -1 })
+NotificationSchema.index({ user: 1, created_time: -1 });
 
-export const Notification =  mongoose.model<NotificationClass>('Notification', NotificationSchema)
+export const Notification =  mongoose.model<NotificationClass>('Notification', NotificationSchema);

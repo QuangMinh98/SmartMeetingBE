@@ -1,4 +1,4 @@
-import { Document, Schema, QueryOptions } from 'mongoose'
+import { Document, Schema, QueryOptions } from 'mongoose';
 
 export interface IFUser extends Document, IFUserDoc {
     _id: string,

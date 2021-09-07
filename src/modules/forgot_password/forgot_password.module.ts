@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { Module } from '@nestjs/common';
 import { ForgotPasswordController } from './forgot_password.controller';
 
 @Module({

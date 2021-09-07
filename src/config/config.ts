@@ -1,11 +1,11 @@
-import * as dotenv from 'dotenv'
-dotenv.config()
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const node_env: string = process.env.NODE_ENV;
 
 class ConfigSingleton {
 
-    private static instance: ConfigSingleton
+    private static instance: ConfigSingleton;
 
     readonly development = {
         jwtKey: process.env.JWT_KEY,
@@ -17,7 +17,7 @@ class ConfigSingleton {
         thingworxAppKey: process.env.THINGWORX_APP_KEY,
         firebaseURL: process.env.FIREBASE_URL,
         firebaseToken: process.env.FIREBASE_TOKEN
-    }
+    };
 
     readonly production = {
         jwtKey: process.env.JWT_KEY,
@@ -29,7 +29,7 @@ class ConfigSingleton {
         thingworxAppKey: process.env.THINGWORX_APP_KEY,
         firebaseURL: process.env.FIREBASE_URL,
         firebaseToken: process.env.FIREBASE_TOKEN
-    }
+    };
 
     public static getInstance(): ConfigSingleton {
         if (!ConfigSingleton.instance) {
@@ -40,4 +40,4 @@ class ConfigSingleton {
     }
 }
 
-export default ConfigSingleton.getInstance()[node_env]
+export default ConfigSingleton.getInstance()[node_env];

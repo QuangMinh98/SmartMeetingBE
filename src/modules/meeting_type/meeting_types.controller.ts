@@ -25,7 +25,7 @@ export class MeetingTypeController {
 
     @Get('')
     getAll(@Query() query: { page?: number, limit?: number}){
-        return this.meetingService.getAll(query)
+        return this.meetingService.getAll(query);
     }
 
 }

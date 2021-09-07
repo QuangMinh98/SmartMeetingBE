@@ -17,10 +17,10 @@ import {
     UseGuards,
     HttpCode
 } from '@nestjs/common';
-import { Request } from 'express'
+import { Request } from 'express';
 import { RoomDto } from './dto/dto';
 import { RoomService } from './room.service';
-import { RoleGuard } from '../roles'
+import { RoleGuard } from '../roles';
 
 @Controller('rooms')
 export class RoomController{
@@ -31,7 +31,7 @@ export class RoomController{
     @HttpCode(200)
     @UseGuards(new RoleGuard('Room', 'admin'))
     async create(@Body() roomData: RoomDto){
-        return this.roomService.create(roomData)
+        return this.roomService.create(roomData);
     }
 
     @Get('')
@@ -47,13 +47,13 @@ export class RoomController{
     @Put('/:id')
     @UseGuards(new RoleGuard('Room', 'admin'))
     async update(@Param('id') id: string, @Body() roomData: RoomDto){
-        return this.roomService.update(id, roomData)
+        return this.roomService.update(id, roomData);
     }
 
     @Delete('/:id')
     @UseGuards(new RoleGuard('Room', 'admin'))
     async delete(@Param('id') id: string){
-        return this.roomService.delete(id)
+        return this.roomService.delete(id);
     }
 
 }

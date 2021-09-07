@@ -1,5 +1,5 @@
-import config from '../../config/config'
-import axios from 'axios'
+import config from '../../config/config';
+import axios from 'axios';
 
 export abstract class AbstractCestron {
 
@@ -9,12 +9,12 @@ export abstract class AbstractCestron {
             url,
             headers,
             data: body
-        })
-        return response.data
+        });
+        return response.data;
     }
 
     async createRoom({ roomName,  description}: { roomName: string, description: string}){
-        const url = config.thingworxHost + '/Thingworx/Things/CestronApi/Services/CreateRoom'
+        const url = config.thingworxHost + '/Thingworx/Things/CestronApi/Services/CreateRoom';
         const room = await this.post({
             url,
             headers: {
@@ -30,16 +30,16 @@ export abstract class AbstractCestron {
                     TimeZoneID: 'Dateline Standard Time'
                 }
             }
-        })
-        return room
+        });
+        return room;
     }
 
     async createAppointments(
         { cestron_room_id, name, note,start_time, end_time, type_id, type_name}:
         { cestron_room_id: string, name: string, note: string, start_time:number, end_time:number, type_id: string, type_name: string}
     ){
-        const url = config.thingworxHost + '/Thingworx/Things/CestronApi/Services/CreateAppointment'
-        if(!note) note = 'note'
+        const url = config.thingworxHost + '/Thingworx/Things/CestronApi/Services/CreateAppointment';
+        if(!note) note = 'note';
         const appointments = await this.post({
             url,
             headers: {
@@ -67,12 +67,12 @@ export abstract class AbstractCestron {
                     OffsetMinutes:0
                 }
             }
-        })
-        return appointments.API_Appointments[0].RV_MeetingID
+        });
+        return appointments.API_Appointments[0].RV_MeetingID;
     }
 
     async getDeviceByRoomId({ RoomID }: { RoomID: string}){
-        const url = config.thingworxHost + '/Thingworx/Things/CestronApi/Services/Get_Room_byID'
+        const url = config.thingworxHost + '/Thingworx/Things/CestronApi/Services/Get_Room_byID';
         const { API_Rooms } = await this.post({
             url,
             headers: {
@@ -82,12 +82,12 @@ export abstract class AbstractCestron {
             body: {
                 RoomID
             }
-        })
-        return API_Rooms[0].Symbols[0].Signals
+        });
+        return API_Rooms[0].Symbols[0].Signals;
     }
 
     async updateDeviceValue({ AttributeID, value }: { AttributeID: string, value: boolean | number}){
-        const url = config.thingworxHost + '/Thingworx/Things/CestronApi/Services/UpdateDevice'
+        const url = config.thingworxHost + '/Thingworx/Things/CestronApi/Services/UpdateDevice';
         try{
             const data = await this.post({
                 url,
@@ -102,11 +102,11 @@ export abstract class AbstractCestron {
                         value
                     }
                 }
-            })
-            console.log(data)
+            });
+            console.log(data);
         }
         catch(error) {
-            console.log(error.message)
+            console.log(error.message);
         }
     }
 

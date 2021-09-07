@@ -1,6 +1,6 @@
-import * as mongoose from 'mongoose'
-import { Schema } from 'mongoose'
-import { IFMeeting, MeetingModel } from '../interface'
+import * as mongoose from 'mongoose';
+import { Schema } from 'mongoose';
+import { IFMeeting, MeetingModel } from '../interface';
 
 const MeetingSchema = new Schema<IFMeeting>({
     name: {
@@ -79,14 +79,14 @@ const MeetingSchema = new Schema<IFMeeting>({
         type: Number,
         default: Date.now()
     }
-})
+});
 
-MeetingSchema.index({ room: 1, start_time: -1, end_time: -1 })
-MeetingSchema.index({ user_booked: 1, start_time: -1, end_time: -1 })
-MeetingSchema.index({ user_booked: 1, start_time: -1, end_time: -1, members: 1 })
-MeetingSchema.index({ members: 1 })
-MeetingSchema.index({ user_booked: 1 })
-MeetingSchema.index({ start_time: -1 })
+MeetingSchema.index({ room: 1, start_time: -1, end_time: -1 });
+MeetingSchema.index({ user_booked: 1, start_time: -1, end_time: -1 });
+MeetingSchema.index({ user_booked: 1, start_time: -1, end_time: -1, members: 1 });
+MeetingSchema.index({ members: 1 });
+MeetingSchema.index({ user_booked: 1 });
+MeetingSchema.index({ start_time: -1 });
 
 /**
  * This function used to get all meetings sort by start_time and group them by date
@@ -100,36 +100,36 @@ MeetingSchema.index({ start_time: -1 })
  * @returns 
  */
 MeetingSchema.statics.findAndGroupByDate = async function (filter?: Object): Promise<Array<IFMeeting[]>>{
-    const VIET_NAM_UTC: number = 25200000
-    const MILLIS_PER_DAY: number = 86400000
+    const VIET_NAM_UTC = 25200000;
+    const MILLIS_PER_DAY = 86400000;
 
     const meetings = await this.find(filter)
         .populate('room')
         .populate('type')
-        .sort({ start_time: 'desc' })
+        .sort({ start_time: 'desc' });
 
     let intermediary = 0;
-    let result: Array<IFMeeting[]> = [];
+    const result: Array<IFMeeting[]> = [];
     let group_meetings: IFMeeting[] = [];
 
     meetings.forEach(meeting => {
         // if surlus equal to surplus when dividing start_time by the number of milliseconds per day
         // it means this meeting in a same day as meetings in group_meetings variable
         // Add start_time with VIET_NAM_UTC because timezone is +7
-        let surplus = Math.floor((meeting.start_time + VIET_NAM_UTC) /MILLIS_PER_DAY)
-        if(intermediary === surplus) group_meetings.push(meeting)
+        const surplus = Math.floor((meeting.start_time + VIET_NAM_UTC) /MILLIS_PER_DAY);
+        if(intermediary === surplus) group_meetings.push(meeting);
         else{
             // If not equal it means this meeting not in a same day as meetings in group_meetings variable
             // then push old group_meetings variable to result and clear group_meetings variable
-            if(group_meetings.length > 0) result.push(group_meetings)
-            group_meetings = [ meeting ]
+            if(group_meetings.length > 0) result.push(group_meetings);
+            group_meetings = [ meeting ];
         }
-        intermediary = surplus
-    })
-    result.push(group_meetings)
+        intermediary = surplus;
+    });
+    result.push(group_meetings);
 
-    return result
-}
+    return result;
+};
 
 /**
  * This function to set hour data (seconds since 00:00 to start_time) and end data (seconds since 00:00:00 to end_time)
@@ -137,15 +137,15 @@ MeetingSchema.statics.findAndGroupByDate = async function (filter?: Object): Pro
  * This properties used to checking if the time of this meeting is overlapped with another meeting
  */
 MeetingSchema.methods.setTime = function(){
-    const VIET_NAM_UTC: number = 25200000 // Vietnam is 7 hours different from the original time zone
-    const MILLIS_PER_DAY: number = 86400000
-    this.day_of_week = (new Date(this.start_time +  VIET_NAM_UTC)).getDay()
+    const VIET_NAM_UTC = 25200000; // Vietnam is 7 hours different from the original time zone
+    const MILLIS_PER_DAY = 86400000;
+    this.day_of_week = (new Date(this.start_time +  VIET_NAM_UTC)).getDay();
     this.time = {
         start: (this.start_time +  VIET_NAM_UTC) % MILLIS_PER_DAY,
         end: (this.end_time +  VIET_NAM_UTC) % MILLIS_PER_DAY,
         date: (new Date(this.start_time)).getDate()
-    }
-}
+    };
+};
 
 // Protoptype design pattern
 MeetingSchema.methods.clone = function(properties?: any): IFMeeting{
@@ -154,10 +154,10 @@ MeetingSchema.methods.clone = function(properties?: any): IFMeeting{
         ...properties,
         _id: undefined,
         clone_from: this._id
-    })
-    clone.setTime()
+    });
+    clone.setTime();
 
-    return clone
-}
+    return clone;
+};
 
-export const Meeting = mongoose.model<IFMeeting, MeetingModel>('Meeting', MeetingSchema)
+export const Meeting = mongoose.model<IFMeeting, MeetingModel>('Meeting', MeetingSchema);

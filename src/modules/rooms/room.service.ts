@@ -2,9 +2,9 @@ import {
     forwardRef,
     Inject,
     Injectable
-} from '@nestjs/common'
-import { RoomRepository } from './room.repository'
-import { RoomDto } from './dto/dto'
+} from '@nestjs/common';
+import { RoomRepository } from './room.repository';
+import { RoomDto } from './dto/dto';
 import { CestronService } from '../cestron';
 
 @Injectable()
@@ -16,11 +16,11 @@ export class RoomService {
         private readonly cestronService: CestronService
     ) {
         // Attach observers to the room subject.
-        this.roomRepo.attach(this.cestronService)
+        this.roomRepo.attach(this.cestronService);
     }
 
     async create(roomData: RoomDto){
-        return this.roomRepo.create(roomData)
+        return this.roomRepo.create(roomData);
     }
 
     getAll({ page, limit }: { page?: number, limit?: number}){
@@ -35,18 +35,18 @@ export class RoomService {
             page,
             limit,
             sort: { created_time: -1 }
-        })
+        });
     }
 
     getById(id: string){
-        return this.roomRepo.findById(id)
+        return this.roomRepo.findById(id);
     }
 
     update(id: string, roomData: RoomDto){
-        return this.roomRepo.updateById(id, roomData, {new: true})
+        return this.roomRepo.updateById(id, roomData, {new: true});
     }
 
     delete(id: string) {
-        return this.roomRepo.deleteById(id)
+        return this.roomRepo.deleteById(id);
     }
 }   

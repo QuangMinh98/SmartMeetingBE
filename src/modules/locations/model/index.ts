@@ -1,5 +1,5 @@
 import * as mongoose from "mongoose";
-import { Schema } from "mongoose"
+import { Schema } from "mongoose";
 import { IFLocation } from "../interface";
 
 const LocationSchema = new Schema({
@@ -17,6 +17,6 @@ const LocationSchema = new Schema({
         type: String,
         default: "23:59"
     }
-})
+});
 
 // export const Location = mongoose.model<IFLocation>('Location', LocationSchema)

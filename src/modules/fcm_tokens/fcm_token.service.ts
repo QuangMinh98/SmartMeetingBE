@@ -7,7 +7,7 @@ export class FcmTokenService {
     constructor(private readonly userRepo: UserRepository) {}
 
     async create(id: string, fcm_token: string){
-        let user = await this.userRepo.findById(id);
+        const user = await this.userRepo.findById(id);
 
         // If the user already has this token, it will not be added
         // This will save storage space on the database
@@ -16,14 +16,14 @@ export class FcmTokenService {
             user.save();
         }
 
-        return user
+        return user;
     }
 
     async remove(id: string, fcm_token: string){
-        let user = await this.userRepo.findById(id);
+        const user = await this.userRepo.findById(id);
         user.fcm_token = user.fcm_token.filter(item => item !== fcm_token);
 
-        return user
+        return user;
     }
 
 }

@@ -12,7 +12,7 @@ export class ResponseRepository {
                 limit: limit.toString(),
                 total_page: Math.ceil(totalRecords / Number(limit))
             }
-        }
+        };
     }
 
 }

@@ -17,7 +17,7 @@ import {
     UseGuards,
     HttpCode
 } from '@nestjs/common';
-import { Request } from 'express'
+import { Request } from 'express';
 import { FcmTokenDto } from './dto/dto';
 import { FcmTokenService } from './fcm_token.service';
 
@@ -29,12 +29,12 @@ export class FcmTokenController {
     @Post('')
     @HttpCode(200)
     create(@Req() req: Request, @Body() body: FcmTokenDto) {
-        return this.fcmTokenService.create(req.user._id, body.fcm_token)
+        return this.fcmTokenService.create(req.user._id, body.fcm_token);
     }
 
     @Delete('')
     remove(@Req() req: Request, @Body() body: FcmTokenDto) {
-        return this.fcmTokenService.remove(req.user._id, body.fcm_token)
+        return this.fcmTokenService.remove(req.user._id, body.fcm_token);
     }
 
 }

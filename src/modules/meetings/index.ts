@@ -1,5 +1,5 @@
-export { MeetingRepository } from './meetings.repository'
+export { MeetingRepository } from './meetings.repository';
 
-export { IFMeeting } from './interface'
+export { IFMeeting } from './interface';
 
-export { MeetingModule } from './meetings.module'
+export { MeetingModule } from './meetings.module';

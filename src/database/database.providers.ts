@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import { DATABASE_CONNECTION } from './database.constants';
-import config from '../config/config'
+import config from '../config/config';
 
 export const databaseProviders = [
     {
@@ -33,4 +33,4 @@ export const databaseProviders = [
             }
         }
     }
-]
+];

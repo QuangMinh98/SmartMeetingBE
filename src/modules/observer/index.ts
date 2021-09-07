@@ -1,3 +1,3 @@
-export { Observer,  Subject, ISubscription} from './interface'
+export { Observer,  Subject, ISubscription} from './interface';
 
-export { AbstractSubject } from './observer.service'
+export { AbstractSubject } from './observer.service';

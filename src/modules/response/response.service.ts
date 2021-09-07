@@ -11,7 +11,7 @@ export class ResponseService {
                 limit: limit.toString(),
                 total_page: Math.ceil(totalRecords / Number(limit))
             }
-        }
+        };
     }
 
 }

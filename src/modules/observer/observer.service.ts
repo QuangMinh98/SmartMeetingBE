@@ -30,7 +30,7 @@ export abstract class AbstractSubject implements Subject {
      */
     public notify(object: ISubscription, type?: string): void {
         for (const observer of this.observers) {
-            observer.observerNotify(object, type)
+            observer.observerNotify(object, type);
         }
     }
 }

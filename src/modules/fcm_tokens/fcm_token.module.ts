@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthMiddleware } from '../auth';
 import { UserModule } from '../users';
 import { FcmTokenController } from './fcm_token.controller';

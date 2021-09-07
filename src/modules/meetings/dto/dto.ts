@@ -3,36 +3,36 @@ import { IsNotEmpty } from 'class-validator';
 export class MeetingDto {
 
     @IsNotEmpty()
-    readonly name: string
+    readonly name: string;
 
-    document?: string[]
+    document?: string[];
 
-    readonly members: string[]
+    readonly members: string[];
 
-    readonly description: string
+    readonly description: string;
     
-    readonly note: string
+    readonly note: string;
     
     @IsNotEmpty()
-    readonly start_time: number
+    readonly start_time: number;
     
     @IsNotEmpty()
-    readonly end_time: number
+    readonly end_time: number;
     
-    readonly remind?: boolean
+    readonly remind?: boolean;
     
-    readonly repeat?: number
+    readonly repeat?: number;
     
-    readonly until_date?: number
+    readonly until_date?: number;
     
-    readonly number_of_members: number
+    readonly number_of_members: number;
     
     @IsNotEmpty()
-    readonly room: string
+    readonly room: string;
     
-    readonly type: string
+    readonly type: string;
 
-    user_booked?: string
+    user_booked?: string;
 
-    cestron_meeting_id: string
+    cestron_meeting_id: string;
 }

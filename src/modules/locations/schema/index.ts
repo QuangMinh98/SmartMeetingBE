@@ -1,22 +1,22 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import * as mongoose from "mongoose"
+import * as mongoose from "mongoose";
 import { Document } from 'mongoose';
-import { IFLocation } from "../interface"
+import { IFLocation } from "../interface";
 
 @Schema()
 export class Location {
 
     @Prop({ type: String })
-    location: string
+    location: string;
     
     @Prop({ type: String })
-    address: string
+    address: string;
     
     @Prop({ type: String })
-    start_time: string
+    start_time: string;
     
     @Prop({ type: String })
-    end_time: string
+    end_time: string;
 }
 
-export const LocationSchema = SchemaFactory.createForClass(Location)
+export const LocationSchema = SchemaFactory.createForClass(Location);

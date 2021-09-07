@@ -3,26 +3,26 @@ import { IsNotEmpty } from 'class-validator';
 export class RegisterDto {
 
     @IsNotEmpty()
-    readonly fullname: string
+    readonly fullname: string;
 
     @IsNotEmpty()
-    readonly email: string
+    readonly email: string;
 
     @IsNotEmpty()
-    readonly password: string
+    readonly password: string;
 
     @IsNotEmpty()
-    readonly phone_number: string
+    readonly phone_number: string;
 
-    readonly address: string
+    readonly address: string;
 
-    readonly roles: string[]
+    readonly roles: string[];
     
-    readonly admin: boolean
+    readonly admin: boolean;
 
-    readonly birthdate: number
+    readonly birthdate: number;
 
-    readonly gender: string
+    readonly gender: string;
 
-    readonly status: string
+    readonly status: string;
 }

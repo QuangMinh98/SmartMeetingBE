@@ -16,7 +16,7 @@ import {
     Query,
     UseGuards,
 } from '@nestjs/common';
-import { Request } from 'express'
+import { Request } from 'express';
 import { UserService } from './users.service';
 import { UserDto } from './dto/dto';
 import { RoleGuard } from '../roles';
@@ -28,7 +28,7 @@ export class UserController {
 
     @Get('/me')
     async findMe(@Req() req: Request){
-        return this.userService.GetById(req.user._id)
+        return this.userService.GetById(req.user._id);
     }
 
     @Get('')

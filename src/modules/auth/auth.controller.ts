@@ -17,7 +17,7 @@ import {
 import { Response } from 'express';
 import { IFAuthentication } from './interface';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/dto'
+import { LoginDto } from './dto/dto';
 
 @Controller('login')
 export class AuthController {
@@ -27,8 +27,8 @@ export class AuthController {
     @Post('')
     @HttpCode(200)
     async login(@Body() loginData: LoginDto, @Res() res: Response){
-        console.log(loginData)
-        return this.authService.login(loginData, res)
+        console.log(loginData);
+        return this.authService.login(loginData, res);
     }
 
 }

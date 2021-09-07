@@ -28,27 +28,27 @@ export class LocationController {
     @Post('')
     @HttpCode(200)
     create(@Body() locationData: LocationDto){
-        return this.locationService.create(locationData)
+        return this.locationService.create(locationData);
     }
 
     @Get('')
     getAll(@Query() query: { page?: number, limit?: number}){
-        return this.locationService.getAll(query)
+        return this.locationService.getAll(query);
     }
 
     @Get('/:id')
     getById(@Param('id') id: string){
-        return this.locationService.getById(id)
+        return this.locationService.getById(id);
     }
 
     @Put('/:id')
     update(@Param('id') id: string, @Body() locationData: LocationDto){
-        return this.locationService.update(id, locationData)
+        return this.locationService.update(id, locationData);
     }
 
     @Delete('/:id')
     delete(@Param('id') id: string){
-        return this.locationService.delete(id)
+        return this.locationService.delete(id);
     }
 
 }

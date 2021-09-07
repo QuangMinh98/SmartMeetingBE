@@ -24,7 +24,7 @@ export class ForgotPasswordController {
     @Post('')
     @HttpCode(200)
     forgotPassword(){
-        return ''
+        return '';
     }
 
 }

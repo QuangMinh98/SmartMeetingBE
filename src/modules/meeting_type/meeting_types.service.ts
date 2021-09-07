@@ -18,7 +18,7 @@ export class MeetingTypeService {
             page,
             limit,
             sort: { created_time: -1 }
-        })
+        });
     }
 
 }

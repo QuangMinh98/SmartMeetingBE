@@ -16,7 +16,7 @@ import {
     HttpCode,
     Req
 } from '@nestjs/common';
-import { Request } from 'express'
+import { Request } from 'express';
 import { NotificationService } from './notifications.service';
 
 @Controller('notifications')

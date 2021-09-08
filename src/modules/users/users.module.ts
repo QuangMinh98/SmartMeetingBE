@@ -6,7 +6,7 @@ import { UserRepository } from './users.repository';
 import { ResponseModule } from '../response';
 
 @Module({
-    imports: [ResponseModule],
+    imports: [],
     controllers:[UserController],
     providers: [
         UserService,

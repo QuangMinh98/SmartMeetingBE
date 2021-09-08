@@ -82,9 +82,9 @@ export class DeviceRepository extends AbstractSubject {
             if(!device) throw new HttpException({error_code: '404', error_message: 'Device not found'}, 404);
 
             // If the device state is inactive (is_on == false) 
-            // The current_value of this device will be adjusted to 0 and vice versa
+            // the current_value of this device will be adjusted to 0 and vice versa
             if(device.device_type === 1){
-                if(is_on == false || current_value == 0){
+                if(is_on === false || current_value === 0){
                     is_on = false;
                     current_value = 0;
                 }

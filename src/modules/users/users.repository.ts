@@ -35,7 +35,8 @@ export class UserRepository {
         .skip(skip)
         .limit(+limit)
         .sort(sort)
-        .select('-password');
+        .select('-password')
+        .select('-fcm_token');
         const totalRecords: number = await User.countDocuments(filter);
         
         return this.responseRepo.getResponse<IFUser>(users, totalRecords, page, limit);

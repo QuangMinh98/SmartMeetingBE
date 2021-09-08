@@ -23,6 +23,8 @@ export class MeetingService {
      */
     filterMeeting(meeting: IFMeeting){
         // Filter data object
+        // find meetings that take place in the same room as this meeting
+        // and start or end time between the start and end times of this meeting
         let filter: any = {
             room: meeting.room,
             start_time: { $lte: meeting.end_time, $gte: meeting.start_time }, // Find a meeting that start_time of this meeting  
@@ -34,6 +36,8 @@ export class MeetingService {
         };
 
         // If meeting is not repeat
+        // find meetings that take place in the same room as this meeting
+        // and start time is between the start and end times of this meeting.
         if(!meeting.repeat || meeting.repeat === 0){
             filter = {
                 room: meeting.room,
@@ -45,11 +49,13 @@ export class MeetingService {
         }
 
         // If repeat is weekly
+        // Add to the filter a condition to find a meeting that happens on the same day of the week as this meeting
         if(meeting.repeat === 2){
             filter.day_of_week = meeting.day_of_week;
         }
 
         // If repeat is monthly
+        // Add to the filter a condition to find a meeting that happens on the same date as this meeting
         if(meeting.repeat === 3){
             filter['time.date'] = meeting.time.date;
         }
@@ -68,16 +74,20 @@ export class MeetingService {
     }
 
     async checkingRoomWhenUpdate(meeting: IFMeeting) {
+        // Find meetings that take place in the same room as this meeting
+        // start or end time between the start and end times of this meeting
         const filter = {
-            'room': meeting.room,
-            '_id': { $ne: meeting._id },
-            '$or': [
+            room: meeting.room,
+            _id: { $ne: meeting._id },
+            $or: [
                 { 'start_time': { $gte: meeting.start_time, $lte: meeting.end_time } },
                 { 'end_time': { $gte: meeting.start_time, $lte: meeting.end_time } }
             ]
         };
 
         // Get data from database
+        // if meetings is greater than 0, this meeting is time duplicated and cannot be created
+        // if the number is 0 then this meeting can be created
         const meetings = await this.meetingRepo.countDocuments(filter);
 
         return meetings;
@@ -132,7 +142,8 @@ export class MeetingService {
         const filter: any = { _id: id };
 
         // If the user does not have administrative rights,
-        // he or she is only allowed to view information about meetings booked by himself or as a member who can join that meeting.
+        // he or she is only allowed to view information about meetings booked by himself 
+        // or as a member who can join that meetings.
         if(!isAdmin){
             filter.$or = [
                 {user_booked: userId},

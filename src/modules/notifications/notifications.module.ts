@@ -9,7 +9,7 @@ import { NotificationRepository } from './notifications.repository';
 import { NotificationService } from './notifications.service';
 
 @Module({
-    imports: [UserModule, RoomModule, FirebaseModule, ResponseModule],
+    imports: [UserModule, RoomModule, FirebaseModule],
     controllers: [NotificationController],
     providers: [NotificationService, NotificationRepository],
     exports: [NotificationService, NotificationRepository]

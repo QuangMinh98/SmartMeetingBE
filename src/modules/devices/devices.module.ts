@@ -8,7 +8,7 @@ import { AuthMiddleware } from '../auth';
 import { CestronModule } from '../cestron';
 
 @Module({
-    imports: [RoomModule, ResponseModule, CestronModule],
+    imports: [RoomModule, CestronModule],
     controllers: [DeviceController],
     providers: [DeviceService, DeviceRepository],
     exports: [DeviceService, DeviceRepository]

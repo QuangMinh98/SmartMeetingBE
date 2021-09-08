@@ -1,4 +1,4 @@
-import { ISubscription, Observer, Subject } from "./interface";
+import { ISubscription, Observer, Subject } from './interface';
 
 export abstract class AbstractSubject implements Subject {
 

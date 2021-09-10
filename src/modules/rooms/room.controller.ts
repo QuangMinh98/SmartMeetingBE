@@ -21,6 +21,7 @@ import { Request } from 'express';
 import { RoomDto } from './dto/dto';
 import { RoomService } from './room.service';
 import { RoleGuard } from '../roles';
+import { PagingPipe } from 'src/common/pipes/paging.pipe';
 
 @Controller('rooms')
 export class RoomController{
@@ -35,7 +36,7 @@ export class RoomController{
     }
 
     @Get('')
-    async getAll(@Query() query: { page?: number, limit?: number }){
+    async getAll(@Query(new PagingPipe()) query: { page?: number, limit?: number }){
         return this.roomService.getAll(query);
     }
 

@@ -28,7 +28,7 @@ export class NotificationRepository {
 
         const notifications = await Notification.find(filter)
             .skip(skip)
-            .limit(+limit)
+            .limit(limit)
             .sort(sort);
         const totalRecords: number = await Notification.countDocuments(filter);
 

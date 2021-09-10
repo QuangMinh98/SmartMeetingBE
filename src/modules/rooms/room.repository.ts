@@ -33,7 +33,7 @@ export class RoomRepository extends AbstractSubject {
         skip = (page -1) * limit;
 
         const rooms: IFRoom[] = await Room.find(filter)
-            .limit(+limit)
+            .limit(limit)
             .skip(skip)
             .sort(sort);
         const totalRecords: number = await Room.countDocuments(filter);

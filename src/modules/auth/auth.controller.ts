@@ -12,7 +12,9 @@ import {
     NotFoundException,
     ConflictException,
     Query,
-    HttpCode
+    HttpCode,
+    ValidationPipe,
+    UsePipes
 } from '@nestjs/common';
 import { Response } from 'express';
 import { IFAuthentication } from './interface';
@@ -26,6 +28,7 @@ export class AuthController {
 
     @Post('')
     @HttpCode(200)
+    @UsePipes(new ValidationPipe())
     async login(@Body() loginData: LoginDto, @Res() res: Response){
         console.log(loginData);
         return this.authService.login(loginData, res);

@@ -15,11 +15,14 @@ import {
     ConflictException,
     Query,
     UseGuards,
-    HttpCode
+    HttpCode,
+    ValidationPipe,
+    UsePipes
 } from '@nestjs/common';
 import { DeviceDto } from './dto/dto';
 import { DeviceService } from './devices.service';
 import { RoleGuard } from '../roles';
+import { UpdateValueDto } from './dto/update-value-dto';
 
 @Controller('devices')
 export class DeviceController{
@@ -29,7 +32,8 @@ export class DeviceController{
     @Post('')
     @HttpCode(200)
     @UseGuards(new RoleGuard('Device', 'admin'))
-    create(deviceData: DeviceDto) {
+    @UsePipes(new ValidationPipe())
+    create(@Body() deviceData: DeviceDto) {
         return this.deviceService.create(deviceData);
     }
 
@@ -52,12 +56,14 @@ export class DeviceController{
 
     @Put('/:id')
     @UseGuards(new RoleGuard('Device', 'admin'))
-    update(@Param('id') id: string,@Body()deviceData: DeviceDto){
+    @UsePipes(new ValidationPipe())
+    update(@Param('id') id: string, @Body() deviceData: DeviceDto){
         return this.deviceService.update(id, deviceData);
     }
 
     @Put('data/:id')
-    updateValue(@Param('id')id: string,@Body() deviceData){
+    @UsePipes(new ValidationPipe())
+    updateValue(@Param('id')id: string, @Body() deviceData: UpdateValueDto){
         return this.deviceService.updateValue(id, deviceData);
     }
 

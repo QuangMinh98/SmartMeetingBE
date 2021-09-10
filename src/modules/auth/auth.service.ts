@@ -14,11 +14,11 @@ export class AuthService {
 
         // Get user info with login email
         const user: IFUser = await User.findOne({ email });
-        if (!user)  throw new HttpException({error_code: '01', error_message: 'Invalid email or password.'}, 400);
+        if (!user)  throw new HttpException({error_code: '400', error_message: 'Invalid email or password.'}, 400);
 
         // Password authentication
         const isValid = await user.comparePassword(password);
-        if (!isValid) throw new HttpException({error_code: '01', error_message: 'Invalid email or password.'}, 400);
+        if (!isValid) throw new HttpException({error_code: '400', error_message: 'Invalid email or password.'}, 400);
 
         // Generate token
         const token = user.generateToken();

@@ -20,6 +20,7 @@ import {
 import { Request, Response } from 'express';
 import { MeetingDto } from './dto/dto';
 import { MeetingService } from './meetings.service';
+import { User } from 'src/common/decorators/user.decorator';
 
 @Controller('meetings')
 export class MeetingController {
@@ -28,21 +29,21 @@ export class MeetingController {
 
     @Post('')
     @HttpCode(200)
-    create(@Req() req: Request, @Body() meetingData: MeetingDto){
+    create(@User() user, @Body() meetingData: MeetingDto){
         return this.meetingService.create({
             ...meetingData,
-            user_booked: req.user._id
+            user_booked: user._id
         });
     }
 
     @Get('/my-meetings')
-    getByMe(@Req() req: Request, @Query() query: {start_time?: number, end_time?: number}){
-        return this.meetingService.getMyMeeting(req.user._id, query);
+    getByMe(@User() user, @Query() query: {start_time?: number, end_time?: number}){
+        return this.meetingService.getMyMeeting(user._id, query);
     }
 
     @Get('/booked')
-    getMeetingIBooked(@Req() req: Request, @Query() query: {start_time?: number, end_time?: number}){
-        return this.meetingService.getMeetingIBooked(req.user._id, query);
+    getMeetingIBooked(@User() user, @Query() query: {start_time?: number, end_time?: number}){
+        return this.meetingService.getMeetingIBooked(user._id, query);
     }
 
     @Get('/room/:id')
@@ -51,26 +52,26 @@ export class MeetingController {
     }
 
     @Get('/:id')
-    getById(@Req() req: Request, @Param('id') id: string){
+    getById(@User() user, @Param('id') id: string){
         return this.meetingService.getById(id, { 
-            userId: req.user._id,  
-            isAdmin: req.user.admin
+            userId: user._id,  
+            isAdmin: user.admin
         });
     }
 
     @Put('/:id')
-    update(@Req() req: Request, @Param('id') id: string, @Body() meetingData: MeetingDto){
+    update(@User() user, @Param('id') id: string, @Body() meetingData: MeetingDto){
         return this.meetingService.update(id, meetingData, { 
-            userId: req.user._id,
-            isAdmin: req.user.admin
+            userId: user._id,
+            isAdmin: user.admin
         });
     }
 
     @Delete('/:id')
-    delete(@Req() req: Request, @Param() id: string){
+    delete(@User() user, @Param() id: string){
         return this.meetingService.delete(id, {
-            userId: req.user._id,
-            isAdmin: req.user.admin
+            userId: user._id,
+            isAdmin: user.admin
         });
     }
 

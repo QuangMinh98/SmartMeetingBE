@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { pick } from 'lodash';
 import { HttpStatus, HttpException, NotFoundException } from '@nestjs/common';
 import { UserDto } from './dto/dto';
 import { UserRepository } from './users.repository';
@@ -35,6 +36,19 @@ export class UserService {
 
     async update(id: string, userData: UserDto){
         return this.userRepo.updateById(id, userData, { new: true});
+    }
+
+    async changePassword(id: string, password: string, newPassword: string){
+        const user = await this.userRepo.findById(id);
+
+        const allow = await user.comparePassword(password);
+        if(!allow) throw new HttpException({error_code: '400', error_message: 'Invalid password'}, 400);
+
+        user.password = newPassword;
+        await user.hashPassword();
+        await user.save();
+
+        return user;
     }
 
     async delete(id: string){

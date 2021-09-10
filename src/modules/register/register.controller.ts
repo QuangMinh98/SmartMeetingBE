@@ -13,7 +13,9 @@ import {
     ConflictException,
     Query,
     UseGuards,
-    HttpCode
+    HttpCode,
+    UsePipes,
+    ValidationPipe
 } from '@nestjs/common';
 import { RegisterDto } from './dto/dto';
 import { RegisterService } from './register.service';
@@ -25,6 +27,7 @@ export class RegisterController {
 
     @Post('')
     @HttpCode(200)
+    @UsePipes(new ValidationPipe())
     async register(@Body() userData: RegisterDto){
         return this.registerService.register(userData);
     }

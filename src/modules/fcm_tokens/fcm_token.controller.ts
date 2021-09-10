@@ -15,9 +15,11 @@ import {
     ConflictException,
     Query,
     UseGuards,
-    HttpCode
+    HttpCode,
+    ValidationPipe
 } from '@nestjs/common';
 import { Request } from 'express';
+import { User } from 'src/common/decorators/user.decorator';
 import { FcmTokenDto } from './dto/dto';
 import { FcmTokenService } from './fcm_token.service';
 
@@ -28,13 +30,13 @@ export class FcmTokenController {
 
     @Post('')
     @HttpCode(200)
-    create(@Req() req: Request, @Body() body: FcmTokenDto) {
-        return this.fcmTokenService.create(req.user._id, body.fcm_token);
+    create(@User() user, @Body(new ValidationPipe()) body: FcmTokenDto) {
+        return this.fcmTokenService.create(user._id, body.fcm_token);
     }
 
     @Delete('')
-    remove(@Req() req: Request, @Body() body: FcmTokenDto) {
-        return this.fcmTokenService.remove(req.user._id, body.fcm_token);
+    remove(@User() user, @Body(new ValidationPipe()) body: FcmTokenDto) {
+        return this.fcmTokenService.remove(user._id, body.fcm_token);
     }
 
 }

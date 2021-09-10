@@ -1,5 +1,8 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ErrorsInterceptor } from './common/interceptors/errors.interceptor';
+import { LoggingInterceptor } from './common/interceptors/logger.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -13,6 +16,8 @@ async function bootstrap() {
   });
 
   app.setGlobalPrefix('api');
+  app.useGlobalInterceptors(new LoggingInterceptor());
+  app.useGlobalInterceptors(new ErrorsInterceptor());
 
   const port = Number(process.env.PORT) || 3000;
   

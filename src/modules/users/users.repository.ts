@@ -33,7 +33,7 @@ export class UserRepository {
 
         const users:IFUser[] = await User.find(filter)
         .skip(skip)
-        .limit(+limit)
+        .limit(limit)
         .sort(sort)
         .select('-password')
         .select('-fcm_token');

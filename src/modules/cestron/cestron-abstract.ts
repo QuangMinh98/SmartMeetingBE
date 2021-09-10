@@ -14,7 +14,7 @@ export abstract class AbstractCestron {
     }
 
     async createRoom({ roomName,  description}: { roomName: string, description: string}){
-        const THINGWORX_PATH: string = '/Thingworx/Things/CestronApi/Services/CreateRoom'
+        const THINGWORX_PATH = '/Thingworx/Things/CestronApi/Services/CreateRoom';
 
         const url = config.thingworxHost + THINGWORX_PATH;
         const room = await this.post({
@@ -40,10 +40,10 @@ export abstract class AbstractCestron {
         { cestron_room_id, name, note,start_time, end_time, type_id, type_name}:
         { cestron_room_id: string, name: string, note: string, start_time:number, end_time:number, type_id: string, type_name: string}
     ){
-        const THINGWORX_PATH: string = '/Thingworx/Things/CestronApi/Services/CreateAppointment';
-        const TIMEZONE: string = '0700';
-        const TIMEZONE_ID: string = 'SE Asia Standard Time';
-        const VIET_NAM_UTC: number = 25200000;
+        const THINGWORX_PATH = '/Thingworx/Things/CestronApi/Services/CreateAppointment';
+        const TIMEZONE = '0700';
+        const TIMEZONE_ID = 'SE Asia Standard Time';
+        const VIET_NAM_UTC = 25200000;
 
         const url = config.thingworxHost + THINGWORX_PATH;
         if(!note) note = 'note';
@@ -79,7 +79,7 @@ export abstract class AbstractCestron {
     }
 
     async getDeviceByRoomId({ RoomID }: { RoomID: string}){
-        const THINGWORX_PATH: string = '/Thingworx/Things/CestronApi/Services/Get_Room_byID';
+        const THINGWORX_PATH = '/Thingworx/Things/CestronApi/Services/Get_Room_byID';
 
         const url = config.thingworxHost + THINGWORX_PATH;
         const { API_Rooms } = await this.post({
@@ -96,7 +96,7 @@ export abstract class AbstractCestron {
     }
 
     async updateDeviceValue({ AttributeID, value }: { AttributeID: string, value: boolean | number}){
-        const THINGWORX_PATH: string = '/Thingworx/Things/CestronApi/Services/UpdateDevice';
+        const THINGWORX_PATH = '/Thingworx/Things/CestronApi/Services/UpdateDevice';
 
         const url = config.thingworxHost + THINGWORX_PATH;
         try{

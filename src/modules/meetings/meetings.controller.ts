@@ -47,8 +47,8 @@ export class MeetingController {
     }
 
     @Get('/room/:id')
-    getByRoom(@Param('id') id: string){
-        return this.meetingService.getByRoom(id);
+    getByRoom(@Param('id') id: string, @Query() query: { start_time?: number, end_time?: number}){
+        return this.meetingService.getByRoom(id, query);
     }
 
     @Get('/:id')

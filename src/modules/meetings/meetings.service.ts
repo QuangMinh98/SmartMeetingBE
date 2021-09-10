@@ -104,8 +104,18 @@ export class MeetingService {
         return newMeeting;
     }
 
-    getByRoom(id: string){
-        return this.meetingRepo.getByRoom(id);
+    getByRoom(id: string, query: { start_time?: number, end_time?: number}){
+        const { start_time, end_time} = query
+        let filter : any = {}
+
+        if(start_time){
+            filter.start_time = { $gte: start_time }
+        }
+        if(end_time){
+            filter.end_time = { $lt: end_time }
+        }
+
+        return this.meetingRepo.getByRoom(id, filter);
     }
 
     getMyMeeting(id: string, { start_time, end_time }: { start_time?: number, end_time?: number}){

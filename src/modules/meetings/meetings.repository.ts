@@ -142,11 +142,11 @@ export class MeetingRepository extends AbstractSubject {
         return result;
     }
 
-    async getByRoom(id: string) {
+    async getByRoom(id: string, filter?: any) {
         try{
             const room = await this.roomRepo.findById(id);
 
-            const meetings: IFMeeting[] = await Meeting.find({ room: room._id }).populate('type');
+            const meetings: IFMeeting[] = await Meeting.find({ room: room._id, ...filter }).populate('type');
 
             return {
                 room,
@@ -159,10 +159,15 @@ export class MeetingRepository extends AbstractSubject {
     }
 
     async getOne(filter?: any): Promise<IFMeeting> {
-        const meeting: IFMeeting = await Meeting.findOne(filter);
-        if(!meeting) throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404);
+        try{
+            const meeting: IFMeeting = await Meeting.findOne(filter);
+            if(!meeting) throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404);
 
-        return meeting;
+            return meeting;
+        }
+        catch(err){
+            throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404);
+        }
     }
 
     async updateOne(

@@ -143,7 +143,7 @@ MeetingSchema.methods.setTime = function(){
     this.time = {
         start: (this.start_time +  VIET_NAM_UTC) % MILLIS_PER_DAY,
         end: (this.end_time +  VIET_NAM_UTC) % MILLIS_PER_DAY,
-        date: (new Date(this.start_time)).getDate()
+        date: (new Date(this.start_time +  VIET_NAM_UTC)).getDate()
     };
 };
 

@@ -4,7 +4,6 @@ dotenv.config();
 const node_env: string = process.env.NODE_ENV;
 
 class ConfigSingleton {
-
     private static instance: ConfigSingleton;
 
     readonly development = {

@@ -16,7 +16,7 @@ import {
     Query,
     UseGuards,
     UsePipes,
-    ValidationPipe,
+    ValidationPipe
 } from '@nestjs/common';
 import { Request } from 'express';
 import { UserService } from './users.service';
@@ -28,16 +28,15 @@ import { ChangePasswordDto } from './dto/change-password-dto';
 
 @Controller('users')
 export class UserController {
-
     constructor(private readonly userService: UserService) {}
 
     @Get('/me')
-    async findMe(@User() user){
+    async findMe(@User() user) {
         return this.userService.GetById(user._id);
     }
 
     @Get('')
-    async GetAllUsers(@Query(new PagingPipe()) query: { page?:number, limit?:number, search_string?: string}) {
+    async GetAllUsers(@Query(new PagingPipe()) query: { page?: number; limit?: number; search_string?: string }) {
         return this.userService.GetAll(query);
     }
 
@@ -48,7 +47,7 @@ export class UserController {
 
     @Put('/me/change-password')
     @UsePipes(new ValidationPipe())
-    async ChangePassword(@User() user, @Body() body: ChangePasswordDto){
+    async ChangePassword(@User() user, @Body() body: ChangePasswordDto) {
         return this.userService.changePassword(user._id, body.password, body.newPassword);
     }
 
@@ -60,8 +59,7 @@ export class UserController {
 
     @Delete('/:id')
     @UseGuards(new RoleGuard('User', 'admin'))
-    async DeleteUser(@Param('id') id: string){
+    async DeleteUser(@Param('id') id: string) {
         return this.userService.delete(id);
     }
-
 }

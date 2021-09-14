@@ -24,12 +24,10 @@ import { User } from 'src/common/decorators/user.decorator';
 
 @Controller('notifications')
 export class NotificationController {
-
     constructor(private readonly notificationService: NotificationService) {}
 
     @Get('')
-    getAll(@User() user, @Query(new PagingPipe()) query: { page?: number, limit?: number, search_string?: string}){
+    getAll(@User() user, @Query(new PagingPipe()) query: { page?: number; limit?: number; search_string?: string }) {
         return this.notificationService.getAll(query, user._id);
     }
-
 }

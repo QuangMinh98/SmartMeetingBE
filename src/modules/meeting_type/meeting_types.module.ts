@@ -12,8 +12,6 @@ import { AuthMiddleware } from '../auth';
 })
 export class MeetingTypeModule implements NestModule {
     public configure(consumer: MiddlewareConsumer) {
-        consumer
-          .apply(AuthMiddleware)
-          .forRoutes(MeetingTypeController);
+        consumer.apply(AuthMiddleware).forRoutes(MeetingTypeController);
     }
 }

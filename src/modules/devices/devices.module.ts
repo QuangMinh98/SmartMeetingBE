@@ -14,8 +14,6 @@ import { CestronModule } from '../cestron';
 })
 export class DeviceModule implements NestModule {
     public configure(consumer: MiddlewareConsumer) {
-        consumer
-          .apply(AuthMiddleware)
-          .forRoutes(DeviceController);
+        consumer.apply(AuthMiddleware).forRoutes(DeviceController);
     }
 }

@@ -2,8 +2,7 @@ import config from '../../config/config';
 import axios from 'axios';
 
 export abstract class AbstractCestron {
-
-    async post({ url, headers, body}: { url: string, headers: any, body: any}){
+    async post({ url, headers, body }: { url: string; headers: any; body: any }) {
         const response = await axios.request({
             method: 'POST',
             url,
@@ -13,7 +12,7 @@ export abstract class AbstractCestron {
         return response.data;
     }
 
-    async createRoom({ roomName,  description}: { roomName: string, description: string}){
+    async createRoom({ roomName, description }: { roomName: string; description: string }) {
         const THINGWORX_PATH = '/Thingworx/Things/CestronApi/Services/CreateRoom';
 
         const url = config.thingworxHost + THINGWORX_PATH;
@@ -24,7 +23,7 @@ export abstract class AbstractCestron {
                 appKey: config.thingworxAppKey
             },
             body: {
-                createRoom:{
+                createRoom: {
                     GroupwareProviderType: 'Internal',
                     Description: description,
                     ParentNodeID: 'ROOMS',
@@ -36,17 +35,30 @@ export abstract class AbstractCestron {
         return room;
     }
 
-    async createAppointments(
-        { cestron_room_id, name, note,start_time, end_time, type_id, type_name}:
-        { cestron_room_id: string, name: string, note: string, start_time:number, end_time:number, type_id: string, type_name: string}
-    ){
+    async createAppointments({
+        cestron_room_id,
+        name,
+        note,
+        start_time,
+        end_time,
+        type_id,
+        type_name
+    }: {
+        cestron_room_id: string;
+        name: string;
+        note: string;
+        start_time: number;
+        end_time: number;
+        type_id: string;
+        type_name: string;
+    }) {
         const THINGWORX_PATH = '/Thingworx/Things/CestronApi/Services/CreateAppointment';
         const TIMEZONE = '0700';
         const TIMEZONE_ID = 'SE Asia Standard Time';
         const VIET_NAM_UTC = 25200000;
 
         const url = config.thingworxHost + THINGWORX_PATH;
-        if(!note) note = 'note';
+        if (!note) note = 'note';
         const appointments = await this.post({
             url,
             headers: {
@@ -66,19 +78,19 @@ export abstract class AbstractCestron {
                     EventOrMeeting: 'EventWithActions',
                     IsPrivate: true,
                     MeetingType: true,
-                    NotifyAction: true,
+                    NotifyAction: true
                 },
                 Actions: {
-                    ActionID:[type_id],
-                    ActionName:[type_name],
-                    OffsetMinutes:0
+                    ActionID: [type_id],
+                    ActionName: [type_name],
+                    OffsetMinutes: 0
                 }
             }
         });
         return appointments.API_Appointments[0].RV_MeetingID;
     }
 
-    async getDeviceByRoomId({ RoomID }: { RoomID: string}){
+    async getDeviceByRoomId({ RoomID }: { RoomID: string }) {
         const THINGWORX_PATH = '/Thingworx/Things/CestronApi/Services/Get_Room_byID';
 
         const url = config.thingworxHost + THINGWORX_PATH;
@@ -95,11 +107,11 @@ export abstract class AbstractCestron {
         return API_Rooms[0].Symbols[0].Signals;
     }
 
-    async updateDeviceValue({ AttributeID, value }: { AttributeID: string, value: boolean | number}){
+    async updateDeviceValue({ AttributeID, value }: { AttributeID: string; value: boolean | number }) {
         const THINGWORX_PATH = '/Thingworx/Things/CestronApi/Services/UpdateDevice';
 
         const url = config.thingworxHost + THINGWORX_PATH;
-        try{
+        try {
             const data = await this.post({
                 url,
                 headers: {
@@ -115,10 +127,8 @@ export abstract class AbstractCestron {
                 }
             });
             console.log(data);
-        }
-        catch(error) {
+        } catch (error) {
             console.log(error.message);
         }
     }
-
 }

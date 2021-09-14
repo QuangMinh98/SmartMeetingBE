@@ -3,10 +3,9 @@ import { MeetingTypeRepository } from './meeting_types.repository';
 
 @Injectable()
 export class MeetingTypeService {
-
     constructor(private readonly meetingTypeRepo: MeetingTypeRepository) {}
 
-    getAll({ page, limit }: { page?: number, limit?: number}){
+    getAll({ page, limit }: { page?: number; limit?: number }) {
         if (!page || page <= 0) {
             page = 1;
         }
@@ -20,5 +19,4 @@ export class MeetingTypeService {
             sort: { created_time: -1 }
         });
     }
-
 }

@@ -25,8 +25,7 @@ import { RoleGuard } from '../roles';
 import { UpdateValueDto } from './dto/update-value-dto';
 
 @Controller('devices')
-export class DeviceController{
-
+export class DeviceController {
     constructor(private deviceService: DeviceService) {}
 
     @Post('')
@@ -39,37 +38,37 @@ export class DeviceController{
 
     @Get('')
     @UseGuards(new RoleGuard('Device', 'admin'))
-    getAll(@Query() query: { page?: number, limit?: number}){
+    getAll(@Query() query: { page?: number; limit?: number }) {
         return this.deviceService.getAll(query);
     }
 
     @Get('/room/:id')
-    getByRoomId(@Param('id') id: string, @Query() query: { page?: number, limit?: number}){
+    getByRoomId(@Param('id') id: string, @Query() query: { page?: number; limit?: number }) {
         return this.deviceService.getByRoomId(id, query);
     }
 
     @Get('/:id')
     @UseGuards(new RoleGuard('Device', 'admin'))
-    getById(@Param('id') id: string){
+    getById(@Param('id') id: string) {
         return this.deviceService.getById(id);
     }
 
     @Put('/:id')
     @UseGuards(new RoleGuard('Device', 'admin'))
     @UsePipes(new ValidationPipe())
-    update(@Param('id') id: string, @Body() deviceData: DeviceDto){
+    update(@Param('id') id: string, @Body() deviceData: DeviceDto) {
         return this.deviceService.update(id, deviceData);
     }
 
     @Put('data/:id')
     @UsePipes(new ValidationPipe())
-    updateValue(@Param('id')id: string, @Body() deviceData: UpdateValueDto){
+    updateValue(@Param('id') id: string, @Body() deviceData: UpdateValueDto) {
         return this.deviceService.updateValue(id, deviceData);
     }
 
     @Delete('/:id')
     @UseGuards(new RoleGuard('Device', 'admin'))
-    delete(@Param('id') id: string){
+    delete(@Param('id') id: string) {
         return this.deviceService.delete(id);
     }
 }

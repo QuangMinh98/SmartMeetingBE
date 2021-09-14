@@ -20,11 +20,9 @@ import {
 
 @Controller('forgot-password')
 export class ForgotPasswordController {
-
     @Post('')
     @HttpCode(200)
-    forgotPassword(){
+    forgotPassword() {
         return '';
     }
-
 }

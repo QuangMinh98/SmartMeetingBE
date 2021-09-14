@@ -1,10 +1,4 @@
-import {
-    Module,
-    MiddlewareConsumer,
-    NestModule,
-    RequestMethod,
-    forwardRef
-} from '@nestjs/common';
+import { Module, MiddlewareConsumer, NestModule, RequestMethod, forwardRef } from '@nestjs/common';
 import { RoomController } from './room.controller';
 import { RoomService } from './room.service';
 import { RoomRepository } from './room.repository';
@@ -19,8 +13,6 @@ import { CestronModule } from '../cestron';
 })
 export class RoomModule implements NestModule {
     public configure(consumer: MiddlewareConsumer) {
-        consumer
-          .apply(AuthMiddleware)
-          .forRoutes(RoomController);
+        consumer.apply(AuthMiddleware).forRoutes(RoomController);
     }
 }

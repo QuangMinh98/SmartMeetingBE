@@ -1,7 +1,6 @@
 import { ISubscription, Observer, Subject } from './interface';
 
 export abstract class AbstractSubject implements Subject {
-
     private observers: Observer[] = [];
 
     /**

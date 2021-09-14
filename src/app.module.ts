@@ -17,28 +17,26 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { SharedModule } from './shared';
 
 @Module({
-  imports: [
-    EventEmitterModule.forRoot(),
-    DatabaseModule,
-    SharedModule,
-    UserModule,
-    AuthModule,
-    RegisterModule,
-    RoomModule,
-    DeviceModule,
-    MeetingModule,
-    MeetingTypeModule,
-    NotificationModule,
-    FcmTokenModule,
-    ForgotPasswordModule
-  ],
-  controllers: [AppController],
-  providers: [AppService]
+    imports: [
+        EventEmitterModule.forRoot(),
+        DatabaseModule,
+        SharedModule,
+        UserModule,
+        AuthModule,
+        RegisterModule,
+        RoomModule,
+        DeviceModule,
+        MeetingModule,
+        MeetingTypeModule,
+        NotificationModule,
+        FcmTokenModule,
+        ForgotPasswordModule
+    ],
+    controllers: [AppController],
+    providers: [AppService]
 })
 export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(LoggerMiddleware)
-      .forRoutes("*");
-  }
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(LoggerMiddleware).forRoutes('*');
+    }
 }

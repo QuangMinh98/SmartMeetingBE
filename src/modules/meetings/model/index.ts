@@ -96,37 +96,34 @@ MeetingSchema.index({ start_time: -1 });
  * This function used to get all meetings sort by start_time and group them by date
  * Get all meetings, then create a group_meetings variable to hold meetings on the same day and a intermediary variable
  * Loop all meetings found, if surplus when dividing start_time by the number of milliseconds per day
- * equal to intermediary variable (in the same day), then push that meeting to the group_meetings variable 
- * if not equal, than clear the group_meetings variable and push that meeting to the group_meetings variable 
+ * equal to intermediary variable (in the same day), then push that meeting to the group_meetings variable
+ * if not equal, than clear the group_meetings variable and push that meeting to the group_meetings variable
  * Then change intermediary variable to be same as surplus variable
- * 
- * @param filter 
- * @returns 
+ *
+ * @param filter
+ * @returns
  */
-MeetingSchema.statics.findAndGroupByDate = async function (filter?: Object): Promise<Array<IFMeeting[]>>{
+MeetingSchema.statics.findAndGroupByDate = async function (filter?: Object): Promise<Array<IFMeeting[]>> {
     const VIET_NAM_UTC = 25200000;
     const MILLIS_PER_DAY = 86400000;
 
-    const meetings = await this.find(filter)
-        .populate('room')
-        .populate('type')
-        .sort({ start_time: 'desc' });
+    const meetings = await this.find(filter).populate('room').populate('type').sort({ start_time: 'desc' });
 
     let intermediary = 0;
     const result: Array<IFMeeting[]> = [];
     let group_meetings: IFMeeting[] = [];
 
-    meetings.forEach(meeting => {
+    meetings.forEach((meeting) => {
         // if surlus equal to surplus when dividing start_time by the number of milliseconds per day
         // it means this meeting in a same day as meetings in group_meetings variable
         // Add start_time with VIET_NAM_UTC because timezone is +7
-        const surplus = Math.floor((meeting.start_time + VIET_NAM_UTC) /MILLIS_PER_DAY);
-        if(intermediary === surplus) group_meetings.push(meeting);
-        else{
+        const surplus = Math.floor((meeting.start_time + VIET_NAM_UTC) / MILLIS_PER_DAY);
+        if (intermediary === surplus) group_meetings.push(meeting);
+        else {
             // If not equal it means this meeting not in a same day as meetings in group_meetings variable
             // then push old group_meetings variable to result and clear group_meetings variable
-            if(group_meetings.length > 0) result.push(group_meetings);
-            group_meetings = [ meeting ];
+            if (group_meetings.length > 0) result.push(group_meetings);
+            group_meetings = [meeting];
         }
         intermediary = surplus;
     });
@@ -140,19 +137,19 @@ MeetingSchema.statics.findAndGroupByDate = async function (filter?: Object): Pro
  * set day_of_week by start_time data
  * This properties used to checking if the time of this meeting is overlapped with another meeting
  */
-MeetingSchema.methods.setTime = function(){
+MeetingSchema.methods.setTime = function () {
     const VIET_NAM_UTC = 25200000; // Vietnam is 7 hours different from the original time zone
     const MILLIS_PER_DAY = 86400000;
-    this.day_of_week = (new Date(this.start_time +  VIET_NAM_UTC)).getDay();
+    this.day_of_week = new Date(this.start_time + VIET_NAM_UTC).getDay();
     this.time = {
-        start: (this.start_time +  VIET_NAM_UTC) % MILLIS_PER_DAY,
-        end: (this.end_time +  VIET_NAM_UTC) % MILLIS_PER_DAY,
-        date: (new Date(this.start_time +  VIET_NAM_UTC)).getDate()
+        start: (this.start_time + VIET_NAM_UTC) % MILLIS_PER_DAY,
+        end: (this.end_time + VIET_NAM_UTC) % MILLIS_PER_DAY,
+        date: new Date(this.start_time + VIET_NAM_UTC).getDate()
     };
 };
 
 // Protoptype design pattern
-MeetingSchema.methods.clone = function(properties?: any): IFMeeting{
+MeetingSchema.methods.clone = function (properties?: any): IFMeeting {
     const clone = new (mongoose.model<IFMeeting>('Meeting', MeetingSchema))({
         ...this.toObject(),
         ...properties,

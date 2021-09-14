@@ -1,7 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
 export class UserDto {
-
     @IsNotEmpty()
     readonly fullname: string;
 
@@ -17,7 +16,7 @@ export class UserDto {
     readonly address: string;
 
     readonly roles: string[];
-    
+
     readonly admin: boolean;
 
     readonly birthdate: number;

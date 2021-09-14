@@ -22,14 +22,12 @@ import { RegisterService } from './register.service';
 
 @Controller('register')
 export class RegisterController {
-
     constructor(private readonly registerService: RegisterService) {}
 
     @Post('')
     @HttpCode(200)
     @UsePipes(new ValidationPipe())
-    async register(@Body() userData: RegisterDto){
+    async register(@Body() userData: RegisterDto) {
         return this.registerService.register(userData);
     }
-
 }

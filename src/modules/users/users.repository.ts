@@ -1,8 +1,4 @@
-import {
-    HttpException,
-    Injectable,
-    NotFoundException 
-} from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './model';
 import { IFUser } from './interface';
 import { UserDto } from './dto/dto';
@@ -10,14 +6,13 @@ import { IFResponse, ResponseService } from 'src/shared';
 
 @Injectable()
 export class UserRepository {
-    
-    constructor(private readonly responseService: ResponseService){}
+    constructor(private readonly responseService: ResponseService) {}
 
     fromEntity(data: any): IFUser {
         return data;
     }
 
-    async create(userData: UserDto): Promise<IFUser>{
+    async create(userData: UserDto): Promise<IFUser> {
         const user = new User(userData);
         await user.save();
 
@@ -25,67 +20,58 @@ export class UserRepository {
     }
 
     async findAllAndPaging(
-        { page, limit, sort }: { page: number, limit: number, sort?: any },
+        { page, limit, sort }: { page: number; limit: number; sort?: any },
         filter?: any
-    ): Promise<IFResponse<IFUser>>{
+    ): Promise<IFResponse<IFUser>> {
         let skip = 0;
-        skip = (page -1) * limit;
+        skip = (page - 1) * limit;
 
-        const users:IFUser[] = await User.find(filter)
-        .skip(skip)
-        .limit(limit)
-        .sort(sort)
-        .select('-password')
-        .select('-fcm_token');
+        const users: IFUser[] = await User.find(filter)
+            .skip(skip)
+            .limit(limit)
+            .sort(sort)
+            .select('-password')
+            .select('-fcm_token');
         const totalRecords: number = await User.countDocuments(filter);
-        
+
         return this.responseService.getResponse<IFUser>(users, totalRecords, page, limit);
     }
 
-    async findAll(filter?: any): Promise<IFUser[]>{
+    async findAll(filter?: any): Promise<IFUser[]> {
         const users = await User.find(filter);
         return users;
     }
 
     async findById(id: string): Promise<IFUser> {
-        try{
+        try {
             const user: IFUser = await User.findById(id);
-            if(!user) throw new HttpException({error_code: '404', error_message: 'User not found'}, 404);
+            if (!user) throw new HttpException({ error_code: '404', error_message: 'User not found' }, 404);
 
             return user;
-        }
-        catch(err){
-            throw new HttpException({error_code: '404', error_message: 'User not found'}, 404);
+        } catch (err) {
+            throw new HttpException({ error_code: '404', error_message: 'User not found' }, 404);
         }
     }
 
-    async updateById (
-        id: string,
-        userData: UserDto,
-        options: any
-    ): Promise<IFUser>{
-        try{
+    async updateById(id: string, userData: UserDto, options: any): Promise<IFUser> {
+        try {
             const user = await User.findByIdAndUpdate(id, userData, options);
-            if(!user) throw new HttpException({error_code: '404', error_message: 'User not found'}, 404);
+            if (!user) throw new HttpException({ error_code: '404', error_message: 'User not found' }, 404);
 
             return this.fromEntity(user);
+        } catch (err) {
+            throw new HttpException({ error_code: '404', error_message: 'User not found' }, 404);
         }
-        catch(err){
-            throw new HttpException({error_code: '404', error_message: 'User not found'}, 404);
-        }
-
     }
 
-    async deleteById(id: string): Promise<IFUser>{
-        try{
+    async deleteById(id: string): Promise<IFUser> {
+        try {
             const user: IFUser = await User.findByIdAndDelete(id);
-            if(!user) throw new HttpException({error_code: '404', error_message: 'User not found'}, 404);
+            if (!user) throw new HttpException({ error_code: '404', error_message: 'User not found' }, 404);
 
             return user;
-        }
-        catch(err){
-            throw new HttpException({error_code: '404', error_message: 'User not found'}, 404);
+        } catch (err) {
+            throw new HttpException({ error_code: '404', error_message: 'User not found' }, 404);
         }
     }
-
 }

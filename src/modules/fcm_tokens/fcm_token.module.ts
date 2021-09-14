@@ -12,8 +12,6 @@ import { FcmTokenService } from './fcm_token.service';
 })
 export class FcmTokenModule implements NestModule {
     public configure(consumer: MiddlewareConsumer) {
-        consumer
-          .apply(AuthMiddleware)
-          .forRoutes(FcmTokenController);
+        consumer.apply(AuthMiddleware).forRoutes(FcmTokenController);
     }
 }

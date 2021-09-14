@@ -1,7 +1,6 @@
 import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class DeviceDto {
-
     @IsString()
     @IsNotEmpty()
     readonly device_name: string;

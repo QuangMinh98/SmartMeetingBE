@@ -1,7 +1,6 @@
-import { IsBoolean, IsNotEmpty, IsNumber, IsOptional } from "class-validator";
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class UpdateValueDto {
-
     @IsBoolean()
     @IsNotEmpty()
     is_on: boolean;
@@ -9,5 +8,4 @@ export class UpdateValueDto {
     @IsNumber()
     @IsOptional()
     current_value: number;
-    
 }

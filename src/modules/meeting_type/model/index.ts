@@ -9,8 +9,8 @@ const MeetingTypeSchema = new Schema({
     cestron_action_id: {
         type: String
     },
-    description: { 
-        type: String 
+    description: {
+        type: String
     },
     created_time: {
         type: Number,

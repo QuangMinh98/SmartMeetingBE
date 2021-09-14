@@ -23,15 +23,13 @@ import { LoginDto } from './dto/dto';
 
 @Controller('login')
 export class AuthController {
-
     constructor(private readonly authService: AuthService) {}
 
     @Post('')
     @HttpCode(200)
     @UsePipes(new ValidationPipe())
-    async login(@Body() loginData: LoginDto, @Res() res: Response){
+    async login(@Body() loginData: LoginDto, @Res() res: Response) {
         console.log(loginData);
         return this.authService.login(loginData, res);
     }
-
 }

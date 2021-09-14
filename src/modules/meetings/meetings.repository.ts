@@ -6,8 +6,7 @@ import { IFMeeting } from './interface';
 import { AbstractSubject } from '../observer';
 
 @Injectable()
-export class MeetingRepository{
-
+export class MeetingRepository {
     constructor(private readonly roomRepo: RoomRepository) {}
 
     fromEntity(data: any): IFMeeting {
@@ -28,7 +27,7 @@ export class MeetingRepository{
         const meeting: IFMeeting = new Meeting(meetingData);
         meeting.setTime();
         // A callback to check if there is a meeting created at this time before save new meeting to database
-        if(checkIfRoomAble) await checkIfRoomAble(meeting);
+        if (checkIfRoomAble) await checkIfRoomAble(meeting);
         await meeting.save();
 
         return meeting;
@@ -52,52 +51,49 @@ export class MeetingRepository{
     }
 
     async getByRoom(id: string, filter?: any) {
-        try{
+        try {
             const room = await this.roomRepo.findById(id);
-            const meetings: IFMeeting[] = await Meeting.find({ room: room._id, ...filter }).populate('type');
+            const meetings: IFMeeting[] = await Meeting.find({
+                room: room._id,
+                ...filter
+            }).populate('type');
 
             return {
                 room,
                 meetings
             };
-        }
-        catch(err){
+        } catch (err) {
             throw new NotFoundException('Room not found');
         }
     }
 
     async getOne(filter?: any): Promise<IFMeeting> {
-        try{
+        try {
             const meeting: IFMeeting = await Meeting.findOne(filter);
-            if(!meeting) throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404);
+            if (!meeting) throw new HttpException({ error_code: '404', error_message: 'Meeting not found' }, 404);
 
             return meeting;
-        }
-        catch(err){
-            throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404);
+        } catch (err) {
+            throw new HttpException({ error_code: '404', error_message: 'Meeting not found' }, 404);
         }
     }
 
-    async updateOne(
-        meetingData: MeetingDto,
-        filter?: any,
-        checkIfRoomAble?: Function
-    ): Promise<IFMeeting>{
+    async updateOne(meetingData: MeetingDto, filter?: any, checkIfRoomAble?: Function): Promise<IFMeeting> {
         const meeting: IFMeeting = await Meeting.findOne(filter);
-        if(!meeting) throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404);
+        if (!meeting) throw new HttpException({ error_code: '404', error_message: 'Meeting not found' }, 404);
 
         // Update data of meeting variable with data of meetingData variable
         Object.assign(meeting, meetingData);
         meeting.setTime();
         // A callback to check if there is a meeting created at this time before save new meeting to database
-        if(checkIfRoomAble) await checkIfRoomAble(meeting);
+        if (checkIfRoomAble) await checkIfRoomAble(meeting);
 
         return meeting;
     }
 
     async deleteOne(filter?: any): Promise<IFMeeting> {
         const meeting: IFMeeting = await Meeting.findOneAndDelete(filter);
-        if(!meeting) throw new HttpException({error_code: '404', error_message: 'Meeting not found'}, 404);
+        if (!meeting) throw new HttpException({ error_code: '404', error_message: 'Meeting not found' }, 404);
 
         return meeting;
     }

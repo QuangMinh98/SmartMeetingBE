@@ -14,8 +14,6 @@ import { NotificationService } from './notifications.service';
 })
 export class NotificationModule {
     public configure(consumer: MiddlewareConsumer) {
-        consumer
-          .apply(AuthMiddleware)
-          .forRoutes(NotificationController);
-      }
+        consumer.apply(AuthMiddleware).forRoutes(NotificationController);
+    }
 }

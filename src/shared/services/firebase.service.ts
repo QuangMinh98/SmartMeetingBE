@@ -4,7 +4,6 @@ import config from '../../config/config';
 
 @Injectable()
 export class FirebaseService {
-
     private readonly firebaseToken: string = config.firebaseToken;
     private readonly firebaseURL: string = config.firebaseURL;
 
@@ -14,15 +13,15 @@ export class FirebaseService {
             url,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'key='+this.firebaseToken
+                Authorization: 'key=' + this.firebaseToken
             },
             data
         });
         return response.data;
     }
 
-    async sendNotifications(tokens: string[], data: any){
-        try{
+    async sendNotifications(tokens: string[], data: any) {
+        try {
             const result = await this.sendRequest(this.firebaseURL, {
                 registration_ids: tokens,
                 content_available: true,
@@ -30,15 +29,13 @@ export class FirebaseService {
                 priority: 'high',
                 data: {
                     ...data,
-                    'url': 'https://www.google.com/',
-                    'img': 'https://media3.scdn.vn/img4/2020/04_16/1vz9YFtpDPe3LYkiryuA_simg_de2fe0_500x500_maxb.jpg'
+                    url: 'https://www.google.com/',
+                    img: 'https://media3.scdn.vn/img4/2020/04_16/1vz9YFtpDPe3LYkiryuA_simg_de2fe0_500x500_maxb.jpg'
                 }
             });
             console.log(result);
-        }
-        catch (error) {
+        } catch (error) {
             console.log(error.message);
         }
     }
-
 }

@@ -1,8 +1,7 @@
 import { IFResponse } from '../interfaces/response.interface';
 
 export class ResponseService {
-
-    getResponse<T>(data: T[], totalRecords: number, page: number, limit: number): IFResponse<T>{
+    getResponse<T>(data: T[], totalRecords: number, page: number, limit: number): IFResponse<T> {
         return {
             data: data,
             meta_data: {
@@ -13,5 +12,4 @@ export class ResponseService {
             }
         };
     }
-
 }

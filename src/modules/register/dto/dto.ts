@@ -1,7 +1,6 @@
 import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, Length } from 'class-validator';
 
 export class RegisterDto {
-
     @IsString()
     @IsNotEmpty()
     readonly fullname: string;
@@ -26,7 +25,7 @@ export class RegisterDto {
     @IsString({ each: true })
     @IsOptional()
     readonly roles: string[];
-    
+
     @IsBoolean()
     @IsOptional()
     readonly admin: boolean;

@@ -12,7 +12,7 @@ interface RoomSubject {
 /**
  * The Observer interface declares the update method, used by subjects.
  */
- interface RoomObserver {
+interface RoomObserver {
     // Receive update from subject.
     update(subject: RoomSubject): void;
 }
@@ -22,7 +22,6 @@ interface RoomSubject {
  * changes.
  */
 export abstract class AbstractRoomSubject implements RoomSubject {
-
     /**
      * @type {Observer[]} List of subscribers. In real life, the list of
      * subscribers can be stored more comprehensively (categorized by event

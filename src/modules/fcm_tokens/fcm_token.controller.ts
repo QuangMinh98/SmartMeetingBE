@@ -25,7 +25,6 @@ import { FcmTokenService } from './fcm_token.service';
 
 @Controller('fcm_token')
 export class FcmTokenController {
-
     constructor(private readonly fcmTokenService: FcmTokenService) {}
 
     @Post('')
@@ -38,5 +37,4 @@ export class FcmTokenController {
     remove(@User() user, @Body(new ValidationPipe()) body: FcmTokenDto) {
         return this.fcmTokenService.remove(user._id, body.fcm_token);
     }
-
 }

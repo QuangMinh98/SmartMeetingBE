@@ -14,10 +14,8 @@ import { NotificationModule } from '../notifications';
     providers: [MeetingService, MeetingRepository],
     exports: [MeetingService, MeetingRepository]
 })
-export class MeetingModule implements NestModule{
+export class MeetingModule implements NestModule {
     public configure(consumer: MiddlewareConsumer) {
-        consumer
-          .apply(AuthMiddleware)
-          .forRoutes(MeetingController);
+        consumer.apply(AuthMiddleware).forRoutes(MeetingController);
     }
 }

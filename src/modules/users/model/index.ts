@@ -54,13 +54,10 @@ export const UserSchema = new Schema<IFUser>({
     }
 });
 
-UserSchema.index({email: 'text'});
+UserSchema.index({ email: 'text' });
 
-UserSchema.methods.generateToken = function ():string {
-    return jwt.sign(
-        { _id: this._id, admin: this.admin, roles: this.roles },
-        '1234qwer!@#$'
-    );
+UserSchema.methods.generateToken = function (): string {
+    return jwt.sign({ _id: this._id, admin: this.admin, roles: this.roles }, '1234qwer!@#$');
 };
 
 UserSchema.methods.hashPassword = async function () {

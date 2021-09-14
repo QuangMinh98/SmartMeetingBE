@@ -9,7 +9,6 @@ import { AbstractSubject } from '../observer';
 
 @Injectable()
 export class MeetingService extends AbstractSubject {
-
     constructor(
         private readonly meetingRepo: MeetingRepository,
         private readonly cestronService: CestronService,
@@ -30,7 +29,7 @@ export class MeetingService extends AbstractSubject {
         // and start or end time between the start and end times of this meeting
         let filter: any = {
             room: meeting.room,
-            start_time: { $lte: meeting.end_time, $gte: meeting.start_time }, // Find a meeting that start_time of this meeting  
+            start_time: { $lte: meeting.end_time, $gte: meeting.start_time }, // Find a meeting that start_time of this meeting
             _id: { $ne: meeting._id },
             $or: [
                 { 'time.start': { $gte: meeting.time.start, $lte: meeting.time.end } },
@@ -83,8 +82,8 @@ export class MeetingService extends AbstractSubject {
             room: meeting.room,
             _id: { $ne: meeting._id },
             $or: [
-                { 'start_time': { $gte: meeting.start_time, $lte: meeting.end_time } },
-                { 'end_time': { $gte: meeting.start_time, $lte: meeting.end_time } }
+                { start_time: { $gte: meeting.start_time, $lte: meeting.end_time } },
+                { end_time: { $gte: meeting.start_time, $lte: meeting.end_time } }
             ]
         };
 
@@ -106,7 +105,7 @@ export class MeetingService extends AbstractSubject {
 
         // Loop while start time is less than until date
         while (1 == 1) {
-            // clone a meeting from the meeting created with new start_time and end_time 
+            // clone a meeting from the meeting created with new start_time and end_time
             const repeat_meeting = meeting.clone({
                 start_time: meeting.start_time + MILLIS_PER_DAY,
                 end_time: meeting.end_time + MILLIS_PER_DAY
@@ -133,7 +132,7 @@ export class MeetingService extends AbstractSubject {
 
         // Loop while start time is less than until date
         while (1 == 1) {
-            // clone a meeting from the meeting created with new start_time and end_time 
+            // clone a meeting from the meeting created with new start_time and end_time
             const repeat_meeting = meeting.clone({
                 start_time: meeting.start_time + MILLIS_PER_WEEK,
                 end_time: meeting.end_time + MILLIS_PER_WEEK
@@ -165,7 +164,7 @@ export class MeetingService extends AbstractSubject {
 
         // Loop while start time is less than until date
         while (1 == 1) {
-            // clone a meeting from the meeting created with new start_time and end_time 
+            // clone a meeting from the meeting created with new start_time and end_time
             const repeat_meeting = meeting.clone({
                 start_time: start_time.getTime(),
                 end_time: end_time.getTime()
@@ -186,15 +185,15 @@ export class MeetingService extends AbstractSubject {
     async create(meetingData: MeetingDto) {
         const newMeeting = await this.meetingRepo.create(meetingData, async (meeting) => {
             // Check if there is a meeting created at this time before save new meeting to database
-            if (await this.checkIfRoomAble(meeting) > 0)
+            if ((await this.checkIfRoomAble(meeting)) > 0)
                 throw new HttpException({ error_code: '400', error_message: 'Can not booking meeting.' }, 400);
         });
-        this.notify({ meeting: newMeeting })
+        this.notify({ meeting: newMeeting });
 
         return newMeeting;
     }
 
-    getByRoom(id: string, query: { start_time?: number, end_time?: number }) {
+    getByRoom(id: string, query: { start_time?: number; end_time?: number }) {
         const { start_time, end_time } = query;
         const filter: any = {};
 
@@ -208,7 +207,7 @@ export class MeetingService extends AbstractSubject {
         return this.meetingRepo.getByRoom(id, filter);
     }
 
-    getMyMeeting(id: string, { start_time, end_time }: { start_time?: number, end_time?: number }) {
+    getMyMeeting(id: string, { start_time, end_time }: { start_time?: number; end_time?: number }) {
         const filter: any = {
             $or: [
                 { members: { $in: [id] } }, // if this user is a member of this meetings
@@ -225,7 +224,7 @@ export class MeetingService extends AbstractSubject {
         return this.meetingRepo.getAllAndGroupByDate(filter);
     }
 
-    getMeetingIBooked(id: string, { start_time, end_time }: { start_time?: number, end_time?: number }) {
+    getMeetingIBooked(id: string, { start_time, end_time }: { start_time?: number; end_time?: number }) {
         const filter: any = { user_booked: id };
 
         if (start_time) {
@@ -238,23 +237,20 @@ export class MeetingService extends AbstractSubject {
         return this.meetingRepo.getAllAndGroupByDate(filter);
     }
 
-    getById(id: string, { isAdmin, userId }: { isAdmin: boolean, userId: string }) {
+    getById(id: string, { isAdmin, userId }: { isAdmin: boolean; userId: string }) {
         const filter: any = { _id: id };
 
         // If the user does not have administrative rights,
-        // he or she is only allowed to view information about meetings booked by himself 
+        // he or she is only allowed to view information about meetings booked by himself
         // or as a member who can join that meeting.
         if (!isAdmin) {
-            filter.$or = [
-                { user_booked: userId },
-                { members: { $in: userId } }
-            ];
+            filter.$or = [{ user_booked: userId }, { members: { $in: userId } }];
         }
 
         return this.meetingRepo.getOne(filter);
     }
 
-    async update(id: string, meetingData: MeetingDto, { isAdmin, userId }: { isAdmin?: boolean, userId: string }) {
+    async update(id: string, meetingData: MeetingDto, { isAdmin, userId }: { isAdmin?: boolean; userId: string }) {
         const filter: any = { _id: id };
 
         // If the user does not have administrative rights,
@@ -266,17 +262,17 @@ export class MeetingService extends AbstractSubject {
         const old_meeting = await this.meetingRepo.getOne({ _id: id });
         const updated_meeting = await this.meetingRepo.updateOne(meetingData, filter, async (meeting) => {
             // Check if there is a meeting created at this time
-            if (await this.checkingRoomWhenUpdate(meeting) > 0)
+            if ((await this.checkingRoomWhenUpdate(meeting)) > 0)
                 throw new HttpException({ error_code: '400', error_message: 'Can not update meeting.' }, 400);
         });
 
-        this.notify({ meeting: updated_meeting, old_meeting }, 'Update Meeting')
+        this.notify({ meeting: updated_meeting, old_meeting }, 'Update Meeting');
         await updated_meeting.save();
 
         return updated_meeting;
     }
 
-    delete(id: string, { isAdmin, userId }: { isAdmin: boolean, userId: string }) {
+    delete(id: string, { isAdmin, userId }: { isAdmin: boolean; userId: string }) {
         const filter: any = { _id: id };
 
         // If the user does not have administrative rights,
@@ -287,5 +283,4 @@ export class MeetingService extends AbstractSubject {
 
         return this.meetingRepo.deleteOne(filter);
     }
-
 }

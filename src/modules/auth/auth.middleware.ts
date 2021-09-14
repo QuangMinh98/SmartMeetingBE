@@ -7,7 +7,7 @@ import * as jwt from 'jsonwebtoken';
 import * as moment from 'moment';
 
 @Injectable()
-export class AuthMiddleware {
+export class AuthMiddleware implements NestMiddleware {
 
     async use(req: Request, res: Response, next: NextFunction){
         const token = req.header('x-auth-token');
@@ -33,7 +33,7 @@ export class AuthMiddleware {
             next();
         } catch (ex) {
             console.log(ex.message);
-            throw new HttpException({error_code: '401', error_message: 'unauthorized'}, 401);
+            throw new HttpException({error_code: '401', error_message: 'Invalid token'}, 401);
         }
     }
 

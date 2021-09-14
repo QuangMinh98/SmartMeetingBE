@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { IFResponse, ResponseRepository } from '../response';
+import { IFResponse, ResponseService } from 'src/shared';
 import { IFNotification } from './interface';
 import { Notification } from './model';
 
 @Injectable()
 export class NotificationRepository {
 
-    constructor(private readonly responseRepo: ResponseRepository){}
+    constructor(private readonly responseService: ResponseService){}
 
     async create(notificationData: any){
         const notification = new Notification(notificationData);
@@ -32,9 +32,7 @@ export class NotificationRepository {
             .sort(sort);
         const totalRecords: number = await Notification.countDocuments(filter);
 
-        return this.responseRepo.getResponse<IFNotification>(notifications, totalRecords, page, limit);
+        return this.responseService.getResponse<IFNotification>(notifications, totalRecords, page, limit);
     }
-
-
 
 }

@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database';
@@ -12,13 +13,16 @@ import { MeetingTypeModule } from './modules/meeting_type';
 import { NotificationModule } from './modules/notifications';
 import { FcmTokenModule } from './modules/fcm_tokens';
 import { ForgotPasswordModule } from './modules/forgot_password';
-import { LoggerMiddleware } from './common/middlewares/logger.middlewares';
+import { LoggerMiddleware } from './common/middlewares/logger.middleware';
+import { SharedModule } from './shared';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     DatabaseModule,
-    AuthModule,
+    SharedModule,
     UserModule,
+    AuthModule,
     RegisterModule,
     RoomModule,
     DeviceModule,

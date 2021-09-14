@@ -1,4 +1,4 @@
-import { IFResponse } from './interface';
+import { IFResponse } from '../interfaces/response.interface';
 
 export class ResponseService {
 

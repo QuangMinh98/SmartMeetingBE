@@ -5,14 +5,13 @@ import {
 } from '@nestjs/common';
 import { IFDevice } from './interface';
 import { Device } from './model';
-import { ResponseRepository, IFResponse} from '../response';
+import { ResponseService, IFResponse} from 'src/shared';
 import { DeviceDto } from './dto/dto';
-import { AbstractSubject } from '../observer';
 
 @Injectable()
-export class DeviceRepository extends AbstractSubject {
+export class DeviceRepository  {
     
-    constructor(private readonly responseRepo: ResponseRepository){ super(); }
+    constructor(private readonly responseService: ResponseService){}
 
     fromEntity(data: any): IFDevice {
         return data;
@@ -38,7 +37,7 @@ export class DeviceRepository extends AbstractSubject {
             .sort(sort);
         const totalRecords: number = await Device.countDocuments(filter);
 
-        return this.responseRepo.getResponse<IFDevice>(devices, totalRecords, page, limit);
+        return this.responseService.getResponse<IFDevice>(devices, totalRecords, page, limit);
     }
 
     async findAll(filter?: any): Promise<IFDevice[]>{
@@ -89,16 +88,11 @@ export class DeviceRepository extends AbstractSubject {
                     current_value = 0;
                 }
             }
-
             device.is_on = is_on;
             if(device.device_type === 1 && current_value >= device.min_value && current_value <= device.max_value){
                 device.current_value = current_value;
             }
-
             device.save();
-
-            // Send notify to cestron service
-            this.notify({ device }, 'Update device value');
 
             return device;
         }

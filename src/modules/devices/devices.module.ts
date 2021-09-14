@@ -3,7 +3,6 @@ import { DeviceService } from './devices.service';
 import { DeviceRepository } from './devices.repository';
 import { DeviceController } from './devices.controller';
 import { RoomModule } from '../rooms';
-import { ResponseModule } from '../response';
 import { AuthMiddleware } from '../auth';
 import { CestronModule } from '../cestron';
 

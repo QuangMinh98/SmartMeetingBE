@@ -6,17 +6,20 @@ import { DeviceRepository } from './devices.repository';
 import { DeviceDto } from './dto/dto';
 import { RoomRepository, IFRoom } from '../rooms';
 import { CestronService } from '../cestron';
+import { EventEmitter2 } from 'eventemitter2';
+import { AbstractSubject } from '../observer';
 
 @Injectable()
-export class DeviceService {
+export class DeviceService extends AbstractSubject{
     
     constructor(
         private readonly deviceRepo: DeviceRepository,
         private readonly roomRepo: RoomRepository,
         private readonly cestronService: CestronService
     ) {
+        super();
         // Attach observers to the device subject.
-        this.deviceRepo.attach(this.cestronService);
+        this.attach(this.cestronService);
     }
 
     async create(deviceData: DeviceDto){
@@ -72,6 +75,8 @@ export class DeviceService {
         { current_value, is_on }: { current_value: number; is_on: boolean}
     ){
         const device: IFDevice = await this.deviceRepo.updateValue(id,{ current_value, is_on});
+        // Send notify to cestron service
+        this.notify({ device }, 'Update device value');
 
         return device;
     }

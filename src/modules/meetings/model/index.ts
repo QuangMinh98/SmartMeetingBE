@@ -70,6 +70,10 @@ const MeetingSchema = new Schema<IFMeeting>({
         type: Schema.Types.ObjectId,
         ref: 'MeetingType'
     },
+    user_updated: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     created_time: {
         type: Number,
         default: Date.now(),
@@ -150,7 +154,7 @@ MeetingSchema.methods.setTime = function(){
 // Protoptype design pattern
 MeetingSchema.methods.clone = function(properties?: any): IFMeeting{
     const clone = new (mongoose.model<IFMeeting>('Meeting', MeetingSchema))({
-        ...this,
+        ...this.toObject(),
         ...properties,
         _id: undefined,
         clone_from: this._id

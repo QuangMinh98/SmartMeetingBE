@@ -6,12 +6,12 @@ import {
 import { User } from './model';
 import { IFUser } from './interface';
 import { UserDto } from './dto/dto';
-import { IFResponse, ResponseRepository } from '../response';
+import { IFResponse, ResponseService } from 'src/shared';
 
 @Injectable()
 export class UserRepository {
     
-    constructor(private readonly responseRepo: ResponseRepository){}
+    constructor(private readonly responseService: ResponseService){}
 
     fromEntity(data: any): IFUser {
         return data;
@@ -39,7 +39,7 @@ export class UserRepository {
         .select('-fcm_token');
         const totalRecords: number = await User.countDocuments(filter);
         
-        return this.responseRepo.getResponse<IFUser>(users, totalRecords, page, limit);
+        return this.responseService.getResponse<IFUser>(users, totalRecords, page, limit);
     }
 
     async findAll(filter?: any): Promise<IFUser[]>{

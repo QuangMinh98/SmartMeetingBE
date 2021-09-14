@@ -5,7 +5,8 @@ import { IFRoom } from "src/modules/rooms";
 export interface ISubscription {
     meeting?: IFMeeting,
     device?: IFDevice,
-    room?: IFRoom
+    room?: IFRoom,
+    old_meeting?: IFMeeting
 }
 
 export interface Subject {

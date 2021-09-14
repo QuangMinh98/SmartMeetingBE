@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { FirebaseService } from '../firebase';
+import { OnEvent } from '@nestjs/event-emitter';
+import { FirebaseService, HelperService } from 'src/shared';
 import { IFMeeting } from '../meetings';
 import { ISubscription, Observer } from '../observer';
 import { RoomRepository } from '../rooms';
@@ -14,6 +15,7 @@ export class NotificationService implements Observer {
         private readonly userRepo: UserRepository,
         private readonly roomRepo: RoomRepository,
         private readonly firebaseService: FirebaseService,
+        private readonly helperService: HelperService
     ) {}
 
     getAll({ page, limit }: { page?: number, limit?: number}, userId: string){
@@ -29,6 +31,11 @@ export class NotificationService implements Observer {
             limit,
             sort: { created_time: -1 }
         }, { user: userId });
+    }
+
+    async observerNotify({ meeting, old_meeting }: ISubscription, type?: string){
+        if(!type || type === 'Create Meeting')  await this.createMany(meeting);
+        if(type === 'Update Meeting') await this.createNotificationWhenUpdate(meeting, old_meeting);
     }
 
     /**
@@ -47,10 +54,6 @@ export class NotificationService implements Observer {
         }
     }
 
-    async observerNotify({ meeting }: ISubscription, type?: string){
-        if(!type || type === 'Create Meeting')  await this.createMany(meeting);
-    }
-
     /**
      * This function used to create notifications and save it to database
      * then send firebase notifications to users'device
@@ -58,11 +61,11 @@ export class NotificationService implements Observer {
      * Loop members'ids and create new notifications data
      */
     async createMany(meeting: IFMeeting){
-        const list_notis = [];
+        let list_notis = [];
         
         const user_booked = await this.userRepo.findById(meeting.user_booked);
         const room = await this.roomRepo.findById(meeting.room);
-        const body = `${ user_booked.fullname } invite you to join ${ meeting.name} at ${room.name} dated ${(new Date(meeting.start_time)).toLocaleDateString('vi-VN',{timeZone: 'Asia/Ho_Chi_Minh'})} ${(new Date(meeting.start_time)).toLocaleTimeString('vi-VN',{timeZone: 'Asia/Ho_Chi_Minh'})} - ${(new Date(meeting.end_time)).toLocaleTimeString('vi-VN',{timeZone: 'Asia/Ho_Chi_Minh'})}`; 
+        const body = `${ user_booked.fullname } invite you to join ${ meeting.name} at ${room.name} dated ${this.helperService.startTimeAndEndTimeToString(meeting.start_time, meeting.end_time)}`; 
         
         // Data to create notifications
         const data = {
@@ -90,48 +93,55 @@ export class NotificationService implements Observer {
         }
     }
 
-    // async createManyUpdateNotification(meeting: IFMeeting, clone_meeting?: IFMeeting){
-    //     let noti = []
-    //     let changed_data: any = {
-    //         name: (clone_meeting.name !== meeting.name) ? meeting.name : undefined,
-    //         start_time: (clone_meeting.start_time !== meeting.start_time) ? meeting.start_time : undefined,
-    //         end_time: (clone_meeting.end_time !== meeting.end_time) ? meeting.end_time : undefined,
-    //         members: meeting.members.filter(member =>  clone_meeting.members.includes(member)),
-    //         new_members: meeting.members.filter(member =>  !clone_meeting.members.includes(member))
-    //     }
+    /**
+     * This function used to create notifications and save it to database when update meeting data
+     * then send a firebase message to the old members with the content that the meeting information has been updated and
+     * send a firebase message to the new members with the content of inviting to join the meeting,
+     * then check the information that has changed and create the message body corresponding to those changes
+     * Find user_booked's data and room's data, then use those data to create notification body
+     * Loop members'ids and create new notifications data
+     */
+    @OnEvent('meeting.update')
+    async createNotificationWhenUpdate(meeting: IFMeeting, old_meeting: IFMeeting){
+        const modifieldPath: string[] = meeting.directModifiedPaths();
 
-    //     let body = `The meeting ${meeting.name} has been updated to `
-    //     if(changed_data.name || changed_data.start_time || changed_data.end_time){
-    //         if(changed_data.name) body += `name ${changed_data.name} `
-    //         if(changed_data.start_time) body += `start at ${changed_data.start_time} `
-    //         if(changed_data.end_time) body += `end at ${changed_data.end_time} `
-    //     }
+        if (modifieldPath.length > 0) {
+            // if members have been updated then send a firebase message to the new members with the content of inviting to join the meeting
+            if (modifieldPath.includes('members'))
+                this.createNotificationForNewUser(meeting, old_meeting)
 
-    //     const data = {
-    //         title: 'Meeting has been updated',
-    //         body,
-    //         data: {
-    //             meeting_id: meeting._id
-    //         }
-    //     }
+            // Check the information that has changed and create the message body corresponding to those changes
+            if (modifieldPath.includes('start_time') || modifieldPath.includes('end_time')) {
+                let body = `The meeting ${old_meeting.name} has been updated`;
+                body += ` from ${this.helperService.startTimeAndEndTimeToString(old_meeting.start_time, old_meeting.end_time)} to ${this.helperService.startTimeAndEndTimeToString(meeting.start_time, meeting.end_time)}`;
+                // Data to create notifications
+                const data = {
+                    title: 'Meeting has been updated',
+                    body,
+                    data: {
+                        meeting_id: meeting._id
+                    }
+                };
+                let clone = meeting.clone({ members: meeting.members.filter(member => old_meeting.members.includes(member)) })
+                // Create a new notifications data and push it to list_notis
+                const list_notis = clone.members.map(user => {
+                    return {
+                        ...data,
+                        user,
+                        created_time: Date.now()
+                    }
+                });
+                // Send firebase message to users's devices
+                this.sendNotificationsToUser(clone.members, data);
+                if (list_notis.length > 0) await this.notificationRepo.insertMany(list_notis);
+            }
+        }
 
-    //     this.sendNotificationsToUser(meeting.members, data)
+    }
 
-    //     changed_data.members.forEach(user => {
-    //         noti.push({
-    //             ...data,
-    //             user,
-    //             created_time: Date.now()
-    //         })
-    //     })
-
-    //     if(noti.length > 0){
-    //         await this.notificationRepo.insertMany(noti)
-    //     }
-
-    //     if(changed_data.members.length > 0) this.createMany(meeting.clone({ members: changed_data.new_members }))
-
-
-    // }
+    async createNotificationForNewUser(meeting: IFMeeting, old_meeting: IFMeeting){
+        const clone = meeting.clone({ members: meeting.members.filter(member => !old_meeting.members.includes(member)) });
+        if(clone.members.length > 0) this.createMany(clone);
+    }
 
 }

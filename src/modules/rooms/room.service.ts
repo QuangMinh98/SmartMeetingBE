@@ -6,17 +6,19 @@ import {
 import { RoomRepository } from './room.repository';
 import { RoomDto } from './dto/dto';
 import { CestronService } from '../cestron';
+import { AbstractSubject } from '../observer';
 
 @Injectable()
-export class RoomService {
+export class RoomService extends AbstractSubject {
 
     constructor(
         private readonly roomRepo: RoomRepository,
         @Inject(forwardRef(() => CestronService)) 
         private readonly cestronService: CestronService
     ) {
+        super();
         // Attach observers to the room subject.
-        this.roomRepo.attach(this.cestronService);
+        this.attach(this.cestronService);
     }
 
     async create(roomData: RoomDto){

@@ -3,23 +3,24 @@ import {
     Inject,
     Injectable
 } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
 import { IFDevice } from '../devices';
 import { IFMeeting } from '../meetings';
 import { MeetingTypeRepository } from '../meeting_type';
 import { ISubscription, Observer } from '../observer';
 import { IFRoom, RoomRepository } from '../rooms';
 import { AbstractCestron } from './cestron-abstract';
+import { ThingworxService } from 'src/shared';
 
 @Injectable()
-export class CestronService extends AbstractCestron implements Observer {
+export class CestronService implements Observer {
 
     constructor(
         @Inject(forwardRef(() => RoomRepository))
         private readonly roomRepo: RoomRepository,
         private readonly meetingTypeRepo: MeetingTypeRepository,
-    ){
-        super();
-    }
+        private readonly thingworxService: ThingworxService
+    ){}
 
     /**
      * This method will be called when state change
@@ -43,7 +44,7 @@ export class CestronService extends AbstractCestron implements Observer {
             const meetingType = await this.meetingTypeRepo.findById(meeting.type);
             
             // Create a meeting on cestron thingworx and get id of that meeting
-            meeting.cestron_meeting_id = await this.createAppointments({
+            meeting.cestron_meeting_id = await this.thingworxService.createAppointments({
                 cestron_room_id: room.cestron_room_id,
                 name: meeting.name,
                 note: meeting.note,
@@ -65,7 +66,8 @@ export class CestronService extends AbstractCestron implements Observer {
      * This function to update device value from @param meeting
      */
     async updateDeviceValueOnCestron(device: IFDevice){
-        await this.updateDeviceValue({
+        console.log(device._id);
+        await this.thingworxService.updateDeviceValue({
             AttributeID: (device.device_type === 1 || device.is_on === true) ? device.cestron_device_id : device.cestron_device_id_off,
             value: (device.device_type === 1) ? device.current_value : device.is_on
         });
@@ -76,7 +78,7 @@ export class CestronService extends AbstractCestron implements Observer {
      */
     async createRoomOnCestron(room: IFRoom){
         try{
-            const cestron_room = await this.createRoom({ roomName: room.name, description: ` Description for ${room.name}`});
+            const cestron_room = await this.thingworxService.createRoom({ roomName: room.name, description: ` Description for ${room.name}`});
             room.cestron_room_id = cestron_room.API_Rooms[0].RoomID;
             await room.save();
         }

@@ -6,13 +6,13 @@ import {
 import { Room } from './model';
 import { IFRoom } from './interface';
 import { RoomDto } from './dto/dto';
-import { ResponseRepository, IFResponse } from '../response';
+import { ResponseService, IFResponse } from 'src/shared';
 import { AbstractSubject } from '../observer';
 
 @Injectable()
-export class RoomRepository extends AbstractSubject {
+export class RoomRepository {
 
-    constructor(private readonly responseRepo: ResponseRepository){ super(); }
+    constructor(private readonly responseService: ResponseService){}
 
     fromEntity(data: any): IFRoom{
         return data;
@@ -38,7 +38,7 @@ export class RoomRepository extends AbstractSubject {
             .sort(sort);
         const totalRecords: number = await Room.countDocuments(filter);
 
-        return this.responseRepo.getResponse<IFRoom>(rooms, totalRecords, +page, +limit);
+        return this.responseService.getResponse<IFRoom>(rooms, totalRecords, +page, +limit);
     }
 
     async findAll(filter?: any): Promise<IFRoom[]>{

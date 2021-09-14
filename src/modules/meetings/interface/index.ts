@@ -25,6 +25,7 @@ export interface IFMeeting extends Document, IFMeetingDoc{
     user_booked: string,
     cestron_meeting_id?: string,
     type: string,
+    user_updated: string,
     created_time: number,
     updated_time: number
 }

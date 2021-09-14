@@ -1,12 +1,12 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
-import { ResponseRepository, IFResponse } from '../response';
+import { ResponseService, IFResponse } from 'src/shared';
 import { IFMeetingType } from './interface';
 import { MeetingType } from './model';
 
 @Injectable()
 export class MeetingTypeRepository {
 
-    constructor(private readonly responseRepo: ResponseRepository) {}
+    constructor(private readonly responseService: ResponseService) {}
 
     async findAllAndPaging(
         { page, limit, sort}: { page: number, limit: number, sort?: any},
@@ -21,7 +21,7 @@ export class MeetingTypeRepository {
             .sort(sort);
         const totalRecords: number = await MeetingType.countDocuments(filter);
 
-        return this.responseRepo.getResponse<IFMeetingType>(meetingTypes, totalRecords, page, limit);
+        return this.responseService.getResponse<IFMeetingType>(meetingTypes, totalRecords, page, limit);
     }
 
     async findAll(filter?: any): Promise<IFMeetingType[]>{

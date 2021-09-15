@@ -3,10 +3,9 @@ import { RoomController } from './room.controller';
 import { RoomService } from './room.service';
 import { RoomRepository } from './room.repository';
 import { AuthMiddleware } from '../auth';
-import { CestronModule } from '../cestron';
 
 @Module({
-    imports: [forwardRef(() => CestronModule)],
+    imports: [],
     controllers: [RoomController],
     providers: [RoomService, RoomRepository],
     exports: [RoomService, RoomRepository]

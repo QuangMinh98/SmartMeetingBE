@@ -15,10 +15,12 @@ import { FcmTokenModule } from './modules/fcm_tokens';
 import { ForgotPasswordModule } from './modules/forgot_password';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { SharedModule } from './shared';
+import { EventListenerModule } from './modules/event_listener';
 
 @Module({
     imports: [
         EventEmitterModule.forRoot(),
+        EventListenerModule,
         DatabaseModule,
         SharedModule,
         UserModule,

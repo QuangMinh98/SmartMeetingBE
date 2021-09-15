@@ -24,7 +24,7 @@ export class ErrorsInterceptor implements NestInterceptor {
                 if (Array.isArray(response.error_message)) response.error_message = response.error_message[0];
 
                 console.log(`status: ${response.error_code.toString()} ${Date.now() - now}ms`);
-                return throwError(new HttpException(response, response.error_code));
+                return throwError(() => new HttpException(response, response.error_code));
             })
         );
     }

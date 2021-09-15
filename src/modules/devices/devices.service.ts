@@ -8,16 +8,12 @@ import { EventEmitter2 } from 'eventemitter2';
 import { AbstractSubject } from '../observer';
 
 @Injectable()
-export class DeviceService extends AbstractSubject {
+export class DeviceService{
     constructor(
         private readonly deviceRepo: DeviceRepository,
         private readonly roomRepo: RoomRepository,
-        private readonly cestronService: CestronService
-    ) {
-        super();
-        // Attach observers to the device subject.
-        this.attach(this.cestronService);
-    }
+        private eventEmitter: EventEmitter2
+    ) {}
 
     async create(deviceData: DeviceDto) {
         return this.deviceRepo.create(deviceData);
@@ -70,7 +66,7 @@ export class DeviceService extends AbstractSubject {
     async updateValue(id: string, { current_value, is_on }: { current_value: number; is_on: boolean }) {
         const device: IFDevice = await this.deviceRepo.updateValue(id, { current_value, is_on });
         // Send notify to cestron service
-        this.notify({ device }, 'Update device value');
+        this.eventEmitter.emit('device.UpdateValue', device);
 
         return device;
     }

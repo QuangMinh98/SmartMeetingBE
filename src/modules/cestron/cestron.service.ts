@@ -5,13 +5,11 @@ import { IFMeeting } from '../meetings';
 import { MeetingTypeRepository } from '../meeting_type';
 import { ISubscription, Observer } from '../observer';
 import { IFRoom, RoomRepository } from '../rooms';
-import { AbstractCestron } from './cestron-abstract';
 import { ThingworxService } from 'src/shared';
 
 @Injectable()
-export class CestronService implements Observer {
+export class CestronService {
     constructor(
-        @Inject(forwardRef(() => RoomRepository))
         private readonly roomRepo: RoomRepository,
         private readonly meetingTypeRepo: MeetingTypeRepository,
         private readonly thingworxService: ThingworxService
@@ -61,7 +59,6 @@ export class CestronService implements Observer {
      * This function to update device value from @param meeting
      */
     async updateDeviceValueOnCestron(device: IFDevice) {
-        console.log(device._id);
         await this.thingworxService.updateDeviceValue({
             AttributeID:
                 device.device_type === 1 || device.is_on === true

@@ -1,24 +1,15 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { MeetingDto } from './dto/dto';
 import { MeetingRepository } from './meetings.repository';
-import { CestronService } from '../cestron';
-import { NotificationService } from '../notifications';
 import { IFMeeting } from './interface';
 import { EventEmitter2 } from 'eventemitter2';
-import { AbstractSubject } from '../observer';
 
 @Injectable()
-export class MeetingService extends AbstractSubject {
+export class MeetingService {
     constructor(
         private readonly meetingRepo: MeetingRepository,
-        private readonly cestronService: CestronService,
-        private readonly notificationService: NotificationService
-    ) {
-        super();
-        // Attach observers to the meeting subject.
-        this.attach(this.notificationService);
-        this.attach(this.cestronService);
-    }
+        private eventEmitter: EventEmitter2
+    ) {}
 
     /**
      * This function used to create data filter for check if the time of this meeting is overlapped with another meeting
@@ -115,7 +106,7 @@ export class MeetingService extends AbstractSubject {
             if (repeat_meeting.start_time > meeting.until_date) break;
             repeat_meeting.save();
 
-            this.notify({ meeting }, 'Repeat Meeting');
+            this.eventEmitter.emit('meeting.repeat', repeat_meeting);
 
             // Add 1 day to MILLIS_PER_DAY (Loop to next day)
             MILLIS_PER_DAY += 86400000;
@@ -142,7 +133,7 @@ export class MeetingService extends AbstractSubject {
             if (repeat_meeting.start_time > meeting.until_date) break;
             repeat_meeting.save();
 
-            this.notify({ meeting }, 'Repeat Meeting');
+            this.eventEmitter.emit('meeting.repeat', repeat_meeting);
 
             // Add 1 week to MILLIS_PER_WEEK (loop to next week)
             MILLIS_PER_WEEK += 604800000;
@@ -174,7 +165,7 @@ export class MeetingService extends AbstractSubject {
             if (repeat_meeting.start_time > meeting.until_date) break;
             meeting.save();
 
-            this.notify({ meeting }, 'Repeat Meeting');
+            this.eventEmitter.emit('meeting.repeat', repeat_meeting);
 
             // Add 1 month to start time and end time (loop to next month)
             start_time.setMonth(start_time.getMonth() + 1);
@@ -188,7 +179,7 @@ export class MeetingService extends AbstractSubject {
             if ((await this.checkIfRoomAble(meeting)) > 0)
                 throw new HttpException({ error_code: '400', error_message: 'Can not booking meeting.' }, 400);
         });
-        this.notify({ meeting: newMeeting });
+        this.eventEmitter.emit('meeting.create', newMeeting);
 
         return newMeeting;
     }
@@ -259,17 +250,17 @@ export class MeetingService extends AbstractSubject {
             filter.user_booked = userId;
         }
 
-        const old_meeting = await this.meetingRepo.getOne({ _id: id });
-        const updated_meeting = await this.meetingRepo.updateOne(meetingData, filter, async (meeting) => {
+        const oldMeeting = await this.meetingRepo.getOne({ _id: id });
+        const updatedMeeting = await this.meetingRepo.updateOne(meetingData, filter, async (meeting) => {
             // Check if there is a meeting created at this time
             if ((await this.checkingRoomWhenUpdate(meeting)) > 0)
                 throw new HttpException({ error_code: '400', error_message: 'Can not update meeting.' }, 400);
         });
 
-        this.notify({ meeting: updated_meeting, old_meeting }, 'Update Meeting');
-        await updated_meeting.save();
+        this.eventEmitter.emit('meeting.create', updatedMeeting, oldMeeting);
+        await updatedMeeting.save();
 
-        return updated_meeting;
+        return updatedMeeting;
     }
 
     delete(id: string, { isAdmin, userId }: { isAdmin: boolean; userId: string }) {

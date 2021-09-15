@@ -4,12 +4,7 @@ import { FirebaseService } from './services/firebase.service';
 import { ResponseService } from './services/response.service';
 import { HelperService } from './services/helper.service';
 
-const providers = [
-    FirebaseService, 
-    ResponseService, 
-    ThingworxService, 
-    HelperService
-];
+const providers = [FirebaseService, ResponseService, ThingworxService, HelperService];
 
 @Global()
 @Module({

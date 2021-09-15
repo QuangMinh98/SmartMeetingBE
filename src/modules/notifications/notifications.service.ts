@@ -8,7 +8,7 @@ import { UserRepository } from '../users/users.repository';
 import { NotificationRepository } from './notifications.repository';
 
 @Injectable()
-export class NotificationService implements Observer {
+export class NotificationService {
     constructor(
         private readonly notificationRepo: NotificationRepository,
         private readonly userRepo: UserRepository,
@@ -105,7 +105,6 @@ export class NotificationService implements Observer {
      * Find user_booked's data and room's data, then use those data to create notification body
      * Loop members'ids and create new notifications data
      */
-    @OnEvent('meeting.update')
     async createNotificationWhenUpdate(meeting: IFMeeting, old_meeting: IFMeeting) {
         const modifieldPath: string[] = meeting.directModifiedPaths();
 
@@ -118,7 +117,10 @@ export class NotificationService implements Observer {
                 body += ` from ${this.helperService.startTimeAndEndTimeToString(
                     old_meeting.start_time,
                     old_meeting.end_time
-                )} to ${this.helperService.startTimeAndEndTimeToString(meeting.start_time, meeting.end_time)}`;
+                )} to ${this.helperService.startTimeAndEndTimeToString(
+                    meeting.start_time,
+                    meeting.end_time
+                )}`;
                 // Data to create notifications
                 const data = {
                     title: 'Meeting has been updated',

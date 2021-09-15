@@ -1,20 +1,10 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { RoomRepository } from './room.repository';
 import { RoomDto } from './dto/dto';
-import { CestronService } from '../cestron';
-import { AbstractSubject } from '../observer';
 
 @Injectable()
-export class RoomService extends AbstractSubject {
-    constructor(
-        private readonly roomRepo: RoomRepository,
-        @Inject(forwardRef(() => CestronService))
-        private readonly cestronService: CestronService
-    ) {
-        super();
-        // Attach observers to the room subject.
-        this.attach(this.cestronService);
-    }
+export class RoomService {
+    constructor(private readonly roomRepo: RoomRepository) {}
 
     async create(roomData: RoomDto) {
         return this.roomRepo.create(roomData);

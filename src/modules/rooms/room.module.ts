@@ -1,4 +1,4 @@
-import { Module, MiddlewareConsumer, NestModule, RequestMethod, forwardRef } from '@nestjs/common';
+import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { RoomController } from './room.controller';
 import { RoomService } from './room.service';
 import { RoomRepository } from './room.repository';

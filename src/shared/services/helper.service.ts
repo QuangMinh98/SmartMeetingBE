@@ -2,17 +2,24 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class HelperService {
-    unixTimeToLocaleDateString(time: number): string {
-        return new Date(time).toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+    unixTimeToLocaleDateString(time: number, options?: { locale: string; timeZone?: string }): string {
+        return new Date(time).toLocaleDateString(options.locale, { timeZone: options.timeZone });
+    }
+
+    unixTimeToLocaleTimeString(time: number, options?: { locale: string; timeZone?: string }): string {
+        return new Date(time).toLocaleTimeString(options.locale, { timeZone: options.timeZone });
     }
 
     startTimeAndEndTimeToString(start_time: number, end_time: number): string {
+        const LOCALE = 'vi-VN';
         const TIMEZONE = 'Asia/Ho_Chi_Minh';
 
-        return `${new Date(start_time).toLocaleDateString('vi-VN', {
+        return `${this.unixTimeToLocaleDateString(start_time, {
+            locale: LOCALE,
             timeZone: TIMEZONE
-        })} ${new Date(start_time).toLocaleTimeString('vi-VN', {
+        })} ${this.unixTimeToLocaleTimeString(start_time, {
+            locale: LOCALE,
             timeZone: TIMEZONE
-        })} - ${new Date(end_time).toLocaleTimeString('vi-VN', { timeZone: TIMEZONE })}`;
+        })} - ${this.unixTimeToLocaleTimeString(end_time, { locale: LOCALE, timeZone: TIMEZONE })}`;
     }
 }

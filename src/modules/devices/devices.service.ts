@@ -3,12 +3,10 @@ import { IFDevice } from './interface';
 import { DeviceRepository } from './devices.repository';
 import { DeviceDto } from './dto/dto';
 import { RoomRepository, IFRoom } from '../rooms';
-import { CestronService } from '../cestron';
 import { EventEmitter2 } from 'eventemitter2';
-import { AbstractSubject } from '../observer';
 
 @Injectable()
-export class DeviceService{
+export class DeviceService {
     constructor(
         private readonly deviceRepo: DeviceRepository,
         private readonly roomRepo: RoomRepository,

@@ -1,9 +1,8 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { OnEvent } from '@nestjs/event-emitter';
+import { Injectable } from '@nestjs/common';
 import { IFDevice } from '../devices';
 import { IFMeeting } from '../meetings';
 import { MeetingTypeRepository } from '../meeting_type';
-import { ISubscription, Observer } from '../observer';
+import { ISubscription } from '../observer';
 import { IFRoom, RoomRepository } from '../rooms';
 import { ThingworxService } from 'src/shared';
 

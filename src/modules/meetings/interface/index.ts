@@ -36,5 +36,5 @@ export interface IFMeetingDoc {
 }
 
 export interface MeetingModel extends Model<IFMeeting> {
-    findAndGroupByDate(filter?: Object): Array<IFMeeting[]>;
+    findAndGroupByDate(filter?: any): Array<IFMeeting[]>;
 }

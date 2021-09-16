@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { OnEvent } from '@nestjs/event-emitter';
 import { FirebaseService, HelperService } from 'src/shared';
 import { IFMeeting } from '../meetings';
-import { ISubscription, Observer } from '../observer';
+import { ISubscription } from '../observer';
 import { RoomRepository } from '../rooms';
 import { UserRepository } from '../users/users.repository';
 import { NotificationRepository } from './notifications.repository';
@@ -98,12 +97,14 @@ export class NotificationService {
     }
 
     /**
-     * This function used to create notifications and save it to database when update meeting data
+     * This function used to create notifications and save it to database when update meeting data,
      * then send a firebase message to the old members with the content that the meeting information has been updated and
      * send a firebase message to the new members with the content of inviting to join the meeting,
-     * then check the information that has changed and create the message body corresponding to those changes
+     * then check the information that has changed and create the message body corresponding to those changes.
      * Find user_booked's data and room's data, then use those data to create notification body
      * Loop members'ids and create new notifications data
+     * @param meeting: TInformation of the meeting after it has been successfully updated
+     * @param old_meeting : Information of the meeting before being changed
      */
     async createNotificationWhenUpdate(meeting: IFMeeting, old_meeting: IFMeeting) {
         const modifieldPath: string[] = meeting.directModifiedPaths();
@@ -117,10 +118,7 @@ export class NotificationService {
                 body += ` from ${this.helperService.startTimeAndEndTimeToString(
                     old_meeting.start_time,
                     old_meeting.end_time
-                )} to ${this.helperService.startTimeAndEndTimeToString(
-                    meeting.start_time,
-                    meeting.end_time
-                )}`;
+                )} to ${this.helperService.startTimeAndEndTimeToString(meeting.start_time, meeting.end_time)}`;
                 // Data to create notifications
                 const data = {
                     title: 'Meeting has been updated',

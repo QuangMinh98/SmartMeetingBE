@@ -6,10 +6,7 @@ import { EventEmitter2 } from 'eventemitter2';
 
 @Injectable()
 export class MeetingService {
-    constructor(
-        private readonly meetingRepo: MeetingRepository,
-        private eventEmitter: EventEmitter2
-    ) {}
+    constructor(private readonly meetingRepo: MeetingRepository, private eventEmitter: EventEmitter2) {}
 
     /**
      * This function used to create data filter for check if the time of this meeting is overlapped with another meeting
@@ -20,11 +17,12 @@ export class MeetingService {
         // and start or end time between the start and end times of this meeting
         let filter: any = {
             room: meeting.room,
-            start_time: { $lte: meeting.end_time, $gte: meeting.start_time }, // Find a meeting that start_time of this meeting
+            start_time: { $lte: meeting.until_date, $gte: meeting.start_time }, // Find a meeting that start_time of this meeting
             _id: { $ne: meeting._id },
             $or: [
                 { 'time.start': { $gte: meeting.time.start, $lte: meeting.time.end } },
-                { 'time.end': { $gte: meeting.time.start, $lte: meeting.time.end } }
+                { 'time.end': { $gte: meeting.time.start, $lte: meeting.time.end } },
+                { 'time.start': { $lte: meeting.time.start }, 'time.end': { $gte: meeting.time.end } }
             ]
         };
 
@@ -36,7 +34,8 @@ export class MeetingService {
                 room: meeting.room,
                 $or: [
                     { start_time: { $gte: meeting.start_time, $lte: meeting.end_time } },
-                    { end_time: { $gte: meeting.start_time, $lte: meeting.end_time } }
+                    { end_time: { $gte: meeting.start_time, $lte: meeting.end_time } },
+                    { start_time: { $lte: meeting.start_time }, end_time: { $gte: meeting.end_time } }
                 ]
             };
         }

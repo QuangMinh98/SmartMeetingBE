@@ -18,7 +18,6 @@ import {
     UsePipes,
     ValidationPipe
 } from '@nestjs/common';
-import { Request } from 'express';
 import { UserService } from './users.service';
 import { UserDto } from './dto/dto';
 import { RoleGuard } from '../roles';

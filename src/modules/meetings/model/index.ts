@@ -103,7 +103,7 @@ MeetingSchema.index({ start_time: -1 });
  * @param filter
  * @returns
  */
-MeetingSchema.statics.findAndGroupByDate = async function (filter?: Object): Promise<Array<IFMeeting[]>> {
+MeetingSchema.statics.findAndGroupByDate = async function (filter?: any): Promise<Array<IFMeeting[]>> {
     const VIET_NAM_UTC = 25200000;
     const MILLIS_PER_DAY = 86400000;
 

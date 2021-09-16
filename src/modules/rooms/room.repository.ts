@@ -1,9 +1,8 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Room } from './model';
 import { IFRoom } from './interface';
 import { RoomDto } from './dto/dto';
 import { ResponseService, IFResponse } from 'src/shared';
-import { AbstractSubject } from '../observer';
 
 @Injectable()
 export class RoomRepository {

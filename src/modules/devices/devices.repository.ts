@@ -1,4 +1,4 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { IFDevice } from './interface';
 import { Device } from './model';
 import { ResponseService, IFResponse } from 'src/shared';

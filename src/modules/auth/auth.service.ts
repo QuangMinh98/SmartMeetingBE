@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { LoginDto } from './dto/dto';
 import { User } from '../users';
 import { IFUser } from '../users/interface';
-import { Post, Res, HttpStatus, HttpException } from '@nestjs/common';
+import { HttpException } from '@nestjs/common';
 import { Response } from 'express';
 
 @Injectable()

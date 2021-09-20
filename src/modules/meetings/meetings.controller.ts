@@ -17,7 +17,6 @@ import {
     UseGuards,
     HttpCode
 } from '@nestjs/common';
-import { Request, Response } from 'express';
 import { MeetingDto } from './dto/dto';
 import { MeetingService } from './meetings.service';
 import { User } from 'src/common/decorators/user.decorator';
@@ -52,25 +51,28 @@ export class MeetingController {
 
     @Get('/:id')
     getById(@User() user, @Param('id') id: string) {
+        const { _id: userId, admin: isAdmin } = user;
         return this.meetingService.getById(id, {
-            userId: user._id,
-            isAdmin: user.admin
+            userId,
+            isAdmin
         });
     }
 
     @Put('/:id')
     update(@User() user, @Param('id') id: string, @Body() meetingData: MeetingDto) {
+        const { _id: userId, admin: isAdmin } = user;
         return this.meetingService.update(id, meetingData, {
-            userId: user._id,
-            isAdmin: user.admin
+            userId,
+            isAdmin
         });
     }
 
     @Delete('/:id')
     delete(@User() user, @Param() id: string) {
+        const { _id: userId, admin: isAdmin } = user;
         return this.meetingService.delete(id, {
-            userId: user._id,
-            isAdmin: user.admin
+            userId,
+            isAdmin
         });
     }
 }

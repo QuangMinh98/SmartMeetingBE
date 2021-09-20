@@ -3,6 +3,7 @@ import { Schema } from 'mongoose';
 import { IFUser } from '../interface';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
+import config from 'src/config/config';
 
 export const UserSchema = new Schema<IFUser>({
     fullname: {
@@ -57,7 +58,9 @@ export const UserSchema = new Schema<IFUser>({
 UserSchema.index({ email: 'text' });
 
 UserSchema.methods.generateToken = function (): string {
-    return jwt.sign({ _id: this._id, admin: this.admin, roles: this.roles }, '1234qwer!@#$');
+    return jwt.sign({ _id: this._id, admin: this.admin, roles: this.roles }, config.jwtKey, {
+        expiresIn: config.tokenExpireIn
+    });
 };
 
 UserSchema.methods.hashPassword = async function () {

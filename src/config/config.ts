@@ -8,6 +8,7 @@ class ConfigSingleton {
 
     readonly development = {
         jwtKey: process.env.JWT_KEY,
+        tokenExpireIn: process.env.TOKEN_EXPIREIN,
         connectionString: process.env.CONNECTION_STRING,
         connectionStringProd: process.env.CONNECTION_STRING_PROD,
         mailAddress: process.env.MAIL_ADDRESS,
@@ -20,6 +21,7 @@ class ConfigSingleton {
 
     readonly production = {
         jwtKey: process.env.JWT_KEY,
+        tokenExpireIn: process.env.TOKEN_EXPIREIN,
         connectionString: process.env.CONNECTION_STRING,
         connectionStringProd: process.env.CONNECTION_STRING_PROD,
         mailAddress: process.env.MAIL_ADDRESS,

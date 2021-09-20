@@ -1,0 +1,11 @@
+version: '3.7'
+
+services: 
+    smartmeeting:
+        image: smart_meeting_be
+        build: .
+        env_file:
+            - ./.env
+        ports:
+            - "3000:3000"
+        restart: always

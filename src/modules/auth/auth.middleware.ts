@@ -4,7 +4,6 @@ import { Request, Response, NextFunction } from 'express';
 import config from '../../config/config';
 import { User } from '../users';
 import * as jwt from 'jsonwebtoken';
-import * as moment from 'moment';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
@@ -19,18 +18,12 @@ export class AuthMiddleware implements NestMiddleware {
             req.body.created_time = req.body.updated_time = Date.now();
 
             const user = await User.findById(payload._id);
-            if (!user) throw new HttpException({ error_code: '400', error_message: 'token expired' }, 400);
-
-            const now = moment();
-            const tokenCreateTime = moment(payload.iat * 1000);
-
-            if (now.diff(tokenCreateTime, 'minutes') > 43200)
-                throw new HttpException({ error_code: '400', error_message: 'token expired' }, 400);
+            if (!user) throw new HttpException({ error_code: '401', error_message: 'Invalid token' }, 401);
 
             next();
         } catch (ex) {
             console.log(ex.message);
-            throw new HttpException({ error_code: '401', error_message: 'Invalid token' }, 401);
+            throw new HttpException({ error_code: '401', error_message: 'token expired' }, 401);
         }
     }
 }

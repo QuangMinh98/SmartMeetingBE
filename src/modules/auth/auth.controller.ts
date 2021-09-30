@@ -17,9 +17,11 @@ import {
     UsePipes
 } from '@nestjs/common';
 import { Response } from 'express';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { IFAuthentication } from './interface';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/dto';
+import { AuthSwagger } from './swagger';
 
 @Controller('login')
 export class AuthController {

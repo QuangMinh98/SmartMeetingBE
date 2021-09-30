@@ -72,7 +72,7 @@ export class NotificationService {
 
         // Data to create notifications
         const data = {
-            title: 'Meeting',
+            title: 'Smart Meeting',
             body,
             data: {
                 meeting_id: meeting._id

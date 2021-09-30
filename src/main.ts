@@ -16,7 +16,7 @@ async function bootstrap() {
 
     app.setGlobalPrefix('api');
     app.useGlobalInterceptors(new LoggingInterceptor());
-    app.useGlobalInterceptors(new ErrorsInterceptor());
+    //app.useGlobalInterceptors(new ErrorsInterceptor());
 
     const port = Number(process.env.PORT) || 3000;
 

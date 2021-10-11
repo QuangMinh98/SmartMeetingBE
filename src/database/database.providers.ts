@@ -1,13 +1,13 @@
 import * as mongoose from 'mongoose';
 import { DATABASE_CONNECTION } from './database.constants';
-import config from '../config/config';
+import { ConfigService } from '../config';
 
 export const databaseProviders = [
     {
         provide: DATABASE_CONNECTION,
-        useFactory: async () => {
+        useFactory: async (configService: ConfigService) => {
             try {
-                await mongoose.connect(config.connectionString, {
+                await mongoose.connect(configService.get('connectionString'), {
                     useCreateIndex: true,
                     bufferMaxEntries: 0,
                     bufferCommands: false,
@@ -15,7 +15,7 @@ export const databaseProviders = [
                     useFindAndModify: true,
                     useUnifiedTopology: true
                 });
-                console.log('connect successful to', config.connectionString);
+                console.log('connect successful to', configService.get('connectionString'));
                 const db = mongoose.connection;
 
                 // When the mongodb server goes down, the driver emits a 'close' event
@@ -36,6 +36,7 @@ export const databaseProviders = [
             } catch (err) {
                 console.log('connect unsucessful!!!!', err);
             }
-        }
+        },
+        inject: [ConfigService]
     }
 ];

@@ -22,7 +22,7 @@ export class MeetingRepository {
      * If not being Duplicate, meeting data will save to database
      * @returns meeting data
      */
-    async create(meetingData: MeetingDto, checkIfRoomAble?: any): Promise<IFMeeting> {
+    async create(meetingData: MeetingDto, checkIfRoomAble?: (meeting: IFMeeting) => void): Promise<IFMeeting> {
         const meeting: IFMeeting = new Meeting(meetingData);
         meeting.setTime();
         // A callback to check if there is a meeting created at this time before save new meeting to database
@@ -77,7 +77,11 @@ export class MeetingRepository {
         }
     }
 
-    async updateOne(meetingData: MeetingDto, filter?: any, checkIfRoomAble?: any): Promise<IFMeeting> {
+    async updateOne(
+        meetingData: MeetingDto,
+        filter?: any,
+        checkIfRoomAble?: (meeting: IFMeeting) => void
+    ): Promise<IFMeeting> {
         const meeting: IFMeeting = await Meeting.findOne(filter);
         if (!meeting) throw new HttpException({ error_code: '404', error_message: 'Meeting not found' }, 404);
 

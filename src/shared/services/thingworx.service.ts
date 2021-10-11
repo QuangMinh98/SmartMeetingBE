@@ -1,7 +1,17 @@
-import config from '../../config/config';
+import { ConfigService } from 'src/config';
 import axios from 'axios';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class ThingworxService {
+    private readonly thingworxHost: string;
+    private readonly thingworxAppKey: string;
+
+    constructor(private readonly configService: ConfigService) {
+        this.thingworxHost = this.configService.get('thingworxHost');
+        this.thingworxAppKey = this.configService.get('thingworxAppKey');
+    }
+
     async post({ url, headers, body }: { url: string; headers: any; body: any }) {
         const response = await axios.request({
             method: 'POST',
@@ -14,12 +24,12 @@ export class ThingworxService {
 
     async createRoom({ roomName, description }: { roomName: string; description: string }) {
         const THINGWORX_PATH = '/Thingworx/Things/CestronApi/Services/CreateRoom';
-        const url = config.thingworxHost + THINGWORX_PATH;
+        const url = this.thingworxHost + THINGWORX_PATH;
         const room = await this.post({
             url,
             headers: {
                 Accept: 'application/json',
-                appKey: config.thingworxAppKey
+                appKey: this.thingworxAppKey
             },
             body: {
                 createRoom: {
@@ -56,13 +66,13 @@ export class ThingworxService {
         const TIMEZONE_ID = 'SE Asia Standard Time';
         const VIET_NAM_UTC = 25200000;
 
-        const url = config.thingworxHost + THINGWORX_PATH;
+        const url = this.thingworxHost + THINGWORX_PATH;
         if (!note) note = 'note';
         const appointments = await this.post({
             url,
             headers: {
                 Accept: 'application/json',
-                appKey: config.thingworxAppKey
+                appKey: this.thingworxAppKey
             },
             body: {
                 param: {
@@ -91,12 +101,12 @@ export class ThingworxService {
 
     async getDeviceByRoomId({ RoomID }: { RoomID: string }) {
         const THINGWORX_PATH = '/Thingworx/Things/CestronApi/Services/Get_Room_byID';
-        const url = config.thingworxHost + THINGWORX_PATH;
+        const url = this.thingworxHost + THINGWORX_PATH;
         const { API_Rooms } = await this.post({
             url,
             headers: {
                 Accept: 'application/json',
-                appKey: config.thingworxAppKey
+                appKey: this.thingworxAppKey
             },
             body: {
                 RoomID
@@ -107,13 +117,13 @@ export class ThingworxService {
 
     async updateDeviceValue({ AttributeID, value }: { AttributeID: string; value: boolean | number }) {
         const THINGWORX_PATH = '/Thingworx/Things/CestronApi/Services/UpdateDevice';
-        const url = config.thingworxHost + THINGWORX_PATH;
+        const url = this.thingworxHost + THINGWORX_PATH;
         try {
             const data = await this.post({
                 url,
                 headers: {
                     Accept: 'application/json',
-                    appKey: config.thingworxAppKey
+                    appKey: this.thingworxAppKey
                 },
                 body: {
                     contentUpdate: {

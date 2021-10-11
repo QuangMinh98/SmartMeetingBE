@@ -1,4 +1,4 @@
-import { Document, Schema, QueryOptions } from 'mongoose';
+import { Document } from 'mongoose';
 
 export interface IFUser extends Document, IFUserDoc {
     _id: string;
@@ -18,7 +18,7 @@ export interface IFUser extends Document, IFUserDoc {
 }
 
 export interface IFUserDoc {
-    generateToken(): string;
+    generateToken(key: string, tokenExpireIn: string): string;
     comparePassword(password: string): boolean;
     hashPassword(): void;
 }

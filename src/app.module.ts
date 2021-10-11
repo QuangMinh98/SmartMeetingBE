@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { ConfigModule } from './config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -19,10 +20,11 @@ import { EventListenerModule } from './modules/event_listener';
 
 @Module({
     imports: [
+        ConfigModule,
         EventEmitterModule.forRoot(),
         EventListenerModule,
-        DatabaseModule,
         SharedModule,
+        DatabaseModule,
         UserModule,
         AuthModule,
         RegisterModule,

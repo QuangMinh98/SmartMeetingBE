@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import config from '../../config/config';
+import { ConfigService } from 'src/config';
 
 @Injectable()
 export class FirebaseService {
-    private readonly firebaseToken: string = config.firebaseToken;
-    private readonly firebaseURL: string = config.firebaseURL;
+    private readonly firebaseToken: string;
+    private readonly firebaseURL: string;
+
+    constructor(private readonly configService: ConfigService) {
+        this.firebaseToken = this.configService.get('firebaseToken');
+        this.firebaseURL = this.configService.get('firebaseURL');
+    }
 
     async sendRequest(url, data) {
         const response = await axios.request({

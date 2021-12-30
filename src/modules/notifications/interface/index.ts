@@ -5,6 +5,7 @@ export interface IFNotification {
     body: string;
     user: string;
     data: { meeting_id: string };
+    read: boolean;
 }
 
 export class NotificationClass extends Document implements IFNotification {
@@ -12,4 +13,5 @@ export class NotificationClass extends Document implements IFNotification {
     body: string;
     user: string;
     data: { meeting_id: string };
+    read: boolean;
 }

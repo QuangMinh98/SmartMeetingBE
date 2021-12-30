@@ -103,7 +103,7 @@ export class NotificationService {
      * then check the information that has changed and create the message body corresponding to those changes.
      * Find user_booked's data and room's data, then use those data to create notification body
      * Loop members'ids and create new notifications data
-     * @param meeting: TInformation of the meeting after it has been successfully updated
+     * @param meeting: Information of the meeting after it has been successfully updated
      * @param old_meeting : Information of the meeting before being changed
      */
     async createNotificationWhenUpdate(meeting: IFMeeting, old_meeting: IFMeeting) {
@@ -150,5 +150,11 @@ export class NotificationService {
             members: meeting.members.filter((member) => !old_meeting.members.includes(member))
         });
         if (clone.members.length > 0) this.createMany(clone);
+    }
+
+    async updateReadNotification(id: string, user: any) {
+        const filter = { _id: id, user: user._id };
+
+        return this.notificationRepo.updateOne(filter, { read: true });
     }
 }

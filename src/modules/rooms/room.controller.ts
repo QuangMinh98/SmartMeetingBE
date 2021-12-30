@@ -20,8 +20,8 @@ import {
 import { Request } from 'express';
 import { RoomDto } from './dto/dto';
 import { RoomService } from './room.service';
-import { RoleGuard } from '../roles';
 import { PagingPipe } from 'src/common/pipes/paging.pipe';
+import { Admin } from 'src/common/decorators/admin.decorator';
 
 @Controller('rooms')
 export class RoomController {
@@ -29,7 +29,7 @@ export class RoomController {
 
     @Post('')
     @HttpCode(200)
-    @UseGuards(new RoleGuard('Room', 'admin'))
+    @Admin(true)
     async create(@Body() roomData: RoomDto) {
         return this.roomService.create(roomData);
     }
@@ -45,13 +45,13 @@ export class RoomController {
     }
 
     @Put('/:id')
-    @UseGuards(new RoleGuard('Room', 'admin'))
+    @Admin(true)
     async update(@Param('id') id: string, @Body() roomData: RoomDto) {
         return this.roomService.update(id, roomData);
     }
 
     @Delete('/:id')
-    @UseGuards(new RoleGuard('Room', 'admin'))
+    @Admin(true)
     async delete(@Param('id') id: string) {
         return this.roomService.delete(id);
     }

@@ -1,1 +1,3 @@
-export { RoleGuard } from './role.guard';
+export { RoleService } from './roles.service';
+
+export { RoleModule } from './roles.module';

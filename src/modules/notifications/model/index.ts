@@ -17,6 +17,10 @@ const NotificationSchema = new Schema({
             type: Schema.Types.ObjectId
         }
     },
+    read: {
+        type: Boolean,
+        default: false
+    },
     created_time: {
         type: Number,
         default: Date.now()

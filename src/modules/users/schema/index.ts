@@ -51,7 +51,7 @@ type TypeUserSchema = mongoose.Schema<IFUser, mongoose.Model<any, any, any>, und
 export const UserSchema: TypeUserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.methods.generateToken = function (): string {
-    return jwt.sign({ _id: this._id, admin: this.admin, roles: this.roles }, '1234qwer!@#$');
+    return jwt.sign({ _id: this._id, admin: this.admin, role: this.role }, '1234qwer!@#$');
 };
 
 UserSchema.methods.hashPassword = async function () {

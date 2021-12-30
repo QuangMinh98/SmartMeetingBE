@@ -15,7 +15,7 @@ export class UserDto {
 
     readonly address: string;
 
-    readonly roles: string[];
+    readonly role: string;
 
     readonly admin: boolean;
 

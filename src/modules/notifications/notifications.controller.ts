@@ -15,7 +15,8 @@ import {
     UseGuards,
     HttpCode,
     Req,
-    ParseIntPipe
+    ParseIntPipe,
+    Put
 } from '@nestjs/common';
 import { Request } from 'express';
 import { PagingPipe } from 'src/common/pipes/paging.pipe';
@@ -29,5 +30,10 @@ export class NotificationController {
     @Get('')
     getAll(@User() user, @Query(new PagingPipe()) query: { page?: number; limit?: number; search_string?: string }) {
         return this.notificationService.getAll(query, user._id);
+    }
+
+    @Put('read')
+    updateRead(@User() user, @Body('id') id: string) {
+        return this.notificationService.updateReadNotification(id, user);
     }
 }

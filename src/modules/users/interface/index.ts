@@ -8,7 +8,7 @@ export interface IFUser extends Document, IFUserDoc {
     phone_number: string;
     password: string;
     address: string;
-    roles: string[];
+    role: any;
     admin: boolean;
     birthdate: number;
     gender: string;

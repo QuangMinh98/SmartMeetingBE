@@ -17,6 +17,7 @@ import { ForgotPasswordModule } from './modules/forgot_password';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { SharedModule } from './shared';
 import { EventListenerModule } from './modules/event_listener';
+import { RoleModule } from './modules/roles';
 
 @Module({
     imports: [
@@ -34,7 +35,8 @@ import { EventListenerModule } from './modules/event_listener';
         MeetingTypeModule,
         NotificationModule,
         FcmTokenModule,
-        ForgotPasswordModule
+        ForgotPasswordModule,
+        RoleModule
     ],
     controllers: [AppController],
     providers: [AppService]

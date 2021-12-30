@@ -23,12 +23,10 @@ export const UserSchema = new Schema<IFUser>({
     address: {
         type: String
     },
-    roles: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Role'
-        }
-    ],
+    role: {
+        type: Schema.Types.ObjectId,
+        ref: 'Role'
+    },
     admin: {
         type: Boolean,
         default: false
@@ -47,6 +45,10 @@ export const UserSchema = new Schema<IFUser>({
             type: String
         }
     ],
+    language: {
+        type: String,
+        default: 'en'
+    },
     created_time: {
         type: Number,
         default: Date.now(),
@@ -57,7 +59,7 @@ export const UserSchema = new Schema<IFUser>({
 UserSchema.index({ email: 'text' });
 
 UserSchema.methods.generateToken = function (key: string, tokenExpireIn: string): string {
-    return jwt.sign({ _id: this._id, admin: this.admin, roles: this.roles }, key, {
+    return jwt.sign({ _id: this._id, admin: this.admin, role: this.role }, key, {
         expiresIn: tokenExpireIn
     });
 };

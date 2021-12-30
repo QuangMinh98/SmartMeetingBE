@@ -33,7 +33,12 @@ export class UserService {
     }
 
     async GetById(id: string) {
-        return this.userRepo.findById(id);
+        return (await this.userRepo.findById(id))
+            .populate({
+                path: 'role',
+                select: { name: 1, modules: 1 }
+            })
+            .execPopulate();
     }
 
     async update(id: string, userData: UserDto) {

@@ -20,10 +20,10 @@ import {
 } from '@nestjs/common';
 import { UserService } from './users.service';
 import { UserDto } from './dto/dto';
-import { RoleGuard } from '../roles';
 import { PagingPipe } from 'src/common/pipes/paging.pipe';
 import { User } from 'src/common/decorators/user.decorator';
 import { ChangePasswordDto } from './dto/change-password-dto';
+import { Admin } from 'src/common/decorators/admin.decorator';
 
 @Controller('users')
 export class UserController {
@@ -51,13 +51,12 @@ export class UserController {
     }
 
     @Put('/:id')
-    @UseGuards(new RoleGuard('User', 'admin'))
     async UpdateUser(@Param('id') id: string, @Body() userData: UserDto) {
         return this.userService.update(id, userData);
     }
 
     @Delete('/:id')
-    @UseGuards(new RoleGuard('User', 'admin'))
+    @Admin(true)
     async DeleteUser(@Param('id') id: string) {
         return this.userService.delete(id);
     }

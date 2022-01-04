@@ -50,8 +50,15 @@ export class UserController {
         return this.userService.changePassword(user._id, body.password, body.newPassword);
     }
 
+    @Put('/me')
+    @UsePipes(new ValidationPipe())
+    async changeUserInfo(@User() user, @Body() userData: UserDto) {
+        return this.userService.update(user._id, userData);
+    }
+
     @Put('/:id')
     async UpdateUser(@Param('id') id: string, @Body() userData: UserDto) {
+        console.log(userData);
         return this.userService.update(id, userData);
     }
 

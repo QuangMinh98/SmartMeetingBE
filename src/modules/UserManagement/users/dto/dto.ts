@@ -24,4 +24,6 @@ export class UserDto {
     readonly gender: string;
 
     readonly status: string;
+
+    readonly lang: string;
 }

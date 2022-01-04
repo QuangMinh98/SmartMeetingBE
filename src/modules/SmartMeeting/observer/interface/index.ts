@@ -1,6 +1,6 @@
-import { IFDevice } from 'src/modules/devices';
-import { IFMeeting } from 'src/modules/meetings';
-import { IFRoom } from 'src/modules/rooms';
+import { IFDevice } from 'src/modules/SmartMeeting/devices';
+import { IFMeeting } from 'src/modules/SmartMeeting/meetings';
+import { IFRoom } from 'src/modules/SmartMeeting/rooms';
 
 export interface ISubscription {
     meeting?: IFMeeting;

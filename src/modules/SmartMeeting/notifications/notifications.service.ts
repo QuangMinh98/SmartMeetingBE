@@ -3,7 +3,7 @@ import { FirebaseService, HelperService } from 'src/shared';
 import { IFMeeting } from '../meetings';
 import { ISubscription } from '../observer';
 import { RoomRepository } from '../rooms';
-import { UserRepository } from '../users/users.repository';
+import { UserRepository } from '../../UserManagement/users/users.repository';
 import { NotificationRepository } from './notifications.repository';
 
 @Injectable()

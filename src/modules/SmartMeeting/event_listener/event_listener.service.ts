@@ -2,8 +2,8 @@ import { IFRoom } from '../rooms';
 import { IFMeeting } from '../meetings';
 import { IFDevice } from '../devices';
 import { OnEvent } from '@nestjs/event-emitter';
-import { NotificationService } from './../notifications';
-import { CestronService } from './../cestron';
+import { NotificationService } from '../notifications';
+import { CestronService } from '../cestron';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

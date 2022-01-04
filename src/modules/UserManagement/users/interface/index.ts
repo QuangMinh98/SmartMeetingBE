@@ -13,6 +13,7 @@ export interface IFUser extends Document, IFUserDoc {
     birthdate: number;
     gender: string;
     status: string;
+    lang: string;
     created_time: number;
     fcm_token: string[];
 }

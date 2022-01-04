@@ -1,13 +1,12 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { AuthMiddleware } from '../auth';
+import { AuthMiddleware } from '../../UserManagement/auth';
 import { RoomModule } from '../rooms';
-import { UserModule } from '../users';
 import { NotificationController } from './notifications.controller';
 import { NotificationRepository } from './notifications.repository';
 import { NotificationService } from './notifications.service';
 
 @Module({
-    imports: [UserModule, RoomModule],
+    imports: [RoomModule],
     controllers: [NotificationController],
     providers: [NotificationService, NotificationRepository],
     exports: [NotificationService, NotificationRepository]

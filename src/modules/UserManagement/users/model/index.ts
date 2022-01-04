@@ -45,7 +45,7 @@ export const UserSchema = new Schema<IFUser>({
             type: String
         }
     ],
-    language: {
+    lang: {
         type: String,
         default: 'en'
     },

@@ -2,7 +2,7 @@ import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { MeetingTypeController } from './meeting_types.controller';
 import { MeetingTypeService } from './meeting_types.service';
 import { MeetingTypeRepository } from './meeting_types.repository';
-import { AuthMiddleware } from '../auth';
+import { AuthMiddleware } from '../../UserManagement/auth';
 
 @Module({
     imports: [],

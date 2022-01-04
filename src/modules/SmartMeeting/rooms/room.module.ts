@@ -2,7 +2,7 @@ import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { RoomController } from './room.controller';
 import { RoomService } from './room.service';
 import { RoomRepository } from './room.repository';
-import { AuthMiddleware } from '../auth';
+import { AuthMiddleware } from '../../UserManagement';
 
 @Module({
     imports: [],

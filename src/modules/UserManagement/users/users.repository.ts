@@ -60,6 +60,7 @@ export class UserRepository {
 
             return this.fromEntity(user);
         } catch (err) {
+            console.log(err.message);
             throw new HttpException({ error_code: '404', error_message: 'User not found' }, 404);
         }
     }

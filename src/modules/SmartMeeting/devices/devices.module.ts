@@ -3,7 +3,7 @@ import { DeviceService } from './devices.service';
 import { DeviceRepository } from './devices.repository';
 import { DeviceController } from './devices.controller';
 import { RoomModule } from '../rooms';
-import { AuthMiddleware } from '../auth';
+import { AuthMiddleware } from '../../UserManagement/auth';
 import { CestronModule } from '../cestron';
 
 @Module({

@@ -4,10 +4,10 @@ import { IFMeeting } from '../meetings';
 import { ISubscription } from '../observer';
 import { RoomRepository } from '../rooms';
 import { UserRepository } from '../../UserManagement/users/users.repository';
-import { NotificationRepository } from './notifications.repository';
+import { NotificationRepository } from 'src/modules/UserManagement';
 
 @Injectable()
-export class NotificationService {
+export class SmartMeetingNotificationService {
     constructor(
         private readonly notificationRepo: NotificationRepository,
         private readonly userRepo: UserRepository,
@@ -15,24 +15,6 @@ export class NotificationService {
         private readonly firebaseService: FirebaseService,
         private readonly helperService: HelperService
     ) {}
-
-    getAll({ page, limit }: { page?: number; limit?: number }, userId: string) {
-        if (!page || page <= 0) {
-            page = 1;
-        }
-        if (!limit) {
-            limit = 20;
-        }
-
-        return this.notificationRepo.findAllAndPaging(
-            {
-                page,
-                limit,
-                sort: { created_time: -1 }
-            },
-            { user: userId }
-        );
-    }
 
     async observerNotify({ meeting, old_meeting }: ISubscription, type?: string) {
         if (!type || type === 'Create Meeting') await this.createMany(meeting);
@@ -150,11 +132,5 @@ export class NotificationService {
             members: meeting.members.filter((member) => !old_meeting.members.includes(member))
         });
         if (clone.members.length > 0) this.createMany(clone);
-    }
-
-    async updateReadNotification(id: string, user: any) {
-        const filter = { _id: id, user: user._id };
-
-        return this.notificationRepo.updateOne(filter, { read: true });
     }
 }

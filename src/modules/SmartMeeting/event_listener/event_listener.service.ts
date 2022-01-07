@@ -2,7 +2,7 @@ import { IFRoom } from '../rooms';
 import { IFMeeting } from '../meetings';
 import { IFDevice } from '../devices';
 import { OnEvent } from '@nestjs/event-emitter';
-import { NotificationService } from '../notifications';
+import { SmartMeetingNotificationService } from '../smart_meeting_notifications';
 import { CestronService } from '../cestron';
 import { Injectable } from '@nestjs/common';
 
@@ -10,7 +10,7 @@ import { Injectable } from '@nestjs/common';
 export class EventListenerService {
     constructor(
         private readonly cestronService: CestronService,
-        private readonly notificationsService: NotificationService
+        private readonly notificationsService: SmartMeetingNotificationService
     ) {}
 
     @OnEvent('device.UpdateValue')

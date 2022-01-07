@@ -24,6 +24,11 @@ const NotificationSchema = new Schema({
     created_time: {
         type: Number,
         default: Date.now()
+    },
+    createdAt: {
+        type: Date,
+        expires: 2592000,
+        default: Date.now
     }
 });
 

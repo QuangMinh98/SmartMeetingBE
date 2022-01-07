@@ -4,7 +4,7 @@ import { DeviceModule } from './devices';
 import { EventListenerModule } from './event_listener';
 import { MeetingModule } from './meetings';
 import { MeetingTypeModule } from './meeting_type';
-import { NotificationModule } from './notifications';
+import { SmartMeetingNotificationModule } from './smart_meeting_notifications';
 import { RoomModule } from './rooms';
 
 @Module({
@@ -13,7 +13,7 @@ import { RoomModule } from './rooms';
         DeviceModule,
         MeetingModule,
         MeetingTypeModule,
-        NotificationModule,
+        SmartMeetingNotificationModule,
         CestronModule,
         EventListenerModule
     ],

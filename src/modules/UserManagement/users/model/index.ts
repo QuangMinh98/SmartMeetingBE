@@ -49,6 +49,9 @@ export const UserSchema = new Schema<IFUser>({
         type: String,
         default: 'en'
     },
+    forgot_password_token: {
+        type: String
+    },
     created_time: {
         type: Number,
         default: Date.now(),

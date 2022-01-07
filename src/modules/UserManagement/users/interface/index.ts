@@ -14,6 +14,7 @@ export interface IFUser extends Document, IFUserDoc {
     gender: string;
     status: string;
     lang: string;
+    forgot_password_token: string;
     created_time: number;
     fcm_token: string[];
 }

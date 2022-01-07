@@ -9,3 +9,5 @@ export { IFResponse } from './interfaces/response.interface';
 export { ThingworxService } from './services/thingworx.service';
 
 export { HelperService } from './services/helper.service';
+
+export { MailService } from './services/mail.service';

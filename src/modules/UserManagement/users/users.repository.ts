@@ -42,6 +42,11 @@ export class UserRepository {
         return users;
     }
 
+    async findOne(filter?: any): Promise<IFUser> {
+        const user = await User.findOne(filter);
+        return user;
+    }
+
     async findById(id: string): Promise<IFUser> {
         try {
             const user: IFUser = await User.findById(id);

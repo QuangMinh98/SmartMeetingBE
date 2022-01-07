@@ -6,10 +6,9 @@ import { MeetingService } from './meetings.service';
 import { MeetingRepository } from './meetings.repository';
 import { MeetingTypeModule } from '../meeting_type';
 import { CestronModule } from '../cestron';
-import { NotificationModule } from '../notifications';
 
 @Module({
-    imports: [RoomModule, CestronModule, MeetingTypeModule, NotificationModule],
+    imports: [RoomModule, CestronModule, MeetingTypeModule],
     controllers: [MeetingController],
     providers: [MeetingService, MeetingRepository],
     exports: [MeetingService, MeetingRepository]

@@ -1,15 +1,14 @@
 import { pick } from 'lodash';
 import { Injectable } from '@nestjs/common';
 import { LoginDto } from './dto/dto';
-import { User } from '../users';
-import { IFUser } from '../users/interface';
+import { UserRepository } from '../users';
 import { HttpException } from '@nestjs/common';
 import { Response } from 'express';
 import { ConfigService } from 'src/config';
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly configService: ConfigService) {}
+    constructor(private readonly configService: ConfigService, private readonly userRepo: UserRepository) {}
 
     async login({ email, password }: LoginDto, res: Response) {
         // Write code to login here
@@ -17,7 +16,7 @@ export class AuthService {
         const TOKEN_EXPIRE_IN = this.configService.get('tokenExpireIn');
 
         // Get user info with login email
-        const user: IFUser = await User.findOne({ email });
+        const user = await this.userRepo.findOne({ email });
         if (!user) throw new HttpException({ error_code: '400', error_message: 'Invalid email or password.' }, 400);
 
         // Password authentication

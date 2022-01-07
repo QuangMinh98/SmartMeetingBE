@@ -29,6 +29,7 @@ export class RoleController {
 
     @Post()
     @Admin(true)
+    @HttpCode(200)
     create(@Body() roleData: RoleDto) {
         return this.roleService.create(roleData);
     }

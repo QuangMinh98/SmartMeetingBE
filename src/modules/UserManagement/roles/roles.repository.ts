@@ -42,6 +42,12 @@ export class RoleRepository {
         }
     }
 
+    async findAll(filter?: any): Promise<IFRole[]> {
+        const roles = await Role.find(filter);
+
+        return roles;
+    }
+
     async updateById(id: string, roleData: RoleDto): Promise<IFRole> {
         try {
             const role = await Role.findByIdAndUpdate(id, roleData, { new: true });

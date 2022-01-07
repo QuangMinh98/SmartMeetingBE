@@ -36,8 +36,13 @@ export class RoleController {
 
     @Get()
     @Admin(true)
-    getAll(@Query() query: { page?: number; limit?: number }) {
+    getAllAndPaging(@Query() query: { page?: number; limit?: number }) {
         return this.roleService.getAll(query);
+    }
+
+    @Get('/all')
+    getAll() {
+        return this.roleService.getAllRole();
     }
 
     @Get('/:id')

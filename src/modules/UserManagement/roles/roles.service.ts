@@ -25,6 +25,10 @@ export class RoleService {
         });
     }
 
+    getAllRole() {
+        return this.roleRepo.findAll();
+    }
+
     getById(id: string) {
         return this.roleRepo.findById(id);
     }

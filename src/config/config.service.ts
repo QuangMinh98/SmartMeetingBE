@@ -12,7 +12,10 @@ export class ConfigService {
             thingworxHost: process.env.THINGWORX_HOST,
             thingworxAppKey: process.env.THINGWORX_APP_KEY,
             firebaseURL: process.env.FIREBASE_URL,
-            firebaseToken: process.env.FIREBASE_TOKEN
+            firebaseToken: process.env.FIREBASE_TOKEN,
+            apiDomain: process.env.API_DOMAIN,
+            apiAuthUserName: process.env.API_AUTH_USERNAME,
+            apiAuthPassword: process.env.API_AUTH_PASSWORD
         };
     }
 

@@ -8,6 +8,7 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { SharedModule } from './shared';
 import { SmartMeetingModule } from './modules/SmartMeeting';
 import { UserManagementModule } from './modules/UserManagement';
+import { SmartParkingModule } from './modules/SmartParking';
 
 @Module({
     imports: [
@@ -16,7 +17,8 @@ import { UserManagementModule } from './modules/UserManagement';
         SharedModule,
         DatabaseModule,
         UserManagementModule,
-        SmartMeetingModule
+        SmartMeetingModule,
+        SmartParkingModule
     ],
     controllers: [AppController],
     providers: [AppService]

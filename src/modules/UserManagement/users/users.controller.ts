@@ -51,7 +51,6 @@ export class UserController {
     }
 
     @Put('/me')
-    @UsePipes(new ValidationPipe())
     async changeUserInfo(@User() user, @Body() userData: UserDto) {
         return this.userService.update(user._id, userData);
     }

@@ -1,19 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from 'src/config';
 import { RequestService } from 'src/shared/services/request.service';
-import { AuthToken } from './model';
 
 @Injectable()
 export class AuthTokenService {
-    constructor(private readonly configService: ConfigService, private readonly requestService: RequestService) {}
+    constructor(
+        private readonly configService: ConfigService,
+        private readonly requestService: RequestService,
+        @Inject(CACHE_MANAGER) private cacheManager
+    ) {}
 
     async updateToken(token: string) {
-        const authToken = await AuthToken.findOne();
-        if (!authToken) AuthToken.create({ token });
-        else {
-            authToken.token = token;
-            authToken.save();
-        }
+        const EXPIRE_TIME = 86399;
+        await this.cacheManager.set('authToken', token, { ttl: EXPIRE_TIME });
     }
 
     async getToken(): Promise<string> {
@@ -38,9 +37,9 @@ export class AuthTokenService {
     }
 
     async getTokenFromDB(): Promise<string> {
-        const token = await AuthToken.findOne();
+        const token = await this.cacheManager.get('authToken');
         if (!token) return await this.getToken();
 
-        return token.token;
+        return token;
     }
 }

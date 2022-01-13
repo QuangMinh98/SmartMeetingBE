@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, CacheModule } from '@nestjs/common';
 import { ConfigModule } from './config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppController } from './app.controller';
